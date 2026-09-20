@@ -1,0 +1,395 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "BulletChart reproduction for Deneb -- ports the visual look/behaviour of D:/DATA/Custom viz/bulletChart (source untouched) as a Vega spec. See README.md in this folder for field mapping and setup.",
+  "width": { "signal": "denebContainer.width" },
+  "height": { "signal": "denebContainer.height" },
+  "padding": 0,
+  "autosize": { "type": "none", "contains": "padding" },
+
+  "signals": [
+    { "name": "fontFamily", "value": "Segoe UI, Arial, sans-serif" },
+    { "name": "maxRows", "value": 10, "description": "Max categories drawn (0 = no limit). Original visual caps at 10." },
+    { "name": "animation", "value": true },
+    { "name": "emptyMessage", "value": "Add Category, Actual, and Target/Budget fields to see the bullet chart." },
+
+    { "name": "actualColor", "value": "#2A78D6" },
+    { "name": "targetColor", "value": "#EB6834" },
+    { "name": "targetThickness", "value": 3 },
+    { "name": "trackColor", "value": "#E4E0D4" },
+    { "name": "barThickness", "value": 25 },
+    { "name": "rowSpacing", "value": 12 },
+    { "name": "conditionalColor", "value": false },
+    { "name": "varianceThreshold1", "value": -5 },
+    { "name": "varianceThreshold2", "value": 10 },
+    { "name": "colorLow", "value": "#0CA30C" },
+    { "name": "colorMid", "value": "#2A78D6" },
+    { "name": "colorHigh", "value": "#D03B3B" },
+
+    { "name": "showValueLabel", "value": true },
+    { "name": "categoryFontSize", "value": 11 },
+    { "name": "categoryFontColor", "value": "#52514E" },
+    { "name": "categoryBold", "value": false },
+    { "name": "valueFontSize", "value": 11 },
+    { "name": "valueFontColor", "value": "#0B0B0B" },
+    { "name": "valueBold", "value": false },
+    { "name": "decimalPlaces", "value": 1 },
+    { "name": "displayUnits", "value": "Auto", "description": "Auto | None | K | M | B" },
+
+    { "name": "axisShow", "value": true },
+    { "name": "axisFontSize", "value": 10 },
+    { "name": "axisFontColor", "value": "#898781" },
+
+    { "name": "statusThreshold1", "value": -5 },
+    { "name": "statusThreshold2", "value": 10 },
+    { "name": "statusFontFamily", "value": "Segoe UI" },
+    { "name": "statusFontSize", "value": 11 },
+    { "name": "statusBold", "value": true },
+    { "name": "statusLowText", "value": "" },
+    { "name": "statusLowFontColor", "value": "#0CA30C" },
+    { "name": "statusLowBackColor", "value": "#FFFFFF" },
+    { "name": "statusLowShowBackground", "value": false },
+    { "name": "statusLowBlink", "value": false },
+    { "name": "statusMidText", "value": "" },
+    { "name": "statusMidFontColor", "value": "#52514E" },
+    { "name": "statusMidBackColor", "value": "#FFFFFF" },
+    { "name": "statusMidShowBackground", "value": false },
+    { "name": "statusMidBlink", "value": false },
+    { "name": "statusHighText", "value": "OVER BURN" },
+    { "name": "statusHighFontColor", "value": "#D03B3B" },
+    { "name": "statusHighBackColor", "value": "#FFFFFF" },
+    { "name": "statusHighShowBackground", "value": false },
+    { "name": "statusHighBlink", "value": true },
+
+    { "name": "vw", "update": "max(120, width)" },
+    { "name": "vh", "update": "max(80, height)" },
+    { "name": "decimalsSafe", "update": "clamp(round(decimalPlaces), 0, 10)" },
+    { "name": "pow10d", "update": "pow(10, decimalsSafe)" },
+    { "name": "roundScale", "update": "pow10d * 1.000000000001", "description": "Round half away from zero like Intl/toLocaleString in the original (plain toFixed rounds 0.95 to 0.9); the epsilon absorbs binary float error on exact halves." },
+
+    { "name": "n", "update": "length(data('rows'))" },
+    { "name": "maxAbs", "update": "length(data('stats')) && isValid(data('stats')[0].maxAbs) ? data('stats')[0].maxAbs : 0" },
+    { "name": "unitValue", "update": "displayUnits === 'None' ? 1 : (displayUnits === 'K' ? 1000 : (displayUnits === 'M' ? 1000000 : (displayUnits === 'B' ? 1000000000 : (maxAbs >= 1000000000 ? 1000000000 : (maxAbs >= 1000000 ? 1000000 : (maxAbs >= 1000 ? 1000 : 1))))))" },
+    { "name": "unitSuffix", "update": "unitValue === 1000 ? 'K' : (unitValue === 1000000 ? 'M' : (unitValue === 1000000000 ? 'B' : ''))" },
+
+    { "name": "catMaxW", "update": "length(data('textStats')) && isValid(data('textStats')[0].catW) ? data('textStats')[0].catW : 0" },
+    { "name": "valueMaxW", "update": "showValueLabel && length(data('textStats')) && isValid(data('textStats')[0].valueW) ? data('textStats')[0].valueW : 0" },
+    { "name": "statusMaxW", "update": "length(data('textStats')) && isValid(data('textStats')[0].statusW) ? data('textStats')[0].statusW : 0" },
+    { "name": "blinkActive", "update": "length(data('textStats')) && isValid(data('textStats')[0].blinkN) ? data('textStats')[0].blinkN > 0 : false" },
+
+    { "name": "topMargin", "value": 8 },
+    { "name": "bottomMargin", "update": "axisShow ? axisFontSize + 16 : 8" },
+    { "name": "leftMarginRaw", "update": "min(max(14 + categoryFontSize * 3, catMaxW + 16), vw * 0.4)" },
+    { "name": "rightMargin", "update": "max(16, (showValueLabel ? valueMaxW + 10 : 0) + (statusMaxW > 0 ? statusMaxW + 18 : 0) + 6)" },
+    { "name": "chartX0", "update": "min(leftMarginRaw, vw * 0.45)" },
+    { "name": "chartX1", "update": "max(chartX0 + 40, vw - rightMargin)" },
+    { "name": "plotHeight", "update": "max(20, vh - topMargin - bottomMargin)" },
+    { "name": "rowHeight", "update": "min(barThickness + rowSpacing * 2, plotHeight / max(1, n))" },
+    { "name": "thickness", "update": "max(3, min(barThickness, rowHeight - 4))" },
+    { "name": "axisH", "update": "n * rowHeight" },
+    { "name": "xDomainMax", "update": "maxAbs > 0 ? maxAbs : 1" },
+    { "name": "axisLabelW", "update": "(length(format(xDomainMax / unitValue, ',.' + decimalsSafe + 'f')) + length(unitSuffix) + 1) * axisFontSize * 0.6 + 14", "description": "Estimated width of the widest axis label plus a gap (Vega cannot measure text in an expression)" },
+    { "name": "axisTickCount", "update": "clamp(floor((chartX1 - chartX0) / axisLabelW), 2, 5)", "description": "At most 5 ticks like the original, fewer when the labels would not fit side by side" },
+
+    { "name": "animStart", "init": "now()" },
+    { "name": "animElapsed", "value": 0,
+      "on": [
+        { "events": { "type": "timer", "throttle": 16 },
+          "update": "animation && animElapsed < 900 ? now() - animStart : 900" }
+      ]
+    },
+    { "name": "barProg", "update": "animation ? 1 - pow(1 - clamp((animElapsed - 180) / 550, 0, 1), 3) : 1" },
+    { "name": "tickProg", "update": "animation ? 1 - pow(1 - clamp(animElapsed / 380, 0, 1), 3) : 1" },
+    { "name": "blinkOpacity", "value": 1,
+      "on": [
+        { "events": { "type": "timer", "throttle": 50 },
+          "update": "blinkActive ? 0.625 + 0.375 * cos(now() * 6.283185307179586 / 1600) : 1" }
+      ]
+    }
+  ],
+
+  "data": [
+    { "name": "dataset" },
+    {
+      "name": "rows",
+      "source": "dataset",
+      "transform": [
+        { "type": "window", "ops": ["row_number"], "as": ["rowIdx"] },
+        { "type": "filter", "expr": "maxRows <= 0 || datum.rowIdx <= maxRows" },
+        { "type": "formula", "as": "i", "expr": "datum.rowIdx - 1" },
+        { "type": "formula", "as": "categoryText", "expr": "isValid(datum.category) ? toString(datum.category) : '(Blank)'" },
+        { "type": "formula", "as": "actualV", "expr": "isNumber(datum.actual) && isFinite(datum.actual) ? datum.actual : 0" },
+        { "type": "formula", "as": "targetV", "expr": "isNumber(datum.target) && isFinite(datum.target) ? datum.target : 0" },
+        { "type": "formula", "as": "peak", "expr": "max(datum.actualV, datum.targetV)" }
+      ]
+    },
+    {
+      "name": "stats",
+      "source": "rows",
+      "transform": [
+        { "type": "aggregate", "fields": ["peak"], "ops": ["max"], "as": ["maxAbs"] }
+      ]
+    },
+    {
+      "name": "texts",
+      "source": "rows",
+      "transform": [
+        { "type": "formula", "as": "actualText", "expr": "replace(format((datum.actualV < 0 ? -1 : 1) * round(abs(datum.actualV / unitValue) * roundScale) / pow10d, ',.' + decimalsSafe + 'f'), '−', '-') + unitSuffix" },
+        { "type": "formula", "as": "targetText", "expr": "replace(format((datum.targetV < 0 ? -1 : 1) * round(abs(datum.targetV / unitValue) * roundScale) / pow10d, ',.' + decimalsSafe + 'f'), '−', '-') + unitSuffix" },
+        { "type": "formula", "as": "variance", "expr": "datum.actualV - datum.targetV" },
+        { "type": "formula", "as": "varianceText", "expr": "(datum.variance >= 0 ? '+' : '') + replace(format((datum.variance < 0 ? -1 : 1) * round(abs(datum.variance / unitValue) * roundScale) / pow10d, ',.' + decimalsSafe + 'f'), '−', '-') + unitSuffix" },
+        { "type": "formula", "as": "variancePct", "expr": "datum.targetV !== 0 ? ((datum.actualV - datum.targetV) / datum.targetV) * 100 : null" },
+        { "type": "formula", "as": "variancePctText", "expr": "datum.variancePct === null ? 'N/A' : ((datum.variancePct >= 0 ? '+' : '') + replace(format(datum.variancePct, '.1f'), '−', '-') + '%')" },
+
+        { "type": "formula", "as": "colorBand", "expr": "(!conditionalColor || datum.variancePct === null) ? null : (datum.variancePct < varianceThreshold1 ? 'low' : (datum.variancePct < varianceThreshold2 ? 'mid' : 'high'))" },
+        { "type": "formula", "as": "barColor", "expr": "datum.colorBand === 'low' ? colorLow : (datum.colorBand === 'high' ? colorHigh : (datum.colorBand === 'mid' ? colorMid : actualColor))" },
+
+        { "type": "formula", "as": "statusBand", "expr": "datum.variancePct === null ? null : (datum.variancePct < statusThreshold1 ? 'low' : (datum.variancePct < statusThreshold2 ? 'mid' : 'high'))" },
+        { "type": "formula", "as": "statusText", "expr": "datum.statusBand === 'low' ? statusLowText : (datum.statusBand === 'mid' ? statusMidText : (datum.statusBand === 'high' ? statusHighText : ''))" },
+        { "type": "formula", "as": "statusVisible", "expr": "isValid(datum.statusText) && datum.statusText !== ''" },
+        { "type": "formula", "as": "statusFontColor", "expr": "datum.statusBand === 'low' ? statusLowFontColor : (datum.statusBand === 'mid' ? statusMidFontColor : statusHighFontColor)" },
+        { "type": "formula", "as": "statusBackColor", "expr": "datum.statusBand === 'low' ? statusLowBackColor : (datum.statusBand === 'mid' ? statusMidBackColor : statusHighBackColor)" },
+        { "type": "formula", "as": "statusShowBg", "expr": "datum.statusVisible && (datum.statusBand === 'low' ? statusLowShowBackground : (datum.statusBand === 'mid' ? statusMidShowBackground : statusHighShowBackground))" },
+        { "type": "formula", "as": "statusBlink", "expr": "datum.statusVisible && (datum.statusBand === 'low' ? statusLowBlink : (datum.statusBand === 'mid' ? statusMidBlink : statusHighBlink))" },
+
+        { "type": "formula", "as": "catW", "expr": "length(datum.categoryText) * categoryFontSize * (categoryBold ? 0.62 : 0.55)" },
+        { "type": "formula", "as": "valueW", "expr": "length(datum.actualText) * valueFontSize * (valueBold ? 0.62 : 0.55)" },
+        { "type": "formula", "as": "statusW", "expr": "datum.statusVisible ? length(datum.statusText) * statusFontSize * (statusBold ? 0.62 : 0.55) : 0" },
+        { "type": "formula", "as": "blinkFlag", "expr": "datum.statusBlink ? 1 : 0" }
+      ]
+    },
+    {
+      "name": "textStats",
+      "source": "texts",
+      "transform": [
+        { "type": "aggregate", "fields": ["catW", "valueW", "statusW", "blinkFlag"], "ops": ["max", "max", "max", "sum"], "as": ["catW", "valueW", "statusW", "blinkN"] }
+      ]
+    },
+    {
+      "name": "bars",
+      "source": "texts",
+      "transform": [
+        { "type": "formula", "as": "cy", "expr": "topMargin + datum.i * rowHeight + rowHeight / 2" },
+        { "type": "formula", "as": "barY", "expr": "datum.cy - thickness / 2" },
+        { "type": "formula", "as": "actualW", "expr": "max(0, scale('xScale', datum.actualV) - chartX0)" },
+        { "type": "formula", "as": "targetX", "expr": "scale('xScale', datum.targetV)" },
+        { "type": "formula", "as": "dim", "expr": "datum.__selected__ === 'off' ? 0.3 : 1" },
+        { "type": "formula", "as": "pillW", "expr": "datum.statusW + 10" },
+        { "type": "formula", "as": "tooltip", "expr": "merge({'Category': datum.categoryText, 'Actual': datum.actualText, 'Target': datum.targetText, 'Variance': datum.varianceText + ' (' + datum.variancePctText + ')'}, datum.statusVisible ? {'Status': datum.statusText} : {}, isValid(datum.tooltip1) ? {'Extra 1': datum.tooltip1} : {}, isValid(datum.tooltip2) ? {'Extra 2': datum.tooltip2} : {}, isValid(datum.tooltip3) ? {'Extra 3': datum.tooltip3} : {}, isValid(datum.tooltip4) ? {'Extra 4': datum.tooltip4} : {})" }
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "xScale",
+      "type": "linear",
+      "domain": [0, { "signal": "xDomainMax" }],
+      "range": [{ "signal": "chartX0" }, { "signal": "chartX1" }],
+      "nice": true,
+      "zero": true
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "name": "bg-catcher",
+      "encode": {
+        "update": {
+          "x": { "value": 0 }, "y": { "value": 0 },
+          "width": { "signal": "width" }, "height": { "signal": "height" },
+          "fill": { "value": "transparent" }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": { "signal": "width / 2" }, "y": { "signal": "height / 2" },
+          "align": { "value": "center" }, "baseline": { "value": "middle" },
+          "text": { "signal": "emptyMessage" },
+          "fill": { "value": "#888888" }, "font": { "signal": "fontFamily" }, "fontSize": { "value": 12 },
+          "limit": { "signal": "width * 0.8" },
+          "opacity": { "signal": "n === 0 ? 1 : 0" }
+        }
+      }
+    },
+    {
+      "type": "group",
+      "name": "axis-group",
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": { "value": 0 },
+          "y": { "signal": "topMargin" },
+          "width": { "signal": "width" },
+          "height": { "signal": "axisH" }
+        }
+      },
+      "axes": [
+        {
+          "scale": "xScale",
+          "orient": "bottom",
+          "grid": true,
+          "domain": false,
+          "ticks": false,
+          "tickCount": { "signal": "axisTickCount" },
+          "labelPadding": 4,
+          "labelOverlap": "greedy",
+          "labelSeparation": 6,
+          "gridColor": "#e4e0d4",
+          "gridWidth": 1,
+          "encode": {
+            "grid": { "update": { "opacity": { "signal": "(axisShow && n > 0) ? 1 : 0" } } },
+            "labels": {
+              "update": {
+                "text": { "signal": "replace(format((datum.value < 0 ? -1 : 1) * round(abs(datum.value / unitValue) * roundScale) / pow10d, ',.' + decimalsSafe + 'f'), '−', '-') + unitSuffix" },
+                "font": { "signal": "fontFamily" },
+                "fontSize": { "signal": "axisFontSize" },
+                "fill": { "signal": "axisFontColor" },
+                "opacity": { "signal": "(axisShow && n > 0) ? 1 : 0" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "interactive": false,
+      "from": { "data": "bars" },
+      "encode": {
+        "update": {
+          "x": { "signal": "chartX0" },
+          "y": { "field": "barY" },
+          "width": { "signal": "chartX1 - chartX0" },
+          "height": { "signal": "thickness" },
+          "cornerRadius": { "value": 3 },
+          "fill": { "signal": "trackColor" },
+          "opacity": { "field": "dim" }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "interactive": false,
+      "from": { "data": "bars" },
+      "encode": {
+        "update": {
+          "x": { "signal": "chartX0" },
+          "y": { "field": "barY" },
+          "width": { "signal": "datum.actualW * barProg" },
+          "height": { "signal": "thickness" },
+          "cornerRadius": { "value": 3 },
+          "fill": { "field": "barColor" },
+          "opacity": { "field": "dim" }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "interactive": false,
+      "from": { "data": "bars" },
+      "encode": {
+        "update": {
+          "x": { "signal": "chartX0 + (datum.targetX - chartX0) * tickProg - targetThickness / 2" },
+          "y": { "signal": "datum.barY - 4" },
+          "width": { "signal": "targetThickness" },
+          "height": { "signal": "thickness + 8" },
+          "fill": { "signal": "targetColor" },
+          "opacity": { "field": "dim" }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "from": { "data": "bars" },
+      "encode": {
+        "update": {
+          "x": { "signal": "chartX0 - 8" },
+          "y": { "signal": "datum.cy + categoryFontSize * 0.35" },
+          "align": { "value": "right" },
+          "text": { "field": "categoryText" },
+          "limit": { "signal": "max(10, chartX0 - 8)" },
+          "ellipsis": { "value": "…" },
+          "font": { "signal": "fontFamily" },
+          "fontSize": { "signal": "categoryFontSize" },
+          "fontWeight": { "signal": "categoryBold ? 'bold' : 'normal'" },
+          "fill": { "signal": "categoryFontColor" },
+          "opacity": { "field": "dim" }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "from": { "data": "bars" },
+      "encode": {
+        "update": {
+          "x": { "signal": "chartX0 + datum.actualW + 6" },
+          "y": { "signal": "datum.cy + valueFontSize * 0.35" },
+          "align": { "value": "left" },
+          "text": { "field": "actualText" },
+          "font": { "signal": "fontFamily" },
+          "fontSize": { "signal": "valueFontSize" },
+          "fontWeight": { "signal": "valueBold ? 'bold' : 'normal'" },
+          "fill": { "signal": "valueFontColor" },
+          "opacity": { "signal": "showValueLabel ? datum.dim : 0" }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "interactive": false,
+      "from": { "data": "bars" },
+      "encode": {
+        "update": {
+          "x": { "signal": "vw - 6 - datum.pillW + 5" },
+          "y": { "signal": "datum.cy - statusFontSize * 0.665 - 2" },
+          "width": { "field": "pillW" },
+          "height": { "signal": "statusFontSize * 1.33 + 4" },
+          "cornerRadius": { "value": 3 },
+          "fill": { "field": "statusBackColor" },
+          "opacity": { "signal": "datum.statusShowBg ? datum.dim * (datum.statusBlink ? blinkOpacity : 1) : 0" }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "from": { "data": "bars" },
+      "encode": {
+        "update": {
+          "x": { "signal": "vw - 6" },
+          "y": { "signal": "datum.cy + statusFontSize * 0.35" },
+          "align": { "value": "right" },
+          "text": { "field": "statusText" },
+          "font": { "signal": "statusFontFamily" },
+          "fontSize": { "signal": "statusFontSize" },
+          "fontWeight": { "signal": "statusBold ? 'bold' : 'normal'" },
+          "fill": { "field": "statusFontColor" },
+          "opacity": { "signal": "datum.statusVisible ? datum.dim * (datum.statusBlink ? blinkOpacity : 1) : 0" }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "name": "row-hit",
+      "from": { "data": "bars" },
+      "encode": {
+        "update": {
+          "x": { "value": 0 },
+          "y": { "signal": "datum.cy - rowHeight / 2" },
+          "width": { "signal": "chartX1" },
+          "height": { "signal": "rowHeight" },
+          "fill": { "value": "transparent" },
+          "tooltip": { "field": "tooltip" },
+          "cursor": { "value": "pointer" }
+        }
+      }
+    }
+  ]
+}

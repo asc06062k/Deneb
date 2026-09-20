@@ -1,0 +1,551 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "BudgetFunnel reproduction for Deneb -- ports the visual look/behaviour of D:/DATA/Custom viz/budgetFunnelViz (source untouched) as a Vega spec. See README.md in this folder for field mapping and setup.",
+  "width": { "signal": "denebContainer.width" },
+  "height": { "signal": "denebContainer.height" },
+  "padding": 0,
+  "autosize": { "type": "none", "contains": "padding" },
+
+  "signals": [
+    { "name": "showSideLabels", "value": true },
+    { "name": "showArrows", "value": true },
+    { "name": "showBottomRemainLabel", "value": true },
+    { "name": "backgroundColor", "value": "#F8FAFC" },
+    { "name": "backgroundTransparency", "value": 100 },
+
+    { "name": "floorShow", "value": true },
+    { "name": "floorThresholdPercent", "value": 14 },
+    { "name": "floorLineColor", "value": "#0891B2" },
+    { "name": "floorLineStyle", "value": "dashed" },
+    { "name": "floorLineWidth", "value": 1.6 },
+
+    { "name": "planColor", "value": "#2563EB" },
+    { "name": "approvedColor", "value": "#7C3AED" },
+    { "name": "actualColor", "value": "#0D9488" },
+    { "name": "borderColor", "value": "#FFFFFF" },
+    { "name": "borderWidth", "value": 1.2 },
+    { "name": "ghostFillOpacity", "value": 0.06, "description": "Fill opacity of the outline-only Plan layer shown when Plan = 0 (keep > 0 so hovering it still shows the tooltip)" },
+
+    { "name": "approvedConditional", "value": false },
+    { "name": "approvedThreshold1", "value": 70 },
+    { "name": "approvedThreshold2", "value": 90 },
+    { "name": "approvedColorLow", "value": "#DC2626" },
+    { "name": "approvedColorMid", "value": "#D97706" },
+    { "name": "approvedColorHigh", "value": "#059669" },
+
+    { "name": "actualConditional", "value": false },
+    { "name": "actualThreshold1", "value": 50 },
+    { "name": "actualThreshold2", "value": 85 },
+    { "name": "actualColorLow", "value": "#DC2626" },
+    { "name": "actualColorMid", "value": "#D97706" },
+    { "name": "actualColorHigh", "value": "#059669" },
+
+    { "name": "planFieldLabel", "value": "PB Budget" },
+    { "name": "approvedFieldLabel", "value": "AB Budget" },
+    { "name": "actualFieldLabel", "value": "Actual" },
+
+    { "name": "planCenterLabel", "value": "Plan" },
+    { "name": "approvedCenterLabel", "value": "Approved" },
+    { "name": "actualCenterLabel", "value": "of Approved" },
+
+    { "name": "planFontFamily", "value": "Arial" },
+    { "name": "planFontSize", "value": 10 },
+    { "name": "planFontColor", "value": "#FFFFFF" },
+    { "name": "planBold", "value": true },
+    { "name": "planBackground", "value": "#000000" },
+    { "name": "planShowBackground", "value": false },
+    { "name": "planUnit", "value": "Auto" },
+    { "name": "planDecimals", "value": 1 },
+    { "name": "planPercentDecimals", "value": 0 },
+    { "name": "planPercentPrefix", "value": "" },
+    { "name": "planPercentSuffix", "value": "%" },
+
+    { "name": "approvedFontFamily", "value": "Arial" },
+    { "name": "approvedFontSize", "value": 10 },
+    { "name": "approvedFontColor", "value": "#FFFFFF" },
+    { "name": "approvedBold", "value": true },
+    { "name": "approvedBackground", "value": "#000000" },
+    { "name": "approvedShowBackground", "value": false },
+    { "name": "approvedUnit", "value": "Auto" },
+    { "name": "approvedDecimals", "value": 1 },
+    { "name": "approvedPercentDecimals", "value": 0 },
+    { "name": "approvedPercentPrefix", "value": "" },
+    { "name": "approvedPercentSuffix", "value": "%" },
+
+    { "name": "actualFontFamily", "value": "Arial" },
+    { "name": "actualFontSize", "value": 10 },
+    { "name": "actualFontColor", "value": "#FFFFFF" },
+    { "name": "actualBold", "value": true },
+    { "name": "actualBackground", "value": "#000000" },
+    { "name": "actualShowBackground", "value": false },
+    { "name": "actualUnit", "value": "Auto" },
+    { "name": "actualDecimals", "value": 1 },
+    { "name": "actualPercentDecimals", "value": 0 },
+    { "name": "actualPercentPrefix", "value": "" },
+    { "name": "actualPercentSuffix", "value": "%" },
+
+    { "name": "sideFontFamily", "value": "Arial" },
+    { "name": "sideFontSize", "value": 10 },
+    { "name": "sideFontColor", "value": "#1E293B" },
+    { "name": "sideBold", "value": true },
+    { "name": "sideBackground", "value": "#000000" },
+    { "name": "showSideBackground", "value": false },
+    { "name": "sideLineColor", "value": "#94A3B8" },
+    { "name": "sideLineWidth", "value": 1 },
+    { "name": "valueFontFamily", "value": "Arial" },
+    { "name": "valueFontSize", "value": 10 },
+    { "name": "valueFontColor", "value": "#1E293B" },
+    { "name": "valueBold", "value": true },
+    { "name": "valueBackground", "value": "#000000" },
+    { "name": "showValueBackground", "value": false },
+
+    { "name": "remainingFontFamily", "value": "Arial" },
+    { "name": "remainingFontSize", "value": 10 },
+    { "name": "remainingFontColor", "value": "#1E293B" },
+    { "name": "remainingBold", "value": true },
+    { "name": "remainingBackground", "value": "#000000" },
+    { "name": "remainingShowBackground", "value": false },
+
+    { "name": "planTotal", "update": "length(data('totals')) ? data('totals')[0].planTotal : 0" },
+    { "name": "approvedTotal", "update": "length(data('totals')) ? data('totals')[0].approvedTotal : 0" },
+    { "name": "actualTotal", "update": "length(data('totals')) ? data('totals')[0].actualTotal : 0" },
+    { "name": "hasPlan", "update": "length(data('totals')) ? data('totals')[0].planValidCount > 0 : false" },
+    { "name": "hasApproved", "update": "length(data('totals')) ? data('totals')[0].approvedValidCount > 0 : false" },
+    { "name": "hasActual", "update": "length(data('totals')) ? data('totals')[0].actualValidCount > 0 : false" },
+    { "name": "showFunnel", "update": "hasApproved && hasActual" },
+
+    { "name": "planZero", "update": "hasPlan && planTotal === 0" },
+    { "name": "approvedRatio", "update": "(hasPlan && planTotal !== 0) ? (approvedTotal / planTotal) * 100 : 100" },
+    { "name": "actualRatio", "update": "approvedTotal !== 0 ? (actualTotal / approvedTotal) * 100 : 0" },
+    { "name": "layerCount", "update": "hasPlan ? 3 : 2" },
+
+    { "name": "sideW", "update": "showSideLabels ? min(width * 0.29, 220) : 10" },
+    { "name": "funnelX", "update": "width / 2" },
+    { "name": "funnelW", "update": "max(120, width - sideW * 2 - 34)" },
+    { "name": "topY", "update": "max(22, height * 0.10)" },
+    { "name": "bottomY", "update": "min(height - 40, height * 0.90)" },
+    { "name": "gap", "update": "showArrows ? max(14, height * 0.02) : max(4, height * 0.008)" },
+    { "name": "stageH", "update": "max(52, (bottomY - topY - gap * (layerCount - 1)) / layerCount)" },
+    { "name": "maxHalf", "update": "funnelW / 2" },
+    { "name": "floorWidth", "update": "maxHalf * (floorThresholdPercent / 100)" },
+
+    { "name": "topHalf0", "update": "maxHalf" },
+    { "name": "stage1Ratio", "update": "hasPlan ? approvedRatio : actualRatio" },
+    { "name": "rawHalf1", "update": "topHalf0 * min(1, max(0, stage1Ratio / 100))" },
+    { "name": "topHalf1", "update": "max(floorWidth, rawHalf1)" },
+    { "name": "floored1", "update": "rawHalf1 < floorWidth" },
+    { "name": "rawHalf2", "update": "topHalf1 * min(1, max(0, actualRatio / 100))" },
+    { "name": "topHalf2", "update": "max(floorWidth, rawHalf2)" },
+    { "name": "floored2", "update": "rawHalf2 < floorWidth" },
+    { "name": "lastTopHalf", "update": "hasPlan ? topHalf2 : topHalf1" },
+    { "name": "spoutHalf", "update": "max(maxHalf * 0.08, lastTopHalf * 0.40)" },
+
+    { "name": "remainingValue", "update": "approvedTotal - actualTotal" },
+    { "name": "remainingRatio", "update": "approvedTotal !== 0 ? (remainingValue / approvedTotal) * 100 : 0" },
+
+    { "name": "hoverIndex", "value": null,
+      "on": [
+        { "events": "@layer-shape:mouseover", "update": "datum.i" },
+        { "events": "@layer-shape:mouseout", "update": "null" }
+      ]
+    }
+  ],
+
+  "data": [
+    { "name": "dataset" },
+    {
+      "name": "totals",
+      "source": "dataset",
+      "transform": [
+        { "type": "aggregate",
+          "fields": ["plan", "approved", "actual", "plan", "approved", "actual"],
+          "ops": ["sum", "sum", "sum", "valid", "valid", "valid"],
+          "as": ["planTotal", "approvedTotal", "actualTotal", "planValidCount", "approvedValidCount", "actualValidCount"] }
+      ]
+    },
+    {
+      "name": "stagesRaw",
+      "source": "dataset",
+      "transform": [
+        { "type": "formula", "as": "__stageKeys", "expr": "['plan','approved','actual']" },
+        { "type": "flatten", "fields": ["__stageKeys"], "as": ["key"] }
+      ]
+    },
+    {
+      "name": "stages",
+      "source": "stagesRaw",
+      "transform": [
+        { "type": "filter", "expr": "datum.key !== 'plan' || hasPlan" },
+        { "type": "window", "ops": ["row_number"], "as": ["idx1"] },
+        { "type": "formula", "as": "i", "expr": "datum.idx1 - 1" },
+        { "type": "formula", "as": "isFirst", "expr": "datum.i === 0" },
+        { "type": "formula", "as": "isLast", "expr": "datum.i === layerCount - 1" },
+        { "type": "formula", "as": "ghost", "expr": "datum.key === 'plan' && planZero" },
+
+        { "type": "formula", "as": "value", "expr": "datum.key === 'plan' ? planTotal : (datum.key === 'approved' ? approvedTotal : actualTotal)" },
+        { "type": "formula", "as": "ratio", "expr": "datum.key === 'plan' ? (planZero ? 0 : 100) : (datum.key === 'approved' ? approvedRatio : actualRatio)" },
+        { "type": "formula", "as": "fieldName", "expr": "datum.key === 'plan' ? planFieldLabel : (datum.key === 'approved' ? approvedFieldLabel : actualFieldLabel)" },
+        { "type": "formula", "as": "centerLabel", "expr": "datum.key === 'plan' ? planCenterLabel : (datum.key === 'approved' ? approvedCenterLabel : actualCenterLabel)" },
+        { "type": "formula", "as": "unit", "expr": "datum.key === 'plan' ? planUnit : (datum.key === 'approved' ? approvedUnit : actualUnit)" },
+        { "type": "formula", "as": "decimals", "expr": "datum.key === 'plan' ? planDecimals : (datum.key === 'approved' ? approvedDecimals : actualDecimals)" },
+        { "type": "formula", "as": "percentDecimals", "expr": "datum.key === 'plan' ? planPercentDecimals : (datum.key === 'approved' ? approvedPercentDecimals : actualPercentDecimals)" },
+        { "type": "formula", "as": "percentPrefix", "expr": "datum.key === 'plan' ? planPercentPrefix : (datum.key === 'approved' ? approvedPercentPrefix : actualPercentPrefix)" },
+        { "type": "formula", "as": "percentSuffix", "expr": "datum.key === 'plan' ? planPercentSuffix : (datum.key === 'approved' ? approvedPercentSuffix : actualPercentSuffix)" },
+        { "type": "formula", "as": "labelFontFamily", "expr": "datum.key === 'plan' ? planFontFamily : (datum.key === 'approved' ? approvedFontFamily : actualFontFamily)" },
+        { "type": "formula", "as": "labelFontSize", "expr": "datum.key === 'plan' ? planFontSize : (datum.key === 'approved' ? approvedFontSize : actualFontSize)" },
+        { "type": "formula", "as": "labelFontColor", "expr": "datum.ghost ? planColor : datum.key === 'plan' ? planFontColor : (datum.key === 'approved' ? approvedFontColor : actualFontColor)" },
+        { "type": "formula", "as": "labelBold", "expr": "datum.key === 'plan' ? planBold : (datum.key === 'approved' ? approvedBold : actualBold)" },
+        { "type": "formula", "as": "labelBackground", "expr": "datum.key === 'plan' ? planBackground : (datum.key === 'approved' ? approvedBackground : actualBackground)" },
+        { "type": "formula", "as": "labelShowBackground", "expr": "datum.key === 'plan' ? planShowBackground : (datum.key === 'approved' ? approvedShowBackground : actualShowBackground)" },
+
+        { "type": "formula", "as": "color", "expr": "datum.key === 'plan' ? planColor : (datum.key === 'approved' ? ((hasPlan && !planZero && approvedConditional) ? (approvedRatio < min(approvedThreshold1, approvedThreshold2) ? approvedColorLow : (approvedRatio < max(approvedThreshold1, approvedThreshold2) ? approvedColorMid : approvedColorHigh)) : approvedColor) : (actualConditional ? (actualRatio < min(actualThreshold1, actualThreshold2) ? actualColorLow : (actualRatio < max(actualThreshold1, actualThreshold2) ? actualColorMid : actualColorHigh)) : actualColor))" },
+
+        { "type": "formula", "as": "topHalf", "expr": "datum.i === 0 ? topHalf0 : (datum.i === 1 ? topHalf1 : topHalf2)" },
+        { "type": "formula", "as": "nextTopHalf", "expr": "(datum.i + 1) === 0 ? topHalf0 : ((datum.i + 1) === 1 ? topHalf1 : topHalf2)" },
+        { "type": "formula", "as": "bottomHalf", "expr": "datum.isLast ? spoutHalf : datum.nextTopHalf" },
+        { "type": "formula", "as": "floored", "expr": "datum.i === 0 ? false : (datum.i === 1 ? floored1 : floored2)" },
+
+        { "type": "formula", "as": "cy", "expr": "topY + datum.i * (stageH + gap) + stageH / 2" },
+        { "type": "formula", "as": "top", "expr": "datum.cy - stageH / 2" },
+        { "type": "formula", "as": "bottom", "expr": "datum.cy + stageH / 2" },
+        { "type": "formula", "as": "x1", "expr": "funnelX - datum.topHalf" },
+        { "type": "formula", "as": "x2", "expr": "funnelX + datum.topHalf" },
+        { "type": "formula", "as": "bx1", "expr": "funnelX - datum.bottomHalf" },
+        { "type": "formula", "as": "bx2", "expr": "funnelX + datum.bottomHalf" },
+
+        { "type": "formula", "as": "valueText", "expr": "!isFinite(datum.value) ? '-' : (datum.unit === 'Auto' ? (abs(datum.value) >= 1e12 ? format(datum.value / 1e12, ',.' + datum.decimals + 'f') + 'T' : abs(datum.value) >= 1e9 ? format(datum.value / 1e9, ',.' + datum.decimals + 'f') + 'B' : abs(datum.value) >= 1e6 ? format(datum.value / 1e6, ',.' + datum.decimals + 'f') + 'M' : abs(datum.value) >= 1e3 ? format(datum.value / 1e3, ',.' + datum.decimals + 'f') + 'K' : format(datum.value, ',.' + datum.decimals + 'f')) : datum.unit === 'K' ? format(datum.value / 1e3, ',.' + datum.decimals + 'f') + 'K' : datum.unit === 'M' ? format(datum.value / 1e6, ',.' + datum.decimals + 'f') + 'M' : datum.unit === 'B' ? format(datum.value / 1e9, ',.' + datum.decimals + 'f') + 'B' : datum.unit === 'T' ? format(datum.value / 1e12, ',.' + datum.decimals + 'f') + 'T' : format(datum.value, ',.' + datum.decimals + 'f'))" },
+        { "type": "formula", "as": "ratioText", "expr": "!isFinite(datum.ratio) ? '-' : (datum.percentPrefix + format(datum.ratio, '.' + datum.percentDecimals + 'f') + datum.percentSuffix)" },
+
+        { "type": "formula", "as": "topBulge", "expr": "datum.isFirst ? -10 : -3" },
+        { "type": "formula", "as": "notchDepth", "expr": "min(20, gap * 0.72, stageH * 0.22)" },
+        { "type": "formula", "as": "notchHalfWidth", "expr": "min(18, datum.bottomHalf * 0.30, datum.topHalf * 0.30)" },
+        { "type": "formula", "as": "pathD", "expr": "datum.isLast ? ('M ' + datum.x1 + ' ' + datum.top + ' Q ' + funnelX + ' ' + (datum.top - 4) + ' ' + datum.x2 + ' ' + datum.top + ' L ' + (datum.x2 - datum.topHalf * 0.10) + ' ' + (datum.top + stageH * 0.68) + ' Q ' + funnelX + ' ' + (datum.bottom + 10) + ' ' + datum.bx2 + ' ' + datum.bottom + ' L ' + datum.bx1 + ' ' + datum.bottom + ' Q ' + funnelX + ' ' + (datum.bottom + 10) + ' ' + (datum.x1 + datum.topHalf * 0.10) + ' ' + (datum.top + stageH * 0.68) + ' Z') : (showArrows ? ('M ' + datum.x1 + ' ' + datum.top + ' Q ' + funnelX + ' ' + (datum.top + datum.topBulge) + ' ' + datum.x2 + ' ' + datum.top + ' L ' + datum.bx2 + ' ' + (datum.bottom - 3) + ' L ' + (funnelX + datum.notchHalfWidth) + ' ' + (datum.bottom - 3) + ' L ' + funnelX + ' ' + (datum.bottom - 3 + datum.notchDepth) + ' L ' + (funnelX - datum.notchHalfWidth) + ' ' + (datum.bottom - 3) + ' L ' + datum.bx1 + ' ' + (datum.bottom - 3) + ' Z') : ('M ' + datum.x1 + ' ' + datum.top + ' Q ' + funnelX + ' ' + (datum.top + datum.topBulge) + ' ' + datum.x2 + ' ' + datum.top + ' L ' + datum.bx2 + ' ' + (datum.bottom - 3) + ' Q ' + funnelX + ' ' + (datum.bottom + 3) + ' ' + datum.bx1 + ' ' + (datum.bottom - 3) + ' Z'))" },
+        { "type": "formula", "as": "shineD", "expr": "'M ' + (datum.x1 + 2) + ' ' + (datum.top + 3) + ' Q ' + funnelX + ' ' + (datum.top - 1) + ' ' + (datum.x2 - 2) + ' ' + (datum.top + 3) + ' L ' + (datum.x2 - datum.topHalf * 0.16) + ' ' + (datum.top + 9) + ' Q ' + funnelX + ' ' + (datum.top + 13) + ' ' + (datum.x1 + datum.topHalf * 0.16) + ' ' + (datum.top + 9) + ' Z'" },
+        { "type": "formula", "as": "rimRx", "expr": "datum.topHalf * 0.92" },
+        { "type": "formula", "as": "rimRy", "expr": "max(4, stageH * 0.05)" },
+        { "type": "formula", "as": "rimD", "expr": "'M ' + (funnelX - datum.rimRx) + ',' + datum.top + ' A ' + datum.rimRx + ',' + datum.rimRy + ' 0 1,0 ' + (funnelX + datum.rimRx) + ',' + datum.top + ' A ' + datum.rimRx + ',' + datum.rimRy + ' 0 1,0 ' + (funnelX - datum.rimRx) + ',' + datum.top + ' Z'" },
+
+        { "type": "formula", "as": "labelBgW", "expr": "min(datum.topHalf * 1.35, 170)" },
+        { "type": "formula", "as": "sideLineLeftX1", "expr": "18 + min(150, length(datum.fieldName) * sideFontSize * 0.55)" },
+        { "type": "formula", "as": "sideLineLeftX2", "expr": "min(sideW, width * 0.30)" },
+        { "type": "formula", "as": "sideLineRightX1", "expr": "width - min(sideW, width * 0.30)" },
+        { "type": "formula", "as": "sideLineRightX2", "expr": "(width - 18) - min(100, length(datum.valueText) * valueFontSize * 0.45)" },
+        { "type": "formula", "as": "sideLabelBgW", "expr": "max(62, length(datum.fieldName) * sideFontSize * 0.56 + 14)" },
+        { "type": "formula", "as": "sideValueBgW", "expr": "max(62, length(datum.valueText) * valueFontSize * 0.56 + 14)" }
+      ]
+    },
+    {
+      "name": "stagesFinal",
+      "source": "stages",
+      "transform": [
+        { "type": "formula", "as": "tooltip", "expr": "merge(\n  hasPlan ? {'Plan': data('stages')[0].valueText} : {},\n  {'Approved': (hasPlan ? data('stages')[1] : data('stages')[0]).valueText},\n  hasPlan ? {'vs Plan': planZero ? 'N/A' : data('stages')[1].ratioText} : {},\n  {'Actual': (hasPlan ? data('stages')[2] : data('stages')[1]).valueText},\n  {'vs Approved': (hasPlan ? data('stages')[2] : data('stages')[1]).ratioText},\n  {'Remaining': format(remainingRatio, '.' + actualPercentDecimals + 'f') + actualPercentSuffix},\n  isValid(data('dataset')[0].tooltip1) ? {'Extra 1': data('dataset')[0].tooltip1} : {},\n  isValid(data('dataset')[0].tooltip2) ? {'Extra 2': data('dataset')[0].tooltip2} : {},\n  isValid(data('dataset')[0].tooltip3) ? {'Extra 3': data('dataset')[0].tooltip3} : {},\n  isValid(data('dataset')[0].tooltip4) ? {'Extra 4': data('dataset')[0].tooltip4} : {},\n  datum.floored ? {'Note': 'Width capped', '\u00a0': 'for readability'} : {}\n)" }
+      ]
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "encode": {
+        "update": {
+          "x": { "value": 0 }, "y": { "value": 0 },
+          "width": { "signal": "width" }, "height": { "signal": "height" },
+          "fill": { "signal": "backgroundColor" },
+          "fillOpacity": { "signal": "1 - backgroundTransparency / 100" }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": { "signal": "width / 2" }, "y": { "signal": "height / 2" },
+          "align": { "value": "center" }, "baseline": { "value": "middle" },
+          "text": { "value": "Please add Approved and Actual data. Plan Budget is optional." },
+          "fill": { "signal": "sideFontColor" }, "font": { "signal": "sideFontFamily" }, "fontSize": { "value": 14 },
+          "opacity": { "signal": "showFunnel ? 0 : 1" }
+        }
+      }
+    },
+    {
+      "type": "group",
+      "name": "layers",
+      "encode": { "update": { "opacity": { "signal": "showFunnel ? 1 : 0" } } },
+      "marks": [
+        {
+          "type": "path",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "path": { "field": "pathD" },
+            "fill": { "value": { "gradient": "linear", "x1": 0, "y1": 0, "x2": 0, "y2": 1,
+              "stops": [
+                { "offset": 0.55, "color": "rgba(0,0,0,0)" },
+                { "offset": 0.82, "color": "rgba(0,0,0,0.18)" },
+                { "offset": 1, "color": "rgba(0,0,0,0.32)" }
+              ] } },
+            "opacity": { "signal": "datum.ghost ? 0 : 1" }
+          } }
+        },
+        {
+          "type": "path", "name": "layer-shape",
+          "from": { "data": "stagesFinal" },
+          "encode": {
+            "update": {
+              "path": { "field": "pathD" },
+              "fill": { "field": "color" },
+              "fillOpacity": { "signal": "datum.ghost ? ghostFillOpacity : 1" },
+              "stroke": { "signal": "datum.ghost ? datum.color : borderColor" },
+              "strokeWidth": { "signal": "datum.ghost ? (hoverIndex === datum.i ? 2.2 : 1.6) : (hoverIndex === datum.i ? max(1.8, borderWidth) : borderWidth)" },
+              "strokeDash": { "signal": "datum.ghost ? [5, 3] : []" },
+              "cursor": { "value": "pointer" },
+              "tooltip": { "signal": "datum.tooltip" }
+            }
+          }
+        },
+        {
+          "type": "path",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "path": { "field": "pathD" },
+            "fill": { "value": { "gradient": "linear", "x1": 0, "y1": 0, "x2": 0, "y2": 1,
+              "stops": [
+                { "offset": 0, "color": "rgba(255,255,255,0.30)" },
+                { "offset": 0.22, "color": "rgba(255,255,255,0.08)" },
+                { "offset": 0.55, "color": "rgba(255,255,255,0)" }
+              ] } },
+            "opacity": { "signal": "datum.ghost ? 0 : 1" }
+          } }
+        },
+        {
+          "type": "path",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "path": { "field": "shineD" },
+            "fill": { "value": "rgba(255,255,255,0.14)" },
+            "opacity": { "signal": "datum.ghost ? 0 : 1" }
+          } }
+        },
+        {
+          "type": "path",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "path": { "field": "rimD" },
+            "fill": { "value": "rgba(0,0,0,0.28)" },
+            "opacity": { "signal": "(datum.isFirst && !datum.ghost) ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "rule",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "signal": "datum.x1 - 5" }, "x2": { "signal": "datum.x1 - 5" },
+            "y": { "signal": "datum.top + 3" }, "y2": { "signal": "datum.bottom - 3" },
+            "stroke": { "signal": "floorLineColor" }, "strokeWidth": { "signal": "floorLineWidth" },
+            "strokeDash": { "signal": "floorLineStyle === 'dashed' ? [3,3] : []" },
+            "opacity": { "signal": "(floorShow && datum.floored) ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "rule",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "signal": "datum.x2 + 5" }, "x2": { "signal": "datum.x2 + 5" },
+            "y": { "signal": "datum.top + 3" }, "y2": { "signal": "datum.bottom - 3" },
+            "stroke": { "signal": "floorLineColor" }, "strokeWidth": { "signal": "floorLineWidth" },
+            "strokeDash": { "signal": "floorLineStyle === 'dashed' ? [3,3] : []" },
+            "opacity": { "signal": "(floorShow && datum.floored) ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "text",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "signal": "datum.x2 + 10" }, "y": { "signal": "datum.top + 10" },
+            "text": { "value": "*" }, "fill": { "signal": "floorLineColor" }, "fontSize": { "value": 11 }, "fontWeight": { "value": "bold" },
+            "opacity": { "signal": "(floorShow && datum.floored) ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "rule",
+          "name": "side-connector-left",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "field": "sideLineLeftX1" }, "x2": { "field": "sideLineLeftX2" },
+            "y": { "field": "cy" }, "y2": { "field": "cy" },
+            "stroke": { "signal": "hoverIndex === datum.i ? datum.color : sideLineColor" },
+            "strokeWidth": { "signal": "hoverIndex === datum.i ? max(1.5, sideLineWidth + 0.5) : sideLineWidth" },
+            "opacity": { "signal": "showSideLabels ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "rule",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "field": "sideLineRightX1" }, "x2": { "field": "sideLineRightX2" },
+            "y": { "field": "cy" }, "y2": { "field": "cy" },
+            "stroke": { "signal": "hoverIndex === datum.i ? datum.color : sideLineColor" },
+            "strokeWidth": { "signal": "hoverIndex === datum.i ? max(1.5, sideLineWidth + 0.5) : sideLineWidth" },
+            "opacity": { "signal": "showSideLabels ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "signal": "18 - 7" }, "y": { "signal": "datum.cy - sideFontSize * 0.85" },
+            "width": { "field": "sideLabelBgW" }, "height": { "signal": "sideFontSize * 1.35" },
+            "cornerRadius": { "value": 3 }, "fill": { "signal": "sideBackground" }, "fillOpacity": { "value": 0.5 },
+            "opacity": { "signal": "(showSideLabels && showSideBackground) ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "text",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "value": 18 }, "y": { "signal": "datum.cy + sideFontSize * 0.35" },
+            "text": { "field": "fieldName" },
+            "fill": { "signal": "hoverIndex === datum.i ? datum.color : sideFontColor" },
+            "font": { "signal": "sideFontFamily" }, "fontSize": { "signal": "sideFontSize" },
+            "fontWeight": { "signal": "sideBold ? 'bold' : 'normal'" },
+            "opacity": { "signal": "showSideLabels ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "signal": "(width - 18) - datum.sideValueBgW" }, "y": { "signal": "datum.cy - valueFontSize * 0.85" },
+            "width": { "field": "sideValueBgW" }, "height": { "signal": "valueFontSize * 1.35" },
+            "cornerRadius": { "value": 3 }, "fill": { "signal": "valueBackground" }, "fillOpacity": { "value": 0.5 },
+            "opacity": { "signal": "(showSideLabels && showValueBackground) ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "text",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "signal": "width - 18" }, "y": { "signal": "datum.cy + valueFontSize * 0.35" },
+            "align": { "value": "right" },
+            "text": { "field": "valueText" },
+            "fill": { "signal": "hoverIndex === datum.i ? datum.color : valueFontColor" },
+            "font": { "signal": "valueFontFamily" }, "fontSize": { "signal": "valueFontSize" },
+            "fontWeight": { "signal": "valueBold ? 'bold' : 'normal'" },
+            "opacity": { "signal": "showSideLabels ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "signal": "funnelX - datum.labelBgW / 2" }, "y": { "signal": "datum.cy - datum.labelFontSize * 1.3" },
+            "width": { "field": "labelBgW" }, "height": { "signal": "datum.labelFontSize * 3.4" },
+            "cornerRadius": { "value": 5 }, "fill": { "field": "labelBackground" }, "fillOpacity": { "value": 0.45 },
+            "opacity": { "signal": "datum.labelShowBackground ? 1 : 0" }
+          } }
+        },
+        {
+          "type": "text",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "signal": "funnelX" }, "y": { "signal": "datum.cy - 2" },
+            "align": { "value": "center" },
+            "text": { "field": "ratioText" },
+            "fill": { "field": "labelFontColor" },
+            "font": { "field": "labelFontFamily" },
+            "fontSize": { "signal": "hoverIndex === datum.i ? datum.labelFontSize * 1.1 : datum.labelFontSize" },
+            "fontWeight": { "signal": "datum.labelBold ? 'bold' : 'normal'" }
+          } }
+        },
+        {
+          "type": "text",
+          "interactive": false,
+          "from": { "data": "stagesFinal" },
+          "encode": { "update": {
+            "x": { "signal": "funnelX" }, "y": { "signal": "datum.cy - 2 + datum.labelFontSize * 1.2" },
+            "align": { "value": "center" },
+            "text": { "field": "centerLabel" },
+            "fill": { "field": "labelFontColor" },
+            "font": { "field": "labelFontFamily" },
+            "fontSize": { "field": "labelFontSize" },
+            "fontWeight": { "signal": "datum.labelBold ? 'bold' : 'normal'" }
+          } }
+        }
+      ]
+    },
+    {
+      "type": "rule",
+      "interactive": false,
+      "encode": { "update": {
+        "x": { "signal": "18 + min(150, length(hasPlan ? data('stages')[1].fieldName : data('stages')[0].fieldName) * remainingFontSize * 0.55)" },
+        "x2": { "signal": "min(sideW, width * 0.30)" },
+        "y": { "signal": "min(height - remainingFontSize * 0.45 - 5, bottomY + 24)" },
+        "y2": { "signal": "min(height - remainingFontSize * 0.45 - 5, bottomY + 24)" },
+        "stroke": { "signal": "sideLineColor" }, "strokeWidth": { "signal": "sideLineWidth" },
+        "opacity": { "signal": "(showFunnel && showBottomRemainLabel) ? 1 : 0" }
+      } }
+    },
+    {
+      "type": "rule",
+      "interactive": false,
+      "encode": { "update": {
+        "x": { "signal": "width - min(sideW, width * 0.30)" },
+        "x2": { "signal": "(width - 18) - min(100, length(format(remainingValue,',.1f')) * remainingFontSize * 0.45)" },
+        "y": { "signal": "min(height - remainingFontSize * 0.45 - 5, bottomY + 24)" },
+        "y2": { "signal": "min(height - remainingFontSize * 0.45 - 5, bottomY + 24)" },
+        "stroke": { "signal": "sideLineColor" }, "strokeWidth": { "signal": "sideLineWidth" },
+        "opacity": { "signal": "(showFunnel && showBottomRemainLabel) ? 1 : 0" }
+      } }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "encode": { "update": {
+        "x": { "value": 18 }, "y": { "signal": "min(height - remainingFontSize * 0.45 - 5, bottomY + 24) + remainingFontSize * 0.35" },
+        "text": { "value": "Remaining" },
+        "fill": { "signal": "remainingFontColor" }, "font": { "signal": "remainingFontFamily" }, "fontSize": { "signal": "remainingFontSize" },
+        "fontWeight": { "signal": "remainingBold ? 'bold' : 'normal'" },
+        "opacity": { "signal": "(showFunnel && showBottomRemainLabel) ? 1 : 0" }
+      } }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "encode": { "update": {
+        "x": { "signal": "width - 18" }, "y": { "signal": "min(height - remainingFontSize * 0.45 - 5, bottomY + 24) + remainingFontSize * 0.35" },
+        "align": { "value": "right" },
+        "text": { "signal": "!isFinite(remainingValue) ? '-' : (actualUnit === 'Auto' ? (abs(remainingValue) >= 1e12 ? format(remainingValue / 1e12, ',.' + actualDecimals + 'f') + 'T' : abs(remainingValue) >= 1e9 ? format(remainingValue / 1e9, ',.' + actualDecimals + 'f') + 'B' : abs(remainingValue) >= 1e6 ? format(remainingValue / 1e6, ',.' + actualDecimals + 'f') + 'M' : abs(remainingValue) >= 1e3 ? format(remainingValue / 1e3, ',.' + actualDecimals + 'f') + 'K' : format(remainingValue, ',.' + actualDecimals + 'f')) : format(remainingValue, ',.' + actualDecimals + 'f'))" },
+        "fill": { "signal": "remainingFontColor" }, "font": { "signal": "remainingFontFamily" }, "fontSize": { "signal": "remainingFontSize" },
+        "fontWeight": { "signal": "remainingBold ? 'bold' : 'normal'" },
+        "opacity": { "signal": "(showFunnel && showBottomRemainLabel) ? 1 : 0" }
+      } }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "encode": { "update": {
+        "x": { "signal": "funnelX" }, "y": { "signal": "min(height - remainingFontSize * 0.45 - 5, bottomY + 24) + remainingFontSize * 0.35" },
+        "align": { "value": "center" },
+        "text": { "signal": "actualPercentPrefix + format(remainingRatio, '.' + actualPercentDecimals + 'f') + actualPercentSuffix" },
+        "fill": { "signal": "remainingFontColor" }, "font": { "signal": "remainingFontFamily" }, "fontSize": { "signal": "max(10, remainingFontSize - 2)" },
+        "fontWeight": { "signal": "remainingBold ? 'bold' : 'normal'" },
+        "opacity": { "signal": "(showFunnel && showBottomRemainLabel) ? 1 : 0" }
+      } }
+    }
+  ]
+}

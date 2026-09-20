@@ -1,0 +1,417 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "ArrowBars3D reproduction for Deneb -- ports the visual look/behaviour of D:/DATA/Custom viz/arrowBarsViz (source untouched) as a Vega spec. See README.md in this folder for field mapping and setup.",
+  "width": { "signal": "denebContainer.width" },
+  "height": { "signal": "denebContainer.height" },
+  "padding": 0,
+  "autosize": { "type": "none", "contains": "padding" },
+
+  "signals": [
+    { "name": "apexRatioRaw", "value": 20 },
+    { "name": "riserMidRaw", "value": 90 },
+    { "name": "riserBottomRaw", "value": 50 },
+    { "name": "leanOffsetRaw", "value": 80 },
+
+    { "name": "showValue", "value": true },
+    { "name": "valueFontFamily", "value": "Segoe UI, Tahoma, sans-serif" },
+    { "name": "valueFontSize", "value": 8 },
+    { "name": "valueFontColor", "value": "#1F2937" },
+    { "name": "valueBackgroundColor", "value": "#F0F0F0" },
+
+    { "name": "showCategory", "value": false },
+    { "name": "categoryFontFamily", "value": "Segoe UI, Tahoma, sans-serif" },
+    { "name": "categoryFontSize", "value": 8 },
+    { "name": "categoryFontColor", "value": "#FFFFFF" },
+    { "name": "categoryBackgroundColor", "value": "rgba(0,0,0,0.35)" },
+
+    { "name": "legendShow", "value": true },
+    { "name": "legendFontSize", "value": 8 },
+    { "name": "legendPos", "value": "left", "description": "left | center | right" },
+
+    { "name": "animation", "value": true },
+    { "name": "sortBy", "value": "ratio-desc", "description": "none | ratio-asc | ratio-desc" },
+
+    { "name": "categoryColorScheme", "value": "tableau10" },
+
+    { "name": "cfEnabled", "value": false },
+    { "name": "cfMode", "value": "gradient", "description": "gradient | rules" },
+    { "name": "cfBasedOn", "value": "ratio", "description": "ratio | target | actual" },
+    { "name": "cfMinColor", "value": "#E74C3C" },
+    { "name": "cfMidColor", "value": "#F1C40F" },
+    { "name": "cfMaxColor", "value": "#2ECC71" },
+    { "name": "cfRedColor", "value": "#E74C3C" },
+    { "name": "cfYellowColor", "value": "#F1C40F" },
+    { "name": "cfGreenColor", "value": "#2ECC71" },
+    { "name": "cfRedUpTo", "value": 100 },
+    { "name": "cfYellowUpTo", "value": 80 },
+
+    { "name": "n", "update": "max(1, length(data('dataset')))" },
+    { "name": "hasTarget", "update": "length(data('targetPresence')) > 0 && data('targetPresence')[0].n > 0" },
+    { "name": "maxValue", "update": "length(data('barsStats')) && isValid(data('barsStats')[0].maxMetric) ? data('barsStats')[0].maxMetric : 1" },
+    { "name": "cfMinV", "update": "length(data('barsStats')) ? data('barsStats')[0].cfMin : 0" },
+    { "name": "cfMaxV", "update": "length(data('barsStats')) ? data('barsStats')[0].cfMax : 0" },
+    { "name": "cfMidV", "update": "(cfMinV + cfMaxV) / 2" },
+
+    { "name": "apexRatio", "update": "max(10, min(apexRatioRaw, 100)) / 100" },
+    { "name": "legendSwatch", "update": "max(10, legendFontSize + 2)" },
+    { "name": "legendReserve", "update": "legendShow ? (legendFontSize + 18) : 0" },
+    { "name": "availH", "update": "max(80, height - 10 - legendReserve)" },
+    { "name": "riserBudget", "update": "availH * 0.42" },
+    { "name": "riserScale", "update": "(riserMidRaw + riserBottomRaw) > riserBudget ? riserBudget / (riserMidRaw + riserBottomRaw) : 1" },
+    { "name": "riserMidH", "update": "riserMidRaw * riserScale" },
+    { "name": "riserBottomH", "update": "riserBottomRaw * riserScale" },
+    { "name": "leanMarginBudget", "update": "min(leanOffsetRaw, 120) + 6" },
+    { "name": "leftMargin", "update": "leanMarginBudget" },
+    { "name": "rightMargin", "update": "leanMarginBudget" },
+    { "name": "plotW", "update": "max(40, width - leftMargin - rightMargin)" },
+    { "name": "barSlotWidth", "update": "plotW / n" },
+    { "name": "barGap", "update": "min(5, max(1, barSlotWidth * 0.14))" },
+    { "name": "barWidth", "update": "max(12, barSlotWidth - barGap)" },
+    { "name": "maxApexH", "update": "min(barWidth * apexRatio, availH * 0.22)" },
+    { "name": "baseLean", "update": "max(0, min(leanOffsetRaw, barWidth * 0.9))" },
+    { "name": "valueLabelReserve", "update": "showValue ? round(valueFontSize * 2 + 18) : 0" },
+    { "name": "topMargin", "update": "maxApexH + valueLabelReserve + 8" },
+    { "name": "barsMaxH", "update": "max(20, availH - topMargin - riserMidH - riserBottomH)" },
+    { "name": "baseY", "update": "topMargin + barsMaxH" },
+
+    { "name": "legendTotalW", "update": "length(data('legendStats')) ? data('legendStats')[0].w : 0" },
+    { "name": "legendStartX", "update": "legendPos === 'left' ? 8 : (legendPos === 'right' ? max(8, width - 8 - legendTotalW) : max(8, (width - legendTotalW) / 2))" },
+
+    { "name": "animT", "value": 0,
+      "on": [
+        { "events": { "type": "timer", "throttle": 16 },
+          "update": "animation ? min(1, animT + 16 / 700) : 1" }
+      ]
+    }
+  ],
+
+  "data": [
+    { "name": "dataset" },
+    {
+      "name": "targetPresence",
+      "source": "dataset",
+      "transform": [
+        { "type": "aggregate", "fields": ["target"], "ops": ["valid"], "as": ["n"] }
+      ]
+    },
+    {
+      "name": "barsBase",
+      "source": "dataset",
+      "transform": [
+        { "type": "window", "ops": ["row_number"], "as": ["origIndex"] },
+        { "type": "formula", "as": "targetVal", "expr": "isValid(datum.target) ? datum.target : null" },
+        { "type": "formula", "as": "ratio", "expr": "hasTarget && datum.targetVal !== null && datum.targetVal !== 0 ? (datum.actual / datum.targetVal) * 100 : null" },
+        { "type": "formula", "as": "isNA", "expr": "hasTarget && datum.ratio === null" },
+        { "type": "formula", "as": "metric", "expr": "hasTarget ? (datum.ratio === null ? 0 : datum.ratio) : datum.actual" },
+        { "type": "formula", "as": "metricFormatted", "expr": "hasTarget ? (datum.ratio === null ? 'N/A' : format(datum.ratio, '.1f') + '%') : format(datum.actual, ',.0f')" },
+        { "type": "formula", "as": "actualFormatted", "expr": "format(datum.actual, ',.0f')" },
+        { "type": "formula", "as": "targetFormatted", "expr": "hasTarget ? format(datum.targetVal, ',.0f') : ''" },
+        { "type": "formula", "as": "ratioFormatted", "expr": "datum.ratio === null ? 'N/A' : format(datum.ratio, '.1f') + '%'" },
+        { "type": "formula", "as": "basisRaw", "expr": "cfBasedOn === 'ratio' ? (hasTarget ? (datum.ratio === null ? 0 : datum.ratio) : datum.actual) : (cfBasedOn === 'target' ? (hasTarget ? (datum.targetVal === null ? 0 : datum.targetVal) : datum.actual) : datum.actual)" },
+        { "type": "formula", "as": "sortDir", "expr": "sortBy === 'ratio-desc' ? -1 : 1" },
+        { "type": "formula", "as": "sortMetric", "expr": "sortBy === 'none' ? datum.origIndex : (datum.ratio === null ? 999999 : datum.ratio * datum.sortDir)" },
+        { "type": "collect", "sort": { "field": "sortMetric", "order": "ascending" } },
+        { "type": "window", "ops": ["row_number"], "as": ["idx1based"] },
+        { "type": "formula", "as": "i", "expr": "datum.idx1based - 1" },
+        { "type": "formula", "as": "x0", "expr": "leftMargin + datum.i * barSlotWidth + barGap / 2" },
+        { "type": "formula", "as": "x1", "expr": "datum.x0 + barWidth" },
+        { "type": "formula", "as": "shiftLeft", "expr": "(n % 2 === 0 && datum.i === n / 2) ? 0 : (datum.i < n / 2 ? baseLean : -baseLean)" },
+        { "type": "formula", "as": "shiftRight", "expr": "(n % 2 === 0 && (datum.i + 1) === n / 2) ? 0 : ((datum.i + 1) < n / 2 ? baseLean : -baseLean)" }
+      ]
+    },
+    {
+      "name": "barsStats",
+      "source": "barsBase",
+      "transform": [
+        { "type": "aggregate", "fields": ["metric", "basisRaw", "basisRaw"], "ops": ["max", "min", "max"], "as": ["maxMetric", "cfMin", "cfMax"] }
+      ]
+    },
+    {
+      "name": "bars",
+      "source": "barsBase",
+      "transform": [
+        { "type": "formula", "as": "barH", "expr": "datum.isNA ? max(10, barsMaxH * 0.12) : max(4, (datum.metric / (maxValue * 1.05)) * barsMaxH)" },
+        { "type": "formula", "as": "topY", "expr": "baseY - datum.barH" },
+        { "type": "formula", "as": "apexH", "expr": "min(maxApexH, datum.barH * 0.9)" },
+
+        { "type": "formula", "as": "categoryColor", "expr": "scale('colorScale', datum.category)" },
+        { "type": "formula", "as": "cfColor", "expr": "!cfEnabled ? datum.categoryColor : (cfMode === 'rules' ? (datum.basisRaw <= cfRedUpTo ? cfRedColor : (datum.basisRaw <= cfYellowUpTo ? cfYellowColor : cfGreenColor)) : (cfMinV === cfMaxV ? cfMidColor : (datum.basisRaw <= cfMidV ? scale('cfLowScale', datum.basisRaw) : scale('cfHighScale', datum.basisRaw))))" },
+        { "type": "formula", "as": "front", "expr": "datum.isNA ? '#9AA3AF' : datum.cfColor" },
+        { "type": "formula", "as": "apexFill", "expr": "datum.isNA ? '#C3C8CF' : datum.front" },
+        { "type": "formula", "as": "riserOverlayOpacity", "expr": "datum.isNA ? 0 : 0.28" },
+
+        { "type": "formula", "as": "pathApex", "expr": "'M' + datum.x0 + ',' + datum.topY + ' L' + ((datum.x0 + datum.x1) / 2) + ',' + (datum.topY - datum.apexH) + ' L' + datum.x1 + ',' + datum.topY + ' Z'" },
+        { "type": "formula", "as": "pathFront", "expr": "'M' + datum.x0 + ',' + baseY + ' L' + datum.x0 + ',' + datum.topY + ' L' + datum.x1 + ',' + datum.topY + ' L' + datum.x1 + ',' + baseY + ' Z'" },
+        { "type": "formula", "as": "pathMid", "expr": "'M' + (datum.x0 - datum.shiftLeft) + ',' + (baseY + riserMidH) + ' L' + (datum.x1 - datum.shiftRight) + ',' + (baseY + riserMidH) + ' L' + datum.x1 + ',' + baseY + ' L' + datum.x0 + ',' + baseY + ' Z'" },
+        { "type": "formula", "as": "pathBottom", "expr": "'M' + (datum.x0 - datum.shiftLeft) + ',' + (baseY + riserMidH + riserBottomH) + ' L' + (datum.x1 - datum.shiftRight) + ',' + (baseY + riserMidH + riserBottomH) + ' L' + (datum.x1 - datum.shiftRight) + ',' + (baseY + riserMidH) + ' L' + (datum.x0 - datum.shiftLeft) + ',' + (baseY + riserMidH) + ' Z'" },
+
+        { "type": "formula", "as": "valueBadgeX", "expr": "(datum.x0 + datum.x1) / 2" },
+        { "type": "formula", "as": "valueBadgeY", "expr": "datum.topY - datum.apexH - 12" },
+        { "type": "formula", "as": "valueTextWidth", "expr": "length(datum.metricFormatted) * valueFontSize * 0.62" },
+        { "type": "formula", "as": "valuePillH", "expr": "valueFontSize * 0.55 + 5" },
+
+        { "type": "formula", "as": "categoryBadgeX", "expr": "(datum.x0 + datum.x1) / 2 - (datum.shiftLeft + datum.shiftRight) / 2" },
+        { "type": "formula", "as": "categoryBadgeY", "expr": "baseY + riserMidH + riserBottomH * 0.55" },
+        { "type": "formula", "as": "categoryTextWidth", "expr": "length(datum.category) * categoryFontSize * 0.58" },
+        { "type": "formula", "as": "catPillH", "expr": "categoryFontSize * 1.3 + 6" },
+
+        { "type": "formula", "as": "hitY0", "expr": "datum.topY - datum.apexH - valueLabelReserve" },
+        { "type": "formula", "as": "hitD", "expr": "'M' + datum.x0 + ',' + datum.hitY0 + ' L' + datum.x1 + ',' + datum.hitY0 + ' L' + datum.x1 + ',' + baseY + ' L' + datum.x0 + ',' + baseY + ' Z ' + datum.pathMid + ' ' + datum.pathBottom" },
+
+        { "type": "formula", "as": "tooltip", "expr": "merge({'Type': datum.category, 'Actual': datum.actualFormatted}, hasTarget ? {'Approve': datum.targetFormatted, 'Ratio %': datum.ratioFormatted} : {}, isValid(datum.tooltip1) ? {'Extra 1': datum.tooltip1} : {}, isValid(datum.tooltip2) ? {'Extra 2': datum.tooltip2} : {}, isValid(datum.tooltip3) ? {'Extra 3': datum.tooltip3} : {}, isValid(datum.tooltip4) ? {'Extra 4': datum.tooltip4} : {})" }
+      ]
+    },
+    {
+      "name": "legendItems",
+      "source": "bars",
+      "transform": [
+        { "type": "formula", "as": "itemW", "expr": "legendSwatch + 8 + length(datum.category) * legendFontSize * 0.58 + 18" },
+        { "type": "window", "ops": ["sum"], "fields": ["itemW"], "as": ["cumW"] },
+        { "type": "formula", "as": "itemX", "expr": "datum.cumW - datum.itemW" }
+      ]
+    },
+    {
+      "name": "legendStats",
+      "source": "legendItems",
+      "transform": [
+        { "type": "aggregate", "fields": ["itemW"], "ops": ["sum"], "as": ["w"] }
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "colorScale",
+      "type": "ordinal",
+      "domain": { "data": "barsBase", "field": "category" },
+      "range": { "scheme": { "signal": "categoryColorScheme" } }
+    },
+    {
+      "name": "cfLowScale",
+      "type": "linear",
+      "domain": [{ "signal": "cfMinV" }, { "signal": "cfMidV" }],
+      "range": [{ "signal": "cfMinColor" }, { "signal": "cfMidColor" }],
+      "interpolate": "rgb",
+      "clamp": true
+    },
+    {
+      "name": "cfHighScale",
+      "type": "linear",
+      "domain": [{ "signal": "cfMidV" }, { "signal": "cfMaxV" }],
+      "range": [{ "signal": "cfMidColor" }, { "signal": "cfMaxColor" }],
+      "interpolate": "rgb",
+      "clamp": true
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "name": "bg-catcher",
+      "encode": {
+        "update": {
+          "x": { "value": 0 },
+          "y": { "value": 0 },
+          "width": { "signal": "width" },
+          "height": { "signal": "height" },
+          "fill": { "value": "transparent" }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": { "signal": "width / 2" },
+          "y": { "signal": "height / 2" },
+          "align": { "value": "center" },
+          "baseline": { "value": "middle" },
+          "text": { "value": "ลาก Category และ Value เข้ามาเพื่อเริ่มต้น" },
+          "fill": { "value": "#8a8a92" },
+          "fontSize": { "value": 13 },
+          "opacity": { "signal": "length(data('dataset')) === 0 ? 1 : 0" }
+        }
+      }
+    },
+    {
+      "type": "group",
+      "name": "chartArea",
+      "encode": {
+        "update": {
+          "x": { "value": 0 },
+          "y": { "signal": "legendReserve + (animation ? (1 - animT) * 18 : 0)" },
+          "opacity": { "signal": "animation ? animT : 1" }
+        }
+      },
+      "marks": [
+        {
+          "type": "path",
+          "from": { "data": "bars" },
+          "encode": {
+            "update": {
+              "path": { "field": "pathMid" },
+              "fill": { "field": "front" },
+              "fillOpacity": { "signal": "datum.__selected__ === 'off' ? 0.35 : 1" }
+            }
+          }
+        },
+        {
+          "type": "path",
+          "from": { "data": "bars" },
+          "encode": {
+            "update": {
+              "path": { "field": "pathMid" },
+              "fill": { "value": "#000000" },
+              "fillOpacity": { "signal": "datum.riserOverlayOpacity * (datum.__selected__ === 'off' ? 0.35 : 1)" }
+            }
+          }
+        },
+        {
+          "type": "path",
+          "from": { "data": "bars" },
+          "encode": {
+            "update": {
+              "path": { "field": "pathBottom" },
+              "fill": { "field": "front" },
+              "fillOpacity": { "signal": "datum.__selected__ === 'off' ? 0.35 : 1" }
+            }
+          }
+        },
+        {
+          "type": "path",
+          "from": { "data": "bars" },
+          "encode": {
+            "update": {
+              "path": { "field": "pathFront" },
+              "fill": { "signal": "datum.isNA ? pbiPatternSVG('diagonal-stripe-3', '#9AA3AF', '#C3C8CF') : datum.front" },
+              "fillOpacity": { "signal": "datum.__selected__ === 'off' ? 0.35 : 1" }
+            }
+          }
+        },
+        {
+          "type": "path",
+          "from": { "data": "bars" },
+          "encode": {
+            "update": {
+              "path": { "field": "pathApex" },
+              "fill": { "field": "apexFill" },
+              "fillOpacity": { "signal": "datum.__selected__ === 'off' ? 0.35 : 1" }
+            }
+          }
+        },
+        {
+          "type": "path",
+          "name": "bar-hit",
+          "from": { "data": "bars" },
+          "encode": {
+            "update": {
+              "path": { "field": "hitD" },
+              "fill": { "value": "#000000" },
+              "fillOpacity": { "value": 0.004 },
+              "tooltip": { "field": "tooltip" },
+              "cursor": { "value": "pointer" }
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "update": {
+              "x": { "signal": "datum.valueBadgeX - (datum.valueTextWidth / 2 + 9)" },
+              "width": { "signal": "datum.valueTextWidth + 18" },
+              "y": { "signal": "datum.valueBadgeY - datum.valuePillH" },
+              "height": { "signal": "datum.valuePillH * 2" },
+              "cornerRadius": { "signal": "datum.valuePillH" },
+              "fill": { "signal": "valueBackgroundColor" },
+              "opacity": { "signal": "showValue ? 1 : 0" }
+            }
+          },
+          "from": { "data": "bars" }
+        },
+        {
+          "type": "text",
+          "interactive": false,
+          "from": { "data": "bars" },
+          "encode": {
+            "update": {
+              "x": { "field": "valueBadgeX" },
+              "y": { "field": "valueBadgeY" },
+              "align": { "value": "center" },
+              "baseline": { "value": "middle" },
+              "text": { "field": "metricFormatted" },
+              "font": { "signal": "valueFontFamily" },
+              "fontSize": { "signal": "valueFontSize" },
+              "fontWeight": { "value": "bold" },
+              "fill": { "signal": "valueFontColor" },
+              "opacity": { "signal": "showValue ? 1 : 0" }
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "from": { "data": "bars" },
+          "encode": {
+            "update": {
+              "x": { "signal": "datum.categoryBadgeX - (datum.categoryTextWidth / 2 + 5)" },
+              "width": { "signal": "datum.categoryTextWidth + 10" },
+              "y": { "signal": "datum.categoryBadgeY - datum.catPillH / 2" },
+              "height": { "field": "catPillH" },
+              "cornerRadius": { "value": 4 },
+              "fill": { "signal": "categoryBackgroundColor" },
+              "opacity": { "signal": "showCategory ? 1 : 0" }
+            }
+          }
+        },
+        {
+          "type": "text",
+          "interactive": false,
+          "from": { "data": "bars" },
+          "encode": {
+            "update": {
+              "x": { "field": "categoryBadgeX" },
+              "y": { "field": "categoryBadgeY" },
+              "align": { "value": "center" },
+              "baseline": { "value": "middle" },
+              "text": { "field": "category" },
+              "font": { "signal": "categoryFontFamily" },
+              "fontSize": { "signal": "categoryFontSize" },
+              "fontWeight": { "value": "bold" },
+              "fill": { "signal": "categoryFontColor" },
+              "opacity": { "signal": "showCategory ? 1 : 0" }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "from": { "data": "legendItems" },
+      "encode": {
+        "update": {
+          "x": { "signal": "legendStartX + datum.itemX" },
+          "y": { "value": 4 },
+          "width": { "signal": "legendSwatch" },
+          "height": { "signal": "legendSwatch" },
+          "fill": { "field": "front" },
+          "opacity": { "signal": "legendShow ? 1 : 0" }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": { "data": "legendItems" },
+      "encode": {
+        "update": {
+          "x": { "signal": "legendStartX + datum.itemX + legendSwatch + 6" },
+          "y": { "signal": "4 + legendSwatch - 2" },
+          "text": { "field": "category" },
+          "fontSize": { "signal": "legendFontSize" },
+          "fill": { "value": "#222222" },
+          "opacity": { "signal": "legendShow ? 1 : 0" }
+        }
+      }
+    }
+  ]
+}
