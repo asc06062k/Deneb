@@ -1,0 +1,35 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"name": "dataset"},
+  "transform": [
+    {"calculate": "datum.target == 0 ? null : (datum.actual - datum.target) / datum.target * 100", "as": "variancePct"},
+    {"calculate": "datum.variancePct == null ? 'N/A' : format(datum.variancePct, '+.1f') + '%'", "as": "varianceLabel"}
+  ],
+  "encoding": {
+    "y": {"field": "category", "type": "nominal", "sort": null, "title": null},
+    "x": {"type": "quantitative", "scale": {"domainMin": 0}, "title": "Amount"}
+  },
+  "layer": [
+    {"mark": {"type": "bar", "color": "#E4E0D4", "size": 25},
+     "encoding": {"x": {"field": "target"}}},
+    {"mark": {"type": "bar", "size": 17},
+     "encoding": {
+       "x": {"field": "actual"},
+       "color": {
+         "condition": [
+           {"test": "datum.variancePct < -5", "value": "#0CA30C"},
+           {"test": "datum.variancePct >= 10", "value": "#D03B3B"}
+         ],
+         "value": "#2A78D6"
+       },
+       "tooltip": [
+         {"field": "category", "type": "nominal"},
+         {"field": "actual", "type": "quantitative", "format": ",.0f"},
+         {"field": "target", "type": "quantitative", "format": ",.0f"},
+         {"field": "varianceLabel", "type": "nominal", "title": "Variance"}
+       ]
+     }},
+    {"mark": {"type": "tick", "color": "#EB6834", "thickness": 3, "size": 32},
+     "encoding": {"x": {"field": "target"}}}
+  ]
+}

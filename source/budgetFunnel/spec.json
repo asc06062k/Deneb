@@ -24,7 +24,7 @@
     { "name": "actualColor", "value": "#0D9488" },
     { "name": "borderColor", "value": "#FFFFFF" },
     { "name": "borderWidth", "value": 1.2 },
-    { "name": "ghostFillOpacity", "value": 0.06, "description": "Fill opacity of the outline-only Plan layer shown when Plan = 0 (keep > 0 so hovering it still shows the tooltip)" },
+    { "name": "ghostFillOpacity", "value": 0.06, "description": "Fill opacity of the outline-only layer shown when Plan = 0 or Approved = 0 (keep > 0 so hovering it still shows the tooltip)" },
 
     { "name": "approvedConditional", "value": false },
     { "name": "approvedThreshold1", "value": 70 },
@@ -115,6 +115,7 @@
     { "name": "showFunnel", "update": "hasApproved && hasActual" },
 
     { "name": "planZero", "update": "hasPlan && planTotal === 0" },
+    { "name": "approvedZero", "update": "hasApproved && approvedTotal === 0" },
     { "name": "approvedRatio", "update": "(hasPlan && planTotal !== 0) ? (approvedTotal / planTotal) * 100 : 100" },
     { "name": "actualRatio", "update": "approvedTotal !== 0 ? (actualTotal / approvedTotal) * 100 : 0" },
     { "name": "layerCount", "update": "hasPlan ? 3 : 2" },
@@ -180,10 +181,10 @@
         { "type": "formula", "as": "i", "expr": "datum.idx1 - 1" },
         { "type": "formula", "as": "isFirst", "expr": "datum.i === 0" },
         { "type": "formula", "as": "isLast", "expr": "datum.i === layerCount - 1" },
-        { "type": "formula", "as": "ghost", "expr": "datum.key === 'plan' && planZero" },
+        { "type": "formula", "as": "ghost", "expr": "(datum.key === 'plan' && planZero) || (datum.key === 'approved' && approvedZero)" },
 
         { "type": "formula", "as": "value", "expr": "datum.key === 'plan' ? planTotal : (datum.key === 'approved' ? approvedTotal : actualTotal)" },
-        { "type": "formula", "as": "ratio", "expr": "datum.key === 'plan' ? (planZero ? 0 : 100) : (datum.key === 'approved' ? approvedRatio : actualRatio)" },
+        { "type": "formula", "as": "ratio", "expr": "datum.key === 'plan' ? (planZero ? 0 : 100) : (datum.key === 'approved' ? (approvedZero ? 0 : approvedRatio) : actualRatio)" },
         { "type": "formula", "as": "fieldName", "expr": "datum.key === 'plan' ? planFieldLabel : (datum.key === 'approved' ? approvedFieldLabel : actualFieldLabel)" },
         { "type": "formula", "as": "centerLabel", "expr": "datum.key === 'plan' ? planCenterLabel : (datum.key === 'approved' ? approvedCenterLabel : actualCenterLabel)" },
         { "type": "formula", "as": "unit", "expr": "datum.key === 'plan' ? planUnit : (datum.key === 'approved' ? approvedUnit : actualUnit)" },
@@ -193,7 +194,7 @@
         { "type": "formula", "as": "percentSuffix", "expr": "datum.key === 'plan' ? planPercentSuffix : (datum.key === 'approved' ? approvedPercentSuffix : actualPercentSuffix)" },
         { "type": "formula", "as": "labelFontFamily", "expr": "datum.key === 'plan' ? planFontFamily : (datum.key === 'approved' ? approvedFontFamily : actualFontFamily)" },
         { "type": "formula", "as": "labelFontSize", "expr": "datum.key === 'plan' ? planFontSize : (datum.key === 'approved' ? approvedFontSize : actualFontSize)" },
-        { "type": "formula", "as": "labelFontColor", "expr": "datum.ghost ? planColor : datum.key === 'plan' ? planFontColor : (datum.key === 'approved' ? approvedFontColor : actualFontColor)" },
+        { "type": "formula", "as": "labelFontColor", "expr": "datum.ghost ? (datum.key === 'plan' ? planColor : approvedColor) : datum.key === 'plan' ? planFontColor : (datum.key === 'approved' ? approvedFontColor : actualFontColor)" },
         { "type": "formula", "as": "labelBold", "expr": "datum.key === 'plan' ? planBold : (datum.key === 'approved' ? approvedBold : actualBold)" },
         { "type": "formula", "as": "labelBackground", "expr": "datum.key === 'plan' ? planBackground : (datum.key === 'approved' ? approvedBackground : actualBackground)" },
         { "type": "formula", "as": "labelShowBackground", "expr": "datum.key === 'plan' ? planShowBackground : (datum.key === 'approved' ? approvedShowBackground : actualShowBackground)" },
@@ -203,7 +204,7 @@
         { "type": "formula", "as": "topHalf", "expr": "datum.i === 0 ? topHalf0 : (datum.i === 1 ? topHalf1 : topHalf2)" },
         { "type": "formula", "as": "nextTopHalf", "expr": "(datum.i + 1) === 0 ? topHalf0 : ((datum.i + 1) === 1 ? topHalf1 : topHalf2)" },
         { "type": "formula", "as": "bottomHalf", "expr": "datum.isLast ? spoutHalf : datum.nextTopHalf" },
-        { "type": "formula", "as": "floored", "expr": "datum.i === 0 ? false : (datum.i === 1 ? floored1 : floored2)" },
+        { "type": "formula", "as": "floored", "expr": "(datum.i === 0 || datum.ghost) ? false : (datum.i === 1 ? floored1 : floored2)" },
 
         { "type": "formula", "as": "cy", "expr": "topY + datum.i * (stageH + gap) + stageH / 2" },
         { "type": "formula", "as": "top", "expr": "datum.cy - stageH / 2" },

@@ -29,8 +29,8 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 1. อธิบาย Deneb, Vega-Lite และความสัมพันธ์กับ Vega ได้
 2. เชื่อม Field และ Measure จาก Power BI เข้า Deneb ผ่าน `dataset`
 3. อ่านและแก้ไข Vega-Lite JSON พื้นฐาน (`mark`, `encoding`, `layer`, `transform`, `scale`, `condition`)
-4. สร้างกราฟ 2 เส้น (Actual vs Reference) พร้อมพื้นที่ Variance ที่เปลี่ยนสีตามเงื่อนไข ดี/แย่
-5. เพิ่ม Connector line, Data label ที่ลดการชนกัน (ไม่รับประกันว่าไม่ชนทุกกรณี) และ Tooltip หลายค่า
+4. สร้างกราฟ 2 เส้น (Actual vs Reference) พร้อมพื้นที่ Variance ที่เปลี่ยนสีตามเงื่อนไข ดี/แย่ โดยกำหนดทิศทาง "ดี" ผ่าน field `Business_Type` (Higher is Good / Lower is Good) แทนการตั้งค่าคงที่แบบต้นแบบ
+5. เพิ่ม Connector line, Data label ที่ลดการชนกัน (ไม่รับประกันว่าไม่ชนทุกกรณี) และ Tooltip หลายค่า พร้อมทำให้ label ไม่ชนกันซ้ำเมื่อผู้ใช้ปรับขนาด Visual (Responsive)
 6. เปิด Cross-filtering (ผ่าน `__selected__` และ Simple mode ของ Deneb) ให้คลิกจุดข้อมูลแล้วกรอง Visual อื่นในหน้าได้ และเปิด Cross-highlighting (ผ่าน `__highlight`/`__highlightStatus`) ให้ Dual-Line Variance Chart แสดงผลเมื่อถูก Highlight จาก Visual อื่น
 7. จัดการกรณี Actual/Reference เป็น Blank, ค่าติดลบ, Category ชื่อยาว และจำนวน Category มาก
 8. Export/Import Deneb Template เพื่อนำ Spec กลับมาใช้กับข้อมูลอื่น
@@ -44,8 +44,9 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 | Category | dataRole `category` | แกน X เช่น เดือน |
 | Actual | dataRole `actual` | Series 1 ค่าจริง |
 | Reference | dataRole `reference` | Series 2 ค่าเปรียบเทียบ (Target/Budget/ปีก่อน) |
+| Business_Type | **field ใหม่ที่ eBook เพิ่มเอง ไม่มีใน capabilities.json ต้นแบบ** | ค่า `"Higher is Good"` หรือ `"Lower is Good"` ระบุทิศทางที่ถือว่า "ดี" เมื่อเทียบ Actual กับ Reference แทนการตั้งค่าคงที่ผ่าน Format pane ของต้นแบบ |
 
-Custom Visual ต้นแบบรับ 1 Category, 1 Actual, 1 Reference เท่านั้น (ดู `dataViewMappings.conditions` ใน capabilities.json) ขอบเขต eBook ใช้ grain เดียวกันเพื่อไม่ชวนผู้อ่านออกนอกสิ่งที่พิสูจน์แล้วว่าทำงาน
+Custom Visual ต้นแบบรับ 1 Category, 1 Actual, 1 Reference เท่านั้น (ดู `dataViewMappings.conditions` ใน capabilities.json) และกำหนด "ดี/แย่" ผ่าน Format pane object `comparisonLogic.mode` ซึ่งเป็นค่าคงที่ต่อ Visual ไม่ใช่ field ที่ผูกกับข้อมูล eBook ฉบับนี้ **เพิ่ม `Business_Type` เป็นฟีเจอร์ส่วนขยาย** (ดูกลุ่ม B ด้านล่าง) ส่วน Category/Actual/Reference ยังคง grain เดียวกับต้นแบบเพื่อไม่ชวนผู้อ่านออกนอกสิ่งที่พิสูจน์แล้วว่าทำงาน
 
 ### Field contract — Semantics เพิ่มเติม (ต้อง Lock ใน Phase 1)
 
@@ -59,6 +60,8 @@ Custom Visual ต้นแบบรับ 1 Category, 1 Actual, 1 Reference เ�
 | Actual/Reference ไม่ใช่ตัวเลข (Blank/Error) | แปลงเป็น `0` ทันที (`typeof rawActual === "number" ? rawActual : 0`) | ระบุใน Design Plan ว่า eBook จะ "เลียนแบบต้นแบบ" (blank→0) หรือ "เลือกออกแบบใหม่" (blank→เว้นช่องว่างเส้น) และระบุเหตุผล ห้ามเรียกว่าเลียนแบบต้นแบบถ้าไม่ได้ทำแบบเดียวกัน |
 | Reference = 0 | `variancePercent = null` (ไม่หารศูนย์) และ tooltip แสดงค่า Variance % เป็นค่าว่าง | Vega-Lite ต้อง guard หารศูนย์แบบเดียวกัน และกำหนดข้อความ tooltip เมื่อ % ไม่มีค่า |
 | Category ซ้ำ | ไม่ผ่านการทดสอบในต้นแบบ (ไม่มี logic เฉพาะ) | Design Plan ต้องกำหนดพฤติกรรมเอง (เช่น sum ก่อนเข้า visual) และเพิ่ม test case |
+| Business_Type (field ใหม่) | ไม่มีในต้นแบบ — ต้นแบบใช้ Format pane setting คงที่ | ต้องกำหนด: (1) ค่าที่ยอมรับคือ `"Higher is Good"`/`"Lower is Good"` เท่านั้น case-sensitive ตรงตัว (2) grain ที่ตั้งใจคือ **ค่าเดียวตลอดทั้ง Visual** (ผูกกับ KPI เดียวที่ Actual/Reference เปรียบเทียบกัน) ไม่ใช่ค่าต่อ Category (3) ถ้าค่าไม่ตรงกันในแต่ละแถว (data quality) ให้ใช้ค่าของแถวแรกที่ไม่ Blank และแสดงคำเตือนใน tooltip/QA ไม่ทำให้ Visual ล้ม (4) ถ้า Blank ทั้งหมดหรือ field ไม่ได้ผูก ให้ fallback เป็น `"Higher is Good"` (ตรงกับ default ของต้นแบบ) และระบุใน Design Plan ว่านี่คือ default ที่เลือกเอง ไม่ใช่ค่าจากต้นแบบ |
+| Category ปรับขนาด Visual (Responsive) | ต้นแบบเรียก `computeThinnedTickValues`/`computeThinningStep` ใหม่ทุกครั้งที่ `update()` ถูกเรียกด้วย viewport ใหม่ (ทุกครั้งที่ resize) ไม่ใช่แค่ตอนโหลดครั้งแรก | Vega-Lite spec ต้องผูก thinning/label logic กับความกว้าง/สูงที่ผู้ใช้ปรับได้จริง (เช่น `"width": "container"` ร่วมกับ signal/expression ที่คำนวณจาก `width`) แล้ว re-evaluate ทุกครั้งที่ resize ไม่ใช่คำนวณครั้งเดียวตอน static — ต้องมี Test case ปรับขนาดแคบ/กว้าง/สูง-ต่ำ แล้วตรวจว่า label ไม่ทับซ้อนกันในทุกขนาดที่ทดสอบ |
 
 ### Features ที่ eBook ต้องพาผู้อ่านสร้างให้ได้
 

@@ -1,0 +1,42 @@
+-- Table: KPI_Data
+-- These measures preserve Blank values so Deneb can distinguish Blank from numeric zero.
+
+Actual Value =
+IF (
+    COUNT ( KPI_Data[Actual] ) = 0,
+    BLANK (),
+    SUM ( KPI_Data[Actual] )
+)
+
+Target Value =
+IF (
+    COUNT ( KPI_Data[Target] ) = 0,
+    BLANK (),
+    SUM ( KPI_Data[Target] )
+)
+
+Achievement % =
+IF (
+    ISBLANK ( [Actual Value] )
+        || ISBLANK ( [Target Value] )
+        || [Target Value] <= 0,
+    BLANK (),
+    DIVIDE ( [Actual Value], [Target Value] )
+)
+
+Variance =
+IF (
+    ISBLANK ( [Actual Value] )
+        || ISBLANK ( [Target Value] ),
+    BLANK (),
+    [Actual Value] - [Target Value]
+)
+
+Variance % =
+IF (
+    ISBLANK ( [Variance] )
+        || ISBLANK ( [Target Value] )
+        || [Target Value] <= 0,
+    BLANK (),
+    DIVIDE ( [Variance], [Target Value] )
+)

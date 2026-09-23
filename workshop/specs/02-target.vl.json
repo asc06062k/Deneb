@@ -1,0 +1,21 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"name": "dataset"},
+  "encoding": {
+    "y": {"field": "category", "type": "nominal", "sort": null, "title": null},
+    "x": {"type": "quantitative", "scale": {"domainMin": 0}, "title": "Amount"}
+  },
+  "layer": [
+    {"mark": {"type": "bar", "color": "#E4E0D4", "size": 25},
+     "encoding": {"x": {"field": "target"}}},
+    {"mark": {"type": "bar", "color": "#2A78D6", "size": 17},
+     "encoding": {"x": {"field": "actual"},
+       "tooltip": [
+         {"field": "category", "type": "nominal"},
+         {"field": "actual", "type": "quantitative", "format": ",.0f"},
+         {"field": "target", "type": "quantitative", "format": ",.0f"}
+       ]}},
+    {"mark": {"type": "tick", "color": "#EB6834", "thickness": 3, "size": 32},
+     "encoding": {"x": {"field": "target"}}}
+  ]
+}

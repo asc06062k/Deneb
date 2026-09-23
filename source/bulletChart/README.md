@@ -59,7 +59,7 @@ of `spec.json`. Edit the values directly (plain constants; no need to touch the 
 | `barThickness`, `rowSpacing` | bar height and spacing above/below each bar (px) | 25 / 12 |
 | `conditionalColor`, `varianceThreshold1/2`, `colorLow/Mid/High` | color the Actual bar by Variance % (Low < t1 ≤ Mid < t2 ≤ High) | off, −5 / 10, green / blue / red |
 | `showValueLabel`, `valueFont*`, `categoryFont*` | label toggles and typography | on, size 11 |
-| `decimalPlaces`, `displayUnits` (`Auto`/`None`/`K`/`M`/`B`) | number formatting (also drives the axis) | 0, Auto |
+| `decimalPlaces`, `displayUnits` (`Auto`/`None`/`K`/`M`/`B`) | number formatting (also drives the axis) | 1, Auto |
 | `axisShow`, `axisFontSize`, `axisFontColor` | axis ticks + gridlines. Tick count is at most 5 (like the original) and drops automatically when the labels (e.g. `100.00M`) would not fit side by side; any label that still collides is hidden | on, 10, `#898781` |
 | `statusThreshold1/2`, `statusFont*`, `statusBold` | Status Label bands and font | −5 / 10, Segoe UI 11 bold |
 | `statusLow*`, `statusMid*`, `statusHigh*` — `Text`, `FontColor`, `BackColor`, `ShowBackground`, `Blink` | per-band badge (blank text = hidden) | "UNDER BUDGET" green / hidden / "OVER BURN" red, blinking |

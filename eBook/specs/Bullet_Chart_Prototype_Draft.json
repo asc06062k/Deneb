@@ -1,0 +1,87 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Phase 2 draft only: horizontal multi-category bullet chart for Deneb 2.0.",
+  "data": { "name": "dataset" },
+  "width": "container",
+  "height": { "step": 42 },
+  "transform": [
+    {
+      "calculate": "isValid(datum['Actual Value']) && isValid(datum['Target Value']) && datum['Target Value'] > 0 ? datum['Actual Value'] / datum['Target Value'] : null",
+      "as": "achievement"
+    },
+    {
+      "calculate": "isValid(datum.achievement) ? (datum.achievement < 0.7 ? 'Bad' : datum.achievement < 0.9 ? 'Warning' : 'Good') : 'Target N/A'",
+      "as": "status"
+    },
+    {
+      "calculate": "isValid(datum.achievement) ? (datum.achievement < 0.7 && datum.achievement >= 0.6995 ? '<70.0%' : datum.achievement < 0.9 && datum.achievement >= 0.8995 ? '<90.0%' : format(datum.achievement, '.1%')) : (isValid(datum['Actual Value']) ? 'Target N/A' : 'Actual Missing; Target N/A')",
+      "as": "achievementLabel"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "Category",
+      "type": "nominal",
+      "sort": { "field": "Sort_Order", "op": "min", "order": "ascending" },
+      "axis": { "title": null, "labelLimit": 260, "labelPadding": 8 }
+    },
+    "x": {
+      "type": "quantitative",
+      "scale": { "domain": [-100, 1500000000], "zero": false },
+      "axis": { "title": null, "format": ",.1f", "grid": true }
+    },
+    "tooltip": [
+      { "field": "Category", "type": "nominal", "title": "Category" },
+      { "field": "Actual Value", "type": "quantitative", "title": "Actual", "format": ",.1f" },
+      { "field": "Target Value", "type": "quantitative", "title": "Target", "format": ",.1f" },
+      { "field": "Variance", "type": "quantitative", "title": "Variance", "format": ",.1f" },
+      { "field": "achievementLabel", "type": "nominal", "title": "Achievement" },
+      { "field": "status", "type": "nominal", "title": "Status" },
+      { "field": "Tooltip_Detail", "type": "nominal", "title": "Detail" }
+    ]
+  },
+  "layer": [
+    {
+      "mark": { "type": "bar", "size": 28, "color": "#E5E7EB", "cornerRadius": 4 },
+      "encoding": { "x": { "field": "Range_Min", "type": "quantitative" }, "x2": { "field": "Range_Low" } }
+    },
+    {
+      "mark": { "type": "bar", "size": 28, "color": "#CBD5E1", "cornerRadius": 4 },
+      "encoding": { "x": { "field": "Range_Low", "type": "quantitative" }, "x2": { "field": "Range_Mid" } }
+    },
+    {
+      "mark": { "type": "bar", "size": 28, "color": "#94A3B8", "cornerRadius": 4 },
+      "encoding": { "x": { "field": "Range_Mid", "type": "quantitative" }, "x2": { "field": "Range_High" } }
+    },
+    {
+      "mark": { "type": "bar", "size": 16, "cornerRadius": 4 },
+      "encoding": {
+        "x": { "field": "Actual Value", "type": "quantitative" },
+        "x2": { "value": 0 },
+        "color": {
+          "field": "status",
+          "type": "nominal",
+          "scale": { "domain": ["Bad", "Warning", "Good", "Target N/A"], "range": ["#B91C1C", "#D97706", "#15803D", "#64748B"] },
+          "legend": null
+        }
+      }
+    },
+    {
+      "mark": { "type": "rule", "stroke": "#111827", "strokeWidth": 3 },
+      "encoding": { "x": { "field": "Target Value", "type": "quantitative" } }
+    },
+    {
+      "mark": { "type": "text", "align": "left", "dx": 8, "fontSize": 11 },
+      "encoding": {
+        "x": { "field": "Target Value", "type": "quantitative" },
+        "text": { "field": "achievementLabel", "type": "nominal" },
+        "color": { "value": "#111827" }
+      }
+    }
+  ],
+  "config": {
+    "font": "Arial",
+    "view": { "stroke": null },
+    "axis": { "labelFont": "Arial", "titleFont": "Arial" }
+  }
+}

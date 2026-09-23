@@ -1,0 +1,9 @@
+category,actual,target,region
+Marketing,820000,1000000,Central
+Sales,1120000,1000000,Central
+Operations,970000,1000000,North
+Customer Success,1040000,1000000,North
+IT,760000,800000,South
+HR,550000,500000,South
+Logistics,660000,750000,East
+Product,1250000,1100000,East

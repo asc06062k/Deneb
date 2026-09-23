@@ -1,0 +1,89 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Phase 2 normalized baseline: compare each KPI to its own target.",
+  "data": { "name": "dataset" },
+  "width": "container",
+  "height": { "step": 42 },
+  "transform": [
+    { "calculate": "isValid(datum['Target Value']) && datum['Target Value'] > 0 && isValid(datum['Actual Value']) ? datum['Actual Value'] / datum['Target Value'] : null", "as": "actualRatio" },
+    { "calculate": "isValid(datum['Target Value']) && datum['Target Value'] > 0 && isValid(datum['Actual Value__highlight']) ? datum['Actual Value__highlight'] / datum['Target Value'] : null", "as": "highlightRatio" },
+    { "calculate": "isValid(datum['Target Value']) && datum['Target Value'] > 0 ? datum['Range_Min'] / datum['Target Value'] : null", "as": "rangeMinRatio" },
+    { "calculate": "isValid(datum['Target Value']) && datum['Target Value'] > 0 ? datum['Range_Low'] / datum['Target Value'] : null", "as": "rangeLowRatio" },
+    { "calculate": "isValid(datum['Target Value']) && datum['Target Value'] > 0 ? datum['Range_Mid'] / datum['Target Value'] : null", "as": "rangeMidRatio" },
+    { "calculate": "isValid(datum['Target Value']) && datum['Target Value'] > 0 ? datum['Range_High'] / datum['Target Value'] : null", "as": "rangeHighRatio" },
+    { "calculate": "isValid(datum['Target Value']) && datum['Target Value'] > 0 ? datum['Actual Value'] / datum['Target Value'] : null", "as": "achievement" },
+    { "calculate": "isValid(datum.achievement) ? (datum.achievement < 0.7 ? 'Bad' : datum.achievement < 0.9 ? 'Warning' : 'Good') : 'Target N/A'", "as": "status" },
+    { "calculate": "isValid(datum.achievement) ? format(datum.achievement, '.1%') : (isValid(datum['Actual Value']) ? 'Target N/A' : 'Actual Missing; Target N/A')", "as": "achievementLabel" },
+    { "calculate": "isValid(datum.actualRatio) ? datum.actualRatio : 1", "as": "labelRatio" }
+  ],
+  "encoding": {
+    "y": {
+      "field": "Category",
+      "type": "nominal",
+      "sort": { "field": "Sort_Order", "op": "min", "order": "ascending" },
+      "axis": { "title": null, "labelLimit": 260, "labelPadding": 8 }
+    },
+    "x": {
+      "type": "quantitative",
+      "scale": { "domain": [-0.5, 1.5], "zero": false },
+      "axis": { "title": "Achievement vs Target", "format": ".0%", "grid": true }
+    },
+    "tooltip": [
+      { "field": "Category", "type": "nominal", "title": "Category" },
+      { "field": "Actual Value", "type": "quantitative", "title": "Actual", "format": ",.1f" },
+      { "field": "Target Value", "type": "quantitative", "title": "Target", "format": ",.1f" },
+      { "field": "Variance", "type": "quantitative", "title": "Variance", "format": ",.1f" },
+      { "field": "achievementLabel", "type": "nominal", "title": "Achievement" },
+      { "field": "status", "type": "nominal", "title": "Status" },
+      { "field": "Tooltip_Detail", "type": "nominal", "title": "Detail" }
+    ]
+  },
+  "layer": [
+    {
+      "mark": { "type": "bar", "size": 28, "color": "#E5E7EB", "cornerRadius": 4 },
+      "encoding": { "x": { "field": "rangeMinRatio", "type": "quantitative" }, "x2": { "field": "rangeLowRatio" } }
+    },
+    {
+      "mark": { "type": "bar", "size": 28, "color": "#CBD5E1", "cornerRadius": 4 },
+      "encoding": { "x": { "field": "rangeLowRatio", "type": "quantitative" }, "x2": { "field": "rangeMidRatio" } }
+    },
+    {
+      "mark": { "type": "bar", "size": 28, "color": "#94A3B8", "cornerRadius": 4 },
+      "encoding": { "x": { "field": "rangeMidRatio", "type": "quantitative" }, "x2": { "field": "rangeHighRatio" } }
+    },
+    {
+      "mark": { "type": "bar", "size": 16, "cornerRadius": 4, "opacity": 0.28 },
+      "encoding": {
+        "x": { "field": "actualRatio", "type": "quantitative" },
+        "x2": { "value": 0 },
+        "color": { "field": "status", "type": "nominal", "scale": { "domain": ["Bad", "Warning", "Good", "Target N/A"], "range": ["#B91C1C", "#D97706", "#15803D", "#64748B"] }, "legend": null }
+      }
+    },
+    {
+      "transform": [
+        { "filter": "isValid(datum.highlightRatio)" }
+      ],
+      "mark": { "type": "bar", "size": 11, "cornerRadius": 4 },
+      "encoding": {
+        "x": { "field": "highlightRatio", "type": "quantitative" },
+        "x2": { "value": 0 },
+        "color": { "field": "status", "type": "nominal", "scale": { "domain": ["Bad", "Warning", "Good", "Target N/A"], "range": ["#B91C1C", "#D97706", "#15803D", "#64748B"] }, "legend": null },
+        "tooltip": [
+          { "field": "Actual Value__highlight", "type": "quantitative", "title": "Highlighted Actual", "format": ",.1f" }
+        ]
+      }
+    },
+    {
+      "transform": [
+        { "filter": "isValid(datum['Target Value']) && datum['Target Value'] > 0" }
+      ],
+      "mark": { "type": "rule", "orient": "vertical", "stroke": "#111827", "strokeWidth": 3 },
+      "encoding": { "x": { "datum": 1, "type": "quantitative" } }
+    },
+    {
+      "mark": { "type": "text", "align": "left", "dx": 8, "fontSize": 11 },
+      "encoding": { "x": { "field": "labelRatio", "type": "quantitative" }, "text": { "field": "achievementLabel", "type": "nominal" }, "color": { "value": "#111827" } }
+    }
+  ],
+  "config": { "font": "Arial", "view": { "stroke": null }, "axis": { "labelFont": "Arial", "titleFont": "Arial" } }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"name": "dataset"},
+  "mark": {"type": "bar", "color": "#2A78D6"},
+  "encoding": {
+    "y": {"field": "category", "type": "nominal", "sort": null, "title": null},
+    "x": {"field": "actual", "type": "quantitative", "title": "Actual"},
+    "tooltip": [
+      {"field": "category", "type": "nominal"},
+      {"field": "actual", "type": "quantitative", "format": ",.0f"}
+    ]
+  }
+}

@@ -130,9 +130,10 @@
       "name": "bars",
       "source": "barsBase",
       "transform": [
-        { "type": "formula", "as": "barH", "expr": "datum.isNA ? max(10, barsMaxH * 0.12) : max(4, (datum.metric / (maxValue * 1.05)) * barsMaxH)" },
+        { "type": "formula", "as": "isZero", "expr": "!datum.isNA && datum.metric === 0" },
+        { "type": "formula", "as": "barH", "expr": "datum.isNA ? max(10, barsMaxH * 0.12) : (datum.isZero ? 0 : max(4, (datum.metric / (maxValue * 1.05)) * barsMaxH))" },
         { "type": "formula", "as": "topY", "expr": "baseY - datum.barH" },
-        { "type": "formula", "as": "apexH", "expr": "min(maxApexH, datum.barH * 0.9)" },
+        { "type": "formula", "as": "apexH", "expr": "datum.isZero ? 0 : min(maxApexH, datum.barH * 0.9)" },
 
         { "type": "formula", "as": "categoryColor", "expr": "scale('colorScale', datum.category)" },
         { "type": "formula", "as": "cfColor", "expr": "!cfEnabled ? datum.categoryColor : (cfMode === 'rules' ? (datum.basisRaw <= cfRedUpTo ? cfRedColor : (datum.basisRaw <= cfYellowUpTo ? cfYellowColor : cfGreenColor)) : (cfMinV === cfMaxV ? cfMidColor : (datum.basisRaw <= cfMidV ? scale('cfLowScale', datum.basisRaw) : scale('cfHighScale', datum.basisRaw))))" },
@@ -284,7 +285,7 @@
             "update": {
               "path": { "field": "pathFront" },
               "fill": { "signal": "datum.isNA ? pbiPatternSVG('diagonal-stripe-3', '#9AA3AF', '#C3C8CF') : datum.front" },
-              "fillOpacity": { "signal": "datum.__selected__ === 'off' ? 0.35 : 1" }
+              "fillOpacity": { "signal": "datum.isZero ? 0 : (datum.__selected__ === 'off' ? 0.35 : 1)" }
             }
           }
         },
@@ -295,7 +296,7 @@
             "update": {
               "path": { "field": "pathApex" },
               "fill": { "field": "apexFill" },
-              "fillOpacity": { "signal": "datum.__selected__ === 'off' ? 0.35 : 1" }
+              "fillOpacity": { "signal": "datum.isZero ? 0 : (datum.__selected__ === 'off' ? 0.35 : 1)" }
             }
           }
         },

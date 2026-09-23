@@ -96,3 +96,7 @@ top of `spec.json`. Open the file and edit the values directly:
   Approved becomes the 100 % reference exactly like when no Plan field is bound, Actual is its %
   of Approved, the conditional Approved color is skipped (a ratio against 0 is meaningless), and
   the tooltip shows `vs Plan: N/A`. A blank/null Plan still hides the Plan layer entirely.
+- **Approved = 0** (deliberate change): the Approved layer is drawn the same way as the zero-Plan
+  layer — a faint dashed outline in the Approved color, labelled `0%` / `Approved`. Its width still
+  follows the normal sizing (100 % reference, or Approved-vs-Plan), the floor `*` marker is not shown on
+  it, and Actual continues below as a floor-width stub (`0%` of Approved).

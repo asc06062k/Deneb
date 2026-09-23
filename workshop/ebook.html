@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>สร้าง Bullet Chart ด้วย Deneb ใน Power BI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&display=swap');
+:root{font-family:"Noto Sans Thai",Tahoma,Arial,sans-serif;color:#19263a;background:#f1f4f8}
+*{box-sizing:border-box}body{margin:0}main{max-width:900px;margin:32px auto;padding:56px 68px;background:white;box-shadow:0 8px 40px #12213a18}
+h1{font-size:2.25rem;line-height:1.25;margin:0 0 1rem}h2{font-size:1.42rem;margin:2.4rem 0 .7rem;border-bottom:2px solid #dfe7f1;padding-bottom:.35rem}
+p,li{line-height:1.8}a{color:#1d64b3}img{width:100%;height:auto;margin:1rem 0 1.5rem;border:1px solid #e1e6ed}
+table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{padding:.7rem;border:1px solid #d9e1ec;text-align:left}th{background:#eaf0f8}
+code{font-family:Consolas,monospace;background:#f2f5f8;padding:.1rem .3rem}pre{background:#101c2d;color:#f4f7fb;padding:1rem;overflow:auto}pre code{background:transparent;padding:0}
+blockquote{margin:1rem 0;padding:.2rem 1rem;border-left:4px solid #2a78d6;background:#f4f8fd}
+@media(max-width:700px){main{margin:0;padding:26px 20px}h1{font-size:1.8rem}}
+@media print{body{background:#fff}main{box-shadow:none;margin:0;padding:0;max-width:none}h2{break-after:avoid}img,pre,table{break-inside:avoid}a{color:#19263a}}
+</style></head><body><main><h1>สร้าง Bullet Chart ด้วย Deneb ใน Power BI</h1>
+<h2>eBook และ workshop แบบค่อยเป็นค่อยไป</h2>
+<p><strong>กลุ่มผู้อ่าน:</strong> ผู้ใช้ Power BI ที่เคยสร้างกราฟพื้นฐานและต้องการควบคุมหน้าตาของ visual ด้วย JSON<br><strong>เวลา:</strong> ประมาณ 60–90 นาที<br><strong>ผลลัพธ์:</strong> จากแท่ง Actual ธรรมดา ไปสู่ Bullet Chart ที่มี Target, สีตาม variance และสเปก Vega ฉบับเต็มที่ถอดแนวคิดจาก custom visual เดิม</p>
+<blockquote>
+<p>ภาพประกอบทุกภาพเป็นภาพจำลองจากข้อมูล workshop เพื่อแสดงผลที่ควรเห็นในแต่ละขั้น เมนูจริงอาจต่างตามรุ่นของ Power BI และ Deneb</p>
+</blockquote>
+<h2>แผนการเรียน</h2>
+<table>
+<thead>
+<tr>
+<th>ขั้น</th>
+<th>สิ่งที่เพิ่ม</th>
+<th>ไฟล์</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>นำเข้าข้อมูลและจับคู่ฟิลด์</td>
+<td><code>data/bullet_workshop.csv</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td>แท่ง Actual พื้นฐาน</td>
+<td><code>specs/01-bars.vl.json</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>แถบ Target และขีดเป้าหมาย</td>
+<td><code>specs/02-target.vl.json</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>คำนวณ variance และใช้สี</td>
+<td><code>specs/03-variance.vl.json</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>ใช้ Vega spec ฉบับเต็มจาก custom visual เดิม</td>
+<td><code>../source/bulletChart/spec.json</code></td>
+</tr>
+</tbody></table>
+<h2>แนวคิดก่อนเริ่ม</h2>
+<p>Bullet chart แสดง Actual เป็นแท่งแนวนอน และ Target เป็นขีดตั้ง การวางสองค่าไว้บนสเกลเดียวกันช่วยให้เห็นว่าแต่ละหมวดอยู่ต่ำหรือสูงกว่าเป้าหมายเท่าไร ใน workshop นี้ถือว่าตัวเลขเป็น <strong>งบใช้จ่าย</strong> จึงตีความ Actual มากกว่า Target ว่าใช้งบเกิน; ถ้าใช้กับยอดขาย ความหมายของสีและสถานะต้องเปลี่ยนตามโจทย์</p>
+<p>Deneb รับฟิลด์จากช่อง <strong>Values</strong> ของ visual แล้วส่งให้สเปกผ่าน dataset ชื่อ <code>dataset</code> ชื่อฟิลด์ใน JSON ต้องตรงกับชื่อที่แสดงใน Values <a href="https://deneb.guide/docs/dataset">เอกสาร Deneb: Dataset</a></p>
+<p><img src="images/00-anatomy.svg" alt="องค์ประกอบ Bullet Chart"></p>
+<h2>ขั้น 0 — เตรียมข้อมูลและ Deneb</h2>
+<ol>
+<li>ใน Power BI Desktop เลือก <strong>Get data → Text/CSV</strong> แล้วเปิด <code>workshop/data/bullet_workshop.csv</code> จากรากโปรเจ็กต์</li>
+<li>ตรวจชนิดข้อมูล: <code>category</code> และ <code>region</code> เป็น Text; <code>actual</code> และ <code>target</code> เป็น Whole number จากนั้น Load</li>
+<li>เพิ่ม Deneb จาก AppSource ลงในรายงานตามขั้นตอนของ Microsoft <a href="https://learn.microsoft.com/en-us/power-bi/developer/visuals/import-visual">Import a Power BI visual</a></li>
+<li>วาง <code>category</code>, <code>actual</code>, <code>target</code>, <code>region</code> ลงในช่อง <strong>Values</strong> ของ Deneb ตรวจชื่อที่แสดงในช่องนี้ให้เป็น <code>category</code>, <code>actual</code>, <code>target</code>, <code>region</code> ทุกตัวอักษร หาก Power BI แสดง <code>Sum of actual</code> หรือ <code>Sum of target</code> ให้เปลี่ยนชื่อฟิลด์ใน Values เป็น <code>actual</code> และ <code>target</code> (เช่น ดับเบิลคลิกชื่อฟิลด์เพื่อ Rename) หรือเลือก <strong>Don&#39;t summarize</strong> เมื่อเหมาะกับข้อมูลหนึ่งแถวต่อหมวด ทั้งสองค่าต้องยังเป็นตัวเลข</li>
+<li>สร้างสเปกใหม่โดยเลือก <strong>Vega-Lite</strong> และเทมเพลตว่าง เปิด editor เพื่อวาง JSON ของขั้น 1</li>
+</ol>
+<p><strong>ตรวจสอบ:</strong> Data pane ของ Deneb ควรมี 8 แถว และเห็นฟิลด์ <code>category</code>, <code>actual</code>, <code>target</code>, <code>region</code> หากเป็นศูนย์แถว ให้ตรวจตัวกรองและ Values ก่อนแก้ JSON</p>
+<p><img src="images/01-setup.svg" alt="เส้นทางข้อมูล CSV ไปยัง Deneb"></p>
+<h2>ขั้น 1 — วาด Actual ด้วย Vega-Lite</h2>
+<p>เปิด <code>workshop/specs/01-bars.vl.json</code> คัดลอกทั้งไฟล์ลง editor แล้ว Apply สเปกใช้ <code>data: {&quot;name&quot;:&quot;dataset&quot;}</code> เพื่อผูกข้อมูลจาก Power BI, วาง <code>category</code> ที่แกน Y และ <code>actual</code> ที่แกน X</p>
+<pre><code class="language-json">&quot;data&quot;: {&quot;name&quot;: &quot;dataset&quot;},
+&quot;mark&quot;: {&quot;type&quot;: &quot;bar&quot;, &quot;color&quot;: &quot;#2A78D6&quot;}
+</code></pre>
+<p><strong>ลองทำ:</strong> ชี้แท่ง Marketing จะเห็น Actual 820,000; Sales 1,120,000 เปลี่ยนตัวกรอง <code>region</code> แล้วจำนวนแท่งควรเปลี่ยน</p>
+<p><strong>ผ่านเมื่อ:</strong> มี 8 แท่งแนวนอน ไม่มีแจ้งเตือน field missing และ tooltip แสดง category กับ actual</p>
+<p><img src="images/02-bars.svg" alt="ผลลัพธ์ขั้น 1: Actual bars"></p>
+<h2>ขั้น 2 — เพิ่ม Target</h2>
+<p>แทน JSON ทั้งหมดด้วย <code>workshop/specs/02-target.vl.json</code> ขั้นนี้ใช้ <code>layer</code> ซ้อน 3 ชั้น: แถบสีเทาเป็น Target, แท่งน้ำเงินเป็น Actual, ขีดสีส้มเป็น Target ที่ตำแหน่งเดียวกัน</p>
+<pre><code class="language-json">&quot;layer&quot;: [
+  {&quot;mark&quot;: {&quot;type&quot;: &quot;bar&quot;, &quot;color&quot;: &quot;#E4E0D4&quot;, &quot;size&quot;: 25}},
+  {&quot;mark&quot;: {&quot;type&quot;: &quot;bar&quot;, &quot;color&quot;: &quot;#2A78D6&quot;, &quot;size&quot;: 17}},
+  {&quot;mark&quot;: {&quot;type&quot;: &quot;tick&quot;, &quot;color&quot;: &quot;#EB6834&quot;, &quot;thickness&quot;: 3, &quot;size&quot;: 32}}
+]
+</code></pre>
+<p>ในไฟล์จริง แต่ละ layer กำหนด <code>x.field</code> ให้เป็น <code>target</code> หรือ <code>actual</code> ด้วย แกน X ร่วมกันจึงเปรียบเทียบได้ตรงตำแหน่ง</p>
+<p><strong>ลองทำ:</strong> Sales และ Product ควรมีแท่ง Actual เลยขีด Target; Marketing ควรอยู่ก่อนขีด Target</p>
+<p><strong>ผ่านเมื่อ:</strong> ทุกแถวมีแถบเทา แท่ง Actual และขีดสีส้ม</p>
+<p><img src="images/03-target.svg" alt="ผลลัพธ์ขั้น 2: Target"></p>
+<h2>ขั้น 3 — เพิ่ม variance และสี</h2>
+<p>แทน JSON ด้วย <code>workshop/specs/03-variance.vl.json</code> สเปกเพิ่ม transform:</p>
+<pre><code class="language-text">variance % = (actual - target) / target × 100
+</code></pre>
+<p>ถ้า Target เป็น 0 ให้ variance เป็น <code>null</code> และแสดง <code>N/A</code> แทนการหารด้วยศูนย์ กติกาสีสำหรับข้อมูล <strong>งบใช้จ่าย</strong> คือ ต่ำกว่า −5% เป็นเขียว, ตั้งแต่ −5% ถึงต่ำกว่า +10% เป็นน้ำเงิน, ตั้งแต่ +10% เป็นแดง</p>
+<p><strong>ลองคำนวณ:</strong> Marketing = (820,000 − 1,000,000) / 1,000,000 = −18.0% สีเขียว; Sales = +12.0% สีแดง; Operations = −3.0% สีน้ำเงิน</p>
+<p><strong>ผ่านเมื่อ:</strong> Tooltip แสดง Variance และสีของสามหมวดตัวอย่างตรงตามข้างต้น ตรวจค่าขอบด้วย: IT = −5.0% ยังเป็นน้ำเงินเพราะเงื่อนไขเขียวใช้ค่าน้อยกว่า −5; HR = +10.0% เป็นแดงเพราะเงื่อนไขแดงเริ่มตั้งแต่ +10</p>
+<p><img src="images/04-variance.svg" alt="ผลลัพธ์ขั้น 3: Variance"></p>
+<h2>ขั้น 4 — ไปสู่สเปก Vega ฉบับเต็ม</h2>
+<p>สเปกเดิมใน <code>source/bulletChart/spec.json</code> เป็น <strong>Vega</strong> ไม่ใช่ Vega-Lite เพิ่ม Deneb visual ตัวใหม่ เลือก provider เป็น <strong>Vega</strong> แล้วลาก <code>category</code>, <code>actual</code>, <code>target</code> (และ <code>region</code> หากต้องการใช้กรอง) ลงใน Values เปลี่ยนชื่อที่แสดงให้ตรงกับ JSON จากนั้นเปิด <strong>Edit → Spec</strong> เพื่อวาง JSON ทั้งไฟล์ ตัวเลือก <code>tooltip1</code> ถึง <code>tooltip4</code> ใส่เพิ่มได้ภายหลัง</p>
+<p>สเปกเต็มเพิ่มสิ่งที่สเปกสอนพื้นฐานยังไม่มี: การจัดพื้นที่ตามขนาด visual, label ตัวเลข Actual, status, หน่วย K/M/B, จำนวนแถวสูงสุด, animation และการเลือกแถว <strong>แถบเทาในสเปกเต็มเป็น track พื้นหลังเต็มความกว้าง</strong> และ Target แสดงด้วยขีดสีส้ม ต่างจากขั้น 2–3 ที่แถบเทายาวถึง Target ค่า variance % อยู่ใน tooltip ส่วนตัวเลขข้างแท่งเป็น Actual รายละเอียดการตั้งค่าอยู่ที่ <code>source/bulletChart/README.md</code> ค่าเริ่มต้นจำกัด 10 แถว; ข้อมูล workshop มี 8 แถวจึงแสดงครบ</p>
+<p><strong>ปรับแต่งแรก:</strong> ใน <code>signals</code> เปลี่ยน <code>&quot;conditionalColor&quot;</code> จาก <code>false</code> เป็น <code>true</code> เพื่อให้แท่งใช้กติกาสีจากขั้น 3 แล้วลองเปลี่ยน <code>&quot;statusHighText&quot;</code> จาก <code>&quot;OVER BURN&quot;</code> เป็น <code>&quot;เกินงบ&quot;</code> หากต้องการภาษาไทย</p>
+<p><strong>ตั้งค่า interactivity:</strong> ที่ <strong>Settings → Vega → Power BI Interactivity</strong> เปิด <strong>Expose cross-filtering values for dataset rows</strong> เพื่อให้คลิกเลือกแถวแล้ว cross-filter visual อื่นได้ ปล่อย <strong>Tooltip Handler</strong> ไว้ที่ On ตามค่าเริ่มต้น</p>
+<p><strong>ทดสอบใน Power BI:</strong> ตรวจ tooltip, การเลือกแถวและ cross-filter กับ visual อื่น, ขนาด visual แคบ/กว้าง และตัวกรอง region ตามคำแนะนำใน README ของสเปกเต็ม การแสดงใน Power BI Desktop ยังต้องตรวจจริงก่อนเผยแพร่รายงาน ภาพประกอบด้านล่างจำลองผลเมื่อเปิด <code>conditionalColor</code> แล้ว และยังใช้ข้อความสถานะเริ่มต้น <code>OVER BURN</code></p>
+<p><img src="images/05-final.svg" alt="ผลลัพธ์ขั้น 4: Bullet Chart ฉบับเต็ม"></p>
+<p>ภาพนี้จำลองสเกล 0–1.3M และเส้นกริดทุก 0.2M เพื่ออธิบายตำแหน่งแท่งกับ Target; ระยะจริงใน Power BI อาจเปลี่ยนตามขนาด visual และการเลือก tick ของ Vega</p>
+<h2>สรุปและแบบฝึกต่อยอด</h2>
+<ol>
+<li>ในขั้น 4 แก้ <code>actual</code> ของ Product ใน CSV เป็น <code>1100000</code> ให้เท่ากับ Target แล้วกด <strong>Refresh</strong> ใน Power BI ผลควรเป็น variance <code>+0.0%</code>, แท่งสีน้ำเงินเมื่อเปิด <code>conditionalColor</code> และไม่มีป้าย status เพราะ <code>statusMidText</code> ว่างโดยค่าเริ่มต้น</li>
+<li>เพิ่มแถวที่ <code>target</code> เป็น <code>0</code> ใน CSV แล้วกด <strong>Refresh</strong> ทดลองในขั้น 3 หรือ 4 Tooltip ควรแสดง variance เป็น <code>N/A</code> (ขั้น 4 แสดงร่วมกับค่าผลต่าง) และแท่งเป็นสีน้ำเงิน</li>
+<li>ปรับ threshold เป็น −4% และ +11%: ในขั้น 3 แก้เงื่อนไข <code>&lt; -5</code> และ <code>&gt;= 10</code> ใน <code>03-variance.vl.json</code>; ในขั้น 4 แก้ทั้ง <code>varianceThreshold1/2</code> สำหรับสี และ <code>statusThreshold1/2</code> สำหรับสถานะใน <code>spec.json</code> จากนั้นอธิบายว่า IT (−5.0%) เปลี่ยนจากน้ำเงินเป็นเขียว และ HR (+10.0%) เปลี่ยนจากแดงเป็นน้ำเงิน หากแก้ threshold เพียงชุดเดียว สีและสถานะอาจไม่ตรงกัน ค่าเริ่มต้น <code>statusLowText</code> ว่าง จึงยังไม่มีป้ายใหม่ที่ IT ส่วนป้าย <code>OVER BURN</code> ของ HR จะหายไป</li>
+<li>หากใช้ข้อมูลยอดขาย ให้กำหนดสีและข้อความสถานะใหม่ก่อนใช้กราฟตัดสินใจ</li>
+</ol>
+<h2>ขอบเขตของการถอด custom visual</h2>
+<p>สเปก Vega ฉบับเต็มถอดหน้าตาและพฤติกรรมหลักจาก custom visual <code>bulletChart</code> ที่มีอยู่ในโปรเจ็กต์ แต่ไม่มีระบบ license, pane ตั้งค่าแบบเดิม หรือ scrolling ภายในกราฟ เมื่อแถวแน่น สเปกจะย่อความหนาแท่ง รายละเอียดความต่างอื่น ๆ อยู่ใน <code>source/bulletChart/README.md</code></p>
+<h2>แหล่งอ้างอิง</h2>
+<ul>
+<li><a href="https://deneb.guide/docs/getting-started">Deneb — Getting Started</a></li>
+<li><a href="https://deneb.guide/docs/dataset">Deneb — Dataset</a></li>
+<li><a href="https://deneb.guide/docs/visual-editor">Deneb — Visual Editor</a></li>
+<li><a href="https://learn.microsoft.com/en-us/power-bi/developer/visuals/import-visual">Microsoft — Import Power BI visuals</a></li>
+<li><a href="https://vega.github.io/vega-lite/docs/layer.html">Vega-Lite — Layer</a></li>
+</ul>
+</main></body></html>
