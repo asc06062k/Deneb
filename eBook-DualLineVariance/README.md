@@ -14,11 +14,16 @@ Workflow ของโครงการนี้: **Claude Code เขียน,
 - Cross-highlight ต้องเปิด 2 ระดับ: `Expose cross-highlight values for measures` ของ Visual แล้วเปิด Supporting field (`Highlight value`/`Highlight status`/`Highlight comparator`) รายฟิลด์ต่อ measure ใน "Supporting Fields: dataset" — ทั้งหมดอยู่ใน Project setup pane เดียวกันคนละ section
 - ฝั่ง Power BI ต้องตั้ง `Edit interactions` ของ Visual ต้นทางเป็น `Highlight` (แนะนำ Clustered bar/column chart) — **ห้ามใช้ Slicer ทดสอบ Highlight** เพราะ Slicer มีเฉพาะ `Filter`/`None`
 - Context menu ใช้ `Show context menu on right-click` และ `Attempt to resolve data point-specific actions`
-- Variance area ที่แบ่งสีตรงจุดตัด (crossing case) ยังเป็นคำถามเปิดที่ต้องพิสูจน์ใน Phase 1 — ยังไม่ยืนยันว่า Vega-Lite ทำได้แบบ pixel-accurate
-- ทุกฟีเจอร์แบ่งเป็นกลุ่ม A (เทียบเท่าต้นแบบ มีหลักฐานจาก source) และกลุ่ม B (ส่วนขยายเฉพาะ Deneb เช่น cross-highlight ขาเข้า, `Business_Type`, Category axis label ไม่ทับซ้อน)
-- **Responsive**: Data label ของ Actual/Reference ต้อง re-evaluate ทุกครั้งที่ resize และ "ลดการชน" เท่านั้น (Group A ไม่รับประกัน 100%) ส่วน **Category axis label ต้องไม่ทับซ้อนกันเลย** ภายในช่วงขนาดที่ Test matrix กำหนด (Group B คำสัญญาที่แข็งกว่าต้นแบบ ต้องพิสูจน์กลไกใน Phase 1 ก่อน)
-- **Business_Type** (ใหม่): field ที่รับค่า `"Higher is Good"`/`"Lower is Good"` ต้องผูกเป็น **DAX Measure ค่าคงที่** (ไม่ใช่ Column) เพื่อไม่ให้กระทบ grain ของ dataset, fallback เป็น `"Higher is Good"` เมื่อไม่ผูก field, ไม่ใช่การเพิ่ม data role ใหม่ใน capabilities.json แบบ Custom Visual
-- ทุกผลทดสอบ Interaction บน Power BI จริงต้องมี Evidence record ครบตามแบบที่ Lock ไว้ (Phase 1 ข้อ 5) มิฉะนั้นระบุ `NOT TESTED`
+- Context menu ใช้ `Show context menu on right-click` และ `Attempt to resolve data point-specific actions`
+- ทุกผลทดสอบ Interaction บน Power BI จริงต้องมี Evidence record ครบตามแบบที่ Lock ไว้ มิฉะนั้นระบุ `NOT TESTED`
+
+**อัปเดตจาก Phase 1** (แทนที่ข้อสมมติฐานบางข้อของ Phase 0):
+
+- **Crossing-case พิสูจน์แล้วว่าเป็นไปได้จริง** ด้วยอัลกอริทึม per-segment (ตรงกับ `segmentFill.ts` ของต้นแบบ) — ดูรายละเอียดใน `review/PHASE1_DESIGN_PLAN.md` หัวข้อ 2.0
+- **`Business_Type` เปลี่ยนเป็น Power Query Column** (ไม่ใช่ DAX Measure ตามที่ Phase 0 เคย Lock ไว้) เพราะสถาปัตยกรรม Phase 1 ใช้ตารางเฉพาะ `DualLine_PlotData` ที่ Power Query ควบคุม grain เองอยู่แล้ว ทำให้ Column ปลอดภัยกว่าและตรงไปตรงมากว่า Measure
+- **Cross-filter ทิศทางออกจาก Area (พื้นที่สี) ยังเป็นความเสี่ยงที่ไม่มี mitigation ที่พิสูจน์แล้ว** — วิเคราะห์พบว่าอาจกรอง Visual อื่นผิดหลาย Category พร้อมกัน เป็น **Phase 2 hard gate** (ห้าม Phase 2 `PASS` จนกว่าจะพิสูจน์ปลอดภัยหรือเปลี่ยน architecture เช่น Advanced cross-filtering mode)
+- **Responsive**: Data label ของ Actual/Reference ต้อง re-evaluate ทุกครั้งที่ resize และ "ลดการชน" เท่านั้น (Group A) ส่วน **Category axis label ต้องไม่ทับซ้อนกันเลย** ภายใน 6 ขนาด viewport ที่ Test matrix กำหนด (Group B คำสัญญาที่แข็งกว่าต้นแบบ)
+- ทุกฟีเจอร์แบ่งเป็นกลุ่ม A (เทียบเท่าต้นแบบ มีหลักฐานจาก source) และกลุ่ม B (ส่วนขยายเฉพาะ Deneb)
 
 ## ไฟล์และโครงสร้าง
 
@@ -44,5 +49,14 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 - ปรับ `PROJECT_PLAN.md` แล้วส่ง Codex รีวิวซ้ำ 4 รอบ (รอบ 8–11) แก้ Mandatory finding M-12 ถึง M-15 (แยกคำสัญญา Group A "ลดการชน" ของ Actual/Reference data label ออกจาก Group B "ไม่ทับซ้อน" ของ Category axis label, ล็อก `Business_Type` เป็น DAX Measure ค่าคงที่เพื่อไม่กระทบ grain, เพิ่ม prototype gate ใน Phase 1)
 - ผลรีวิว: `qa/PHASE0_CODEX_VERDICT_R8_ADDENDUM.md` ถึง `..._R11_ADDENDUM.md` (`PASS` ที่รอบ 11)
 
-### Phase 1 — ยังไม่เริ่ม
-รอเริ่ม Research และ Design Lock ตาม `PROJECT_PLAN.md` หัวข้อ 7
+### Phase 1 — 23 กันยายน 2026 — PASS
+- ทดสอบความเป็นไปได้ทางเทคนิคจริงใน Vega-Lite Editor (ผ่าน Browser pane) ก่อนเขียน Design Plan: crossing-case color-split, `Business_Type` dynamic switching, และ `labelOverlap` responsive — ผลอยู่ใน `qa/PHASE1_PROTOTYPE_TEST_LOG.md` และ spec ทดสอบใน `specs/phase1-proto-*.vl.json`
+- เขียน `review/PHASE1_DESIGN_PLAN.md` ส่งให้ Codex CLI รีวิวรวม **13 รอบ** (REVISE 12 ครั้ง, `PASS` รอบที่ 13) แก้ Mandatory finding รวม 23+ ข้อ (M-01 ถึง M-23R) รวมการค้นพบสำคัญ 3 เรื่อง:
+  1. Dataset ต้องเป็นตารางเดียว (`DualLine_PlotData`) มี `Row_Type` (`Original`/`Boundary`/`Crossing`) แยกบทบาท Identity กับ Fill/plotting อย่างเด็ดขาด
+  2. ต้องมี Relationship คนละคอลัมน์สำหรับ Cross-filter (`Filter_Key`) แยกจาก `Category` ที่ใช้แสดงผล มิฉะนั้น Filter จะตัดพื้นที่สีทั้งหมดหรือกรองผิด
+  3. Area (พื้นที่สี) interaction ยังไม่มี mitigation ที่พิสูจน์แล้วว่าปลอดภัย — ต้องพิสูจน์จริงใน Phase 2 (T18/T22) ก่อน ไม่ใช่ข้อสรุปที่ Lock ได้จาก Design เพียงอย่างเดียว
+- ผลรีวิวทุกรอบ: `qa/PHASE1_CODEX_VERDICT.md` (รอบ 1) ถึง `..._R13.md`
+- แก้ `PROJECT_PLAN.md` เพิ่มเติมหลายจุดตามผลรีวิว (ย้าย UI screen verification และ Business_Type/Responsive prototype proof ไปเป็น Phase 2 gate อย่างเป็นทางการ, เพิ่ม Phase 2 ข้อ 7 บังคับพิสูจน์ Area interaction)
+
+### Phase 2 — ยังไม่เริ่ม
+รอเริ่ม Dataset และ Vega-Lite Prototype ตาม `PROJECT_PLAN.md` หัวข้อ 7 — ต้องมีเครื่องจริง (Power BI Desktop 2.157.1354.0 + Deneb 2.0.0.0) สำหรับ Evidence record หลายจุด

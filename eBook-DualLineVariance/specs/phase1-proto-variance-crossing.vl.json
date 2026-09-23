@@ -1,0 +1,118 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Phase 1 feasibility prototype - proves crossing-case variance area fill and Business_Type-driven color switching work in pure Vega-Lite. Tested in Vega-Lite Editor (vega.github.io/editor) 2026-09-23, Vega 6.4.0 / Vega-Lite 6.4.3. Screenshot evidence: fill polygons split exactly at each Actual/Reference crossing, no gap or overlap; toggling the businessType param inverts good/bad colors correctly.",
+  "width": 500,
+  "height": 300,
+  "params": [
+    {
+      "name": "businessType",
+      "value": "higher",
+      "bind": { "input": "select", "options": ["higher", "lower"], "name": "Business Type: " }
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "values": [
+          { "run_id": 0, "pos": 0, "y": 10, "y2": 8, "runSign": 1 },
+          { "run_id": 0, "pos": 0.286, "y": 8.571, "y2": 8.571, "runSign": 1 },
+          { "run_id": 1, "pos": 0.286, "y": 8.571, "y2": 8.571, "runSign": -1 },
+          { "run_id": 1, "pos": 1, "y": 5, "y2": 10, "runSign": -1 },
+          { "run_id": 1, "pos": 1.625, "y": 9.375, "y2": 9.375, "runSign": -1 },
+          { "run_id": 2, "pos": 1.625, "y": 9.375, "y2": 9.375, "runSign": 1 },
+          { "run_id": 2, "pos": 2, "y": 12, "y2": 9, "runSign": 1 },
+          { "run_id": 2, "pos": 2.3, "y": 10.8, "y2": 10.8, "runSign": 1 },
+          { "run_id": 3, "pos": 2.3, "y": 10.8, "y2": 10.8, "runSign": -1 },
+          { "run_id": 3, "pos": 3, "y": 8, "y2": 15, "runSign": -1 },
+          { "run_id": 3, "pos": 3.7, "y": 12.2, "y2": 12.2, "runSign": -1 },
+          { "run_id": 4, "pos": 3.7, "y": 12.2, "y2": 12.2, "runSign": 1 },
+          { "run_id": 4, "pos": 4, "y": 14, "y2": 11, "runSign": 1 },
+          { "run_id": 4, "pos": 4.429, "y": 11.857, "y2": 11.857, "runSign": 1 },
+          { "run_id": 5, "pos": 4.429, "y": 11.857, "y2": 11.857, "runSign": -1 },
+          { "run_id": 5, "pos": 5, "y": 9, "y2": 13, "runSign": -1 }
+        ]
+      },
+      "mark": { "type": "area", "opacity": 0.35 },
+      "encoding": {
+        "x": { "field": "pos", "type": "quantitative" },
+        "y": { "field": "y", "type": "quantitative" },
+        "y2": { "field": "y2" },
+        "detail": { "field": "run_id", "type": "nominal" },
+        "color": {
+          "condition": {
+            "test": "(businessType == 'higher' && datum.runSign > 0) || (businessType == 'lower' && datum.runSign < 0)",
+            "value": "#16A34A"
+          },
+          "value": "#DC2626"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          { "pos": 0, "actual": 10, "reference": 8 },
+          { "pos": 1, "actual": 5, "reference": 10 },
+          { "pos": 2, "actual": 12, "reference": 9 },
+          { "pos": 3, "actual": 8, "reference": 15 },
+          { "pos": 4, "actual": 14, "reference": 11 },
+          { "pos": 5, "actual": 9, "reference": 13 }
+        ]
+      },
+      "mark": { "type": "rule", "strokeWidth": 3 },
+      "encoding": {
+        "x": { "field": "pos", "type": "quantitative" },
+        "y": { "field": "actual", "type": "quantitative" },
+        "y2": { "field": "reference" },
+        "color": {
+          "condition": {
+            "test": "(businessType == 'higher' && datum.actual > datum.reference) || (businessType == 'lower' && datum.actual < datum.reference)",
+            "value": "#16A34A"
+          },
+          "value": "#DC2626"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          { "pos": 0, "actual": 10, "reference": 8 },
+          { "pos": 1, "actual": 5, "reference": 10 },
+          { "pos": 2, "actual": 12, "reference": 9 },
+          { "pos": 3, "actual": 8, "reference": 15 },
+          { "pos": 4, "actual": 14, "reference": 11 },
+          { "pos": 5, "actual": 9, "reference": 13 }
+        ]
+      },
+      "mark": { "type": "line", "color": "#2563EB", "point": true, "strokeWidth": 2 },
+      "encoding": {
+        "x": {
+          "field": "pos",
+          "type": "quantitative",
+          "axis": {
+            "values": [0, 1, 2, 3, 4, 5],
+            "labelExpr": "['Jan','Feb','Mar','Apr','May','Jun'][datum.value]",
+            "title": "Month"
+          }
+        },
+        "y": { "field": "actual", "type": "quantitative", "title": "Value" }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          { "pos": 0, "actual": 10, "reference": 8 },
+          { "pos": 1, "actual": 5, "reference": 10 },
+          { "pos": 2, "actual": 12, "reference": 9 },
+          { "pos": 3, "actual": 8, "reference": 15 },
+          { "pos": 4, "actual": 14, "reference": 11 },
+          { "pos": 5, "actual": 9, "reference": 13 }
+        ]
+      },
+      "mark": { "type": "line", "color": "#F59E0B", "point": true, "strokeDash": [4, 2], "strokeWidth": 2 },
+      "encoding": {
+        "x": { "field": "pos", "type": "quantitative" },
+        "y": { "field": "reference", "type": "quantitative" }
+      }
+    }
+  ]
+}
