@@ -1,0 +1,34 @@
+-- Deneb Dual-Line Variance Chart — DAX measures
+--
+-- These measures are for OTHER visuals on the report page (KPI cards, a
+-- Clustered bar/column chart used as the cross-highlight source in บทที่ 8,
+-- etc.) — NOT for the Dual-Line Variance Chart itself. The chart binds
+-- directly to the DualLine_PlotData table built by Power Query
+-- (specs/DualLine_PlotData_PowerQuery.pq); Actual/Reference there are plain
+-- Columns already at the correct grain, not Measures.
+--
+-- Table: DualLineVariance_Workshop_Data (the raw input table, before
+-- Power Query builds DualLine_PlotData from it)
+
+Total Actual =
+SUM ( DualLineVariance_Workshop_Data[Actual] )
+
+Total Reference =
+SUM ( DualLineVariance_Workshop_Data[Reference] )
+
+Variance =
+[Total Actual] - [Total Reference]
+
+Variance % =
+DIVIDE ( [Variance], [Total Reference] )
+
+-- Achievement % follows the Business_Type direction, not a hardcoded "higher is better".
+-- Business_Type_Source lives on DualLineVariance_Settings (single row) — see
+-- PHASE1_DESIGN_PLAN.md section 3. This measure is illustrative only; the
+-- Dual-Line Variance Chart itself reads Business_Type from DualLine_PlotData,
+-- not from this measure.
+Achievement % =
+VAR BusinessType = SELECTEDVALUE ( DualLineVariance_Settings[Business_Type_Source], "Higher is Good" )
+VAR RawRatio = DIVIDE ( [Total Actual], [Total Reference] )
+RETURN
+    IF ( BusinessType = "Lower is Good", DIVIDE ( [Total Reference], [Total Actual] ), RawRatio )

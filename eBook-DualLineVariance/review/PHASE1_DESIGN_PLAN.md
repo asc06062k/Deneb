@@ -294,8 +294,8 @@ Grain สำหรับ Identity (Line/Point/Selection/Tooltip) = 1 แถว�
 
 **Non-text distinguishability (แก้ M-07 — ต้องไม่พึ่งสีอย่างเดียว)**: teal-700 กับ amber-700 มี contrast ต่อกันเพียง **1.09:1** (คำนวณแล้ว) ซึ่งไม่พอสำหรับแยกพื้นที่ Good/Bad ด้วยสายตาอย่างเดียว โดยเฉพาะภาวะตาบอดสี **ไม่ claim ว่าคู่สีนี้ผ่านการทดสอบ CVD simulation จริง** (แก้คำกล่าวเกินหลักฐานจากรอบ 1) ให้เพิ่ม **Pattern เส้นขอบ** เป็นตัวแยกหลักที่ไม่พึ่งสี:
 
-- พื้นที่ Good: เส้นขอบพื้นที่ (`stroke`) เป็นเส้นทึบ
-- พื้นที่ Bad: เส้นขอบพื้นที่เป็นเส้นประ (`strokeDash`)
+- พื้นที่ Good: เส้นขอบพื้นที่ (`stroke`) เป็นเส้นทึบ — ใช้ `stroke` บน mark `area` ได้ตรง ๆ
+- พื้นที่ Bad: เส้นขอบพื้นที่เป็นเส้นประ — **แก้ไขจากรอบพิสูจน์ Phase 2**: Vega-Lite drop `strokeDash` บน mark `area` เงียบ ๆ (runtime warning "strokeDash dropped as it is incompatible with area" ที่พบตอน render จริงใน Phase 2 ไม่ใช่ตอน static-inspect JSON) ดังนั้นต้องเพิ่ม layer `line` แยกสองชั้น (`bad_area_border_actual`, `bad_area_border_reference`) ที่ทาบทับขอบบน/ขอบล่างของ segment ที่เป็น Bad เท่านั้น (filter เดียวกับ Bad ของ `variance_area` กลับด้วย `!(...)`) แล้วค่อยใช้ `strokeDash` บน mark `line` นั้น (รองรับจริง) — เห็นผลเป็นเส้นประทาบขอบ polygon ของ Bad segment เหมือนเจตนาเดิม
 - Connector line: คงสีตาม Good/Bad แต่เพิ่ม **ความหนาต่างกัน** (Good หนากว่า Bad 1px) เป็นตัวช่วยแยกเพิ่มเติม
 
 **สิ่งที่ต้องทำใน Phase 2 ก่อนยืนยันสีสุดท้าย**: ทดสอบคู่สีนี้ผ่าน CVD simulator จริง (เช่น Chrome DevTools Rendering > Emulate vision deficiencies) และปรับถ้าจำเป็น — ห้ามระบุในหนังสือว่า "ผ่านการทดสอบตาบอดสีทุกประเภท" จนกว่าจะมีหลักฐานนี้

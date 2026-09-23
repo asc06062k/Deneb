@@ -1,0 +1,1236 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Dual-Line Variance Chart - STATIC TEST variant of dual-line-variance-final.vl.json with inline data.values (the computed Workshop PlotData) for QA/browser testing outside Power BI. Do not paste this file into Deneb - use dual-line-variance-final.vl.json there (data.name=\"dataset\", no inline values).",
+  "width": "container",
+  "height": "container",
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "data": {
+    "name": "dataset",
+    "values": [
+      {
+        "Row_Type": "Original",
+        "Category": "ม.ค.",
+        "Sort_Order": 1,
+        "Actual": 420,
+        "Reference": 400,
+        "Plot_Position": 1,
+        "Plot_Actual": 420,
+        "Plot_Reference": 400,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ม.ค."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "ก.พ.",
+        "Sort_Order": 2,
+        "Actual": 380,
+        "Reference": 410,
+        "Plot_Position": 2,
+        "Plot_Actual": 380,
+        "Plot_Reference": 410,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.พ."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "มี.ค.",
+        "Sort_Order": 3,
+        "Actual": 460,
+        "Reference": 430,
+        "Plot_Position": 3,
+        "Plot_Actual": 460,
+        "Plot_Reference": 430,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "มี.ค."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "เม.ย.",
+        "Sort_Order": 4,
+        "Actual": 440,
+        "Reference": 450,
+        "Plot_Position": 4,
+        "Plot_Actual": 440,
+        "Plot_Reference": 450,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "เม.ย."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "พ.ค.",
+        "Sort_Order": 5,
+        "Actual": 500,
+        "Reference": 470,
+        "Plot_Position": 5,
+        "Plot_Actual": 500,
+        "Plot_Reference": 470,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "พ.ค."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "มิ.ย.",
+        "Sort_Order": 6,
+        "Actual": 480,
+        "Reference": 480,
+        "Plot_Position": 6,
+        "Plot_Actual": 480,
+        "Plot_Reference": 480,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "มิ.ย."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "ก.ค.",
+        "Sort_Order": 7,
+        "Actual": 510,
+        "Reference": 520,
+        "Plot_Position": 7,
+        "Plot_Actual": 510,
+        "Plot_Reference": 520,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ค."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "ส.ค.",
+        "Sort_Order": 8,
+        "Actual": 530,
+        "Reference": 500,
+        "Plot_Position": 8,
+        "Plot_Actual": 530,
+        "Plot_Reference": 500,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ส.ค."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "ก.ย.",
+        "Sort_Order": 9,
+        "Actual": 520,
+        "Reference": 540,
+        "Plot_Position": 9,
+        "Plot_Actual": 520,
+        "Plot_Reference": 540,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ย."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "ต.ค.",
+        "Sort_Order": 10,
+        "Actual": 560,
+        "Reference": 530,
+        "Plot_Position": 10,
+        "Plot_Actual": 560,
+        "Plot_Reference": 530,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ต.ค."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "พ.ย.",
+        "Sort_Order": 11,
+        "Actual": 540,
+        "Reference": 560,
+        "Plot_Position": 11,
+        "Plot_Actual": 540,
+        "Plot_Reference": 560,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "พ.ย."
+      },
+      {
+        "Row_Type": "Original",
+        "Category": "ธ.ค.",
+        "Sort_Order": 12,
+        "Actual": 600,
+        "Reference": 570,
+        "Plot_Position": 12,
+        "Plot_Actual": 600,
+        "Plot_Reference": 570,
+        "Segment_ID": null,
+        "Run_Sign": null,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ธ.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 1,
+        "Plot_Actual": 420,
+        "Plot_Reference": 400,
+        "Segment_ID": "0-a",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ม.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 1.4,
+        "Plot_Actual": 404,
+        "Plot_Reference": 404,
+        "Segment_ID": "0-a",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ม.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 1.4,
+        "Plot_Actual": 404,
+        "Plot_Reference": 404,
+        "Segment_ID": "0-b",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ม.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 2,
+        "Plot_Actual": 380,
+        "Plot_Reference": 410,
+        "Segment_ID": "0-b",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ม.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 2,
+        "Plot_Actual": 380,
+        "Plot_Reference": 410,
+        "Segment_ID": "1-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.พ."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 2.5,
+        "Plot_Actual": 420,
+        "Plot_Reference": 420,
+        "Segment_ID": "1-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.พ."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 2.5,
+        "Plot_Actual": 420,
+        "Plot_Reference": 420,
+        "Segment_ID": "1-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.พ."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 3,
+        "Plot_Actual": 460,
+        "Plot_Reference": 430,
+        "Segment_ID": "1-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.พ."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 3,
+        "Plot_Actual": 460,
+        "Plot_Reference": 430,
+        "Segment_ID": "2-a",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "มี.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 3.75,
+        "Plot_Actual": 445,
+        "Plot_Reference": 445,
+        "Segment_ID": "2-a",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "มี.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 3.75,
+        "Plot_Actual": 445,
+        "Plot_Reference": 445,
+        "Segment_ID": "2-b",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "มี.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 4,
+        "Plot_Actual": 440,
+        "Plot_Reference": 450,
+        "Segment_ID": "2-b",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "มี.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 4,
+        "Plot_Actual": 440,
+        "Plot_Reference": 450,
+        "Segment_ID": "3-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "เม.ย."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 4.25,
+        "Plot_Actual": 455,
+        "Plot_Reference": 455,
+        "Segment_ID": "3-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "เม.ย."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 4.25,
+        "Plot_Actual": 455,
+        "Plot_Reference": 455,
+        "Segment_ID": "3-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "เม.ย."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 5,
+        "Plot_Actual": 500,
+        "Plot_Reference": 470,
+        "Segment_ID": "3-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "เม.ย."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 5,
+        "Plot_Actual": 500,
+        "Plot_Reference": 470,
+        "Segment_ID": "4",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "พ.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 6,
+        "Plot_Actual": 480,
+        "Plot_Reference": 480,
+        "Segment_ID": "4",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "พ.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 6,
+        "Plot_Actual": 480,
+        "Plot_Reference": 480,
+        "Segment_ID": "5",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "มิ.ย."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 7,
+        "Plot_Actual": 510,
+        "Plot_Reference": 520,
+        "Segment_ID": "5",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "มิ.ย."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 7,
+        "Plot_Actual": 510,
+        "Plot_Reference": 520,
+        "Segment_ID": "6-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 7.25,
+        "Plot_Actual": 515,
+        "Plot_Reference": 515,
+        "Segment_ID": "6-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 7.25,
+        "Plot_Actual": 515,
+        "Plot_Reference": 515,
+        "Segment_ID": "6-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 8,
+        "Plot_Actual": 530,
+        "Plot_Reference": 500,
+        "Segment_ID": "6-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 8,
+        "Plot_Actual": 530,
+        "Plot_Reference": 500,
+        "Segment_ID": "7-a",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ส.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 8.6,
+        "Plot_Actual": 524,
+        "Plot_Reference": 524,
+        "Segment_ID": "7-a",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ส.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 8.6,
+        "Plot_Actual": 524,
+        "Plot_Reference": 524,
+        "Segment_ID": "7-b",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ส.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 9,
+        "Plot_Actual": 520,
+        "Plot_Reference": 540,
+        "Segment_ID": "7-b",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ส.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 9,
+        "Plot_Actual": 520,
+        "Plot_Reference": 540,
+        "Segment_ID": "8-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ย."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 9.4,
+        "Plot_Actual": 536,
+        "Plot_Reference": 536,
+        "Segment_ID": "8-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ย."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 9.4,
+        "Plot_Actual": 536,
+        "Plot_Reference": 536,
+        "Segment_ID": "8-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ย."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 10,
+        "Plot_Actual": 560,
+        "Plot_Reference": 530,
+        "Segment_ID": "8-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ก.ย."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 10,
+        "Plot_Actual": 560,
+        "Plot_Reference": 530,
+        "Segment_ID": "9-a",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ต.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 10.6,
+        "Plot_Actual": 548,
+        "Plot_Reference": 548,
+        "Segment_ID": "9-a",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ต.ค."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 10.6,
+        "Plot_Actual": 548,
+        "Plot_Reference": 548,
+        "Segment_ID": "9-b",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ต.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 11,
+        "Plot_Actual": 540,
+        "Plot_Reference": 560,
+        "Segment_ID": "9-b",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "ต.ค."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 11,
+        "Plot_Actual": 540,
+        "Plot_Reference": 560,
+        "Segment_ID": "10-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "พ.ย."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 11.4,
+        "Plot_Actual": 564,
+        "Plot_Reference": 564,
+        "Segment_ID": "10-a",
+        "Run_Sign": -1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "พ.ย."
+      },
+      {
+        "Row_Type": "Crossing",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 11.4,
+        "Plot_Actual": 564,
+        "Plot_Reference": 564,
+        "Segment_ID": "10-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "พ.ย."
+      },
+      {
+        "Row_Type": "Boundary",
+        "Category": null,
+        "Sort_Order": null,
+        "Actual": null,
+        "Reference": null,
+        "Plot_Position": 12,
+        "Plot_Actual": 600,
+        "Plot_Reference": 570,
+        "Segment_ID": "10-b",
+        "Run_Sign": 1,
+        "Business_Type": "Higher is Good",
+        "Filter_Key": "พ.ย."
+      }
+    ]
+  },
+  "layer": [
+    {
+      "name": "variance_area",
+      "transform": [
+        {
+          "filter": "datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing'"
+        }
+      ],
+      "mark": {
+        "type": "area",
+        "opacity": 0.35,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "Plot_Position",
+          "type": "quantitative",
+          "axis": null
+        },
+        "y": {
+          "field": "Plot_Actual",
+          "type": "quantitative",
+          "axis": null
+        },
+        "y2": {
+          "field": "Plot_Reference"
+        },
+        "detail": {
+          "field": "Segment_ID",
+          "type": "nominal"
+        },
+        "color": {
+          "condition": {
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0)",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "stroke": {
+          "condition": {
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0)",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "strokeWidth": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "bad_area_border_actual",
+      "transform": [
+        {
+          "filter": "(datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing') && !((datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0))"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#B45309",
+        "strokeWidth": 1,
+        "strokeDash": [3, 2],
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": { "field": "Plot_Position", "type": "quantitative", "axis": null },
+        "y": { "field": "Plot_Actual", "type": "quantitative", "axis": null },
+        "detail": { "field": "Segment_ID", "type": "nominal" }
+      }
+    },
+    {
+      "name": "bad_area_border_reference",
+      "transform": [
+        {
+          "filter": "(datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing') && !((datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0))"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#B45309",
+        "strokeWidth": 1,
+        "strokeDash": [3, 2],
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": { "field": "Plot_Position", "type": "quantitative", "axis": null },
+        "y": { "field": "Plot_Reference", "type": "quantitative", "axis": null },
+        "detail": { "field": "Segment_ID", "type": "nominal" }
+      }
+    },
+    {
+      "name": "connector_rule",
+      "transform": [
+        {
+          "filter": "datum.Row_Type == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "Plot_Position",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Plot_Actual",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "Plot_Reference"
+        },
+        "color": {
+          "condition": {
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Plot_Actual > datum.Plot_Reference) || (datum.Business_Type == 'Lower is Good' && datum.Plot_Actual < datum.Plot_Reference)",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "strokeWidth": {
+          "condition": {
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Plot_Actual > datum.Plot_Reference) || (datum.Business_Type == 'Lower is Good' && datum.Plot_Actual < datum.Plot_Reference)",
+            "value": 3
+          },
+          "value": 2
+        }
+      }
+    },
+    {
+      "name": "line_reference",
+      "transform": [
+        {
+          "filter": "datum.Row_Type == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "monotone",
+        "color": "#F59E0B",
+        "strokeWidth": 2,
+        "strokeDash": [
+          5,
+          3
+        ],
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "Plot_Position",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Plot_Reference",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.Reference__highlightStatus == 'off' || datum.Actual__highlightStatus == 'off'",
+            "value": 0.25
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "line_actual",
+      "transform": [
+        {
+          "filter": "datum.Row_Type == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "monotone",
+        "color": "#2563EB",
+        "strokeWidth": 2,
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "Plot_Position",
+          "type": "quantitative",
+          "title": "เดือน",
+          "axis": {
+            "values": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "labelExpr": "['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][datum.value - 1]",
+            "labelOverlap": "greedy",
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "Plot_Actual",
+          "type": "quantitative",
+          "title": "ยอดขาย (พันบาท)"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.Actual__highlightStatus == 'off' || datum.Reference__highlightStatus == 'off'",
+            "value": 0.25
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "point_reference",
+      "transform": [
+        {
+          "filter": "datum.Row_Type == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 40,
+        "color": "#F59E0B",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "Plot_Position",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Plot_Reference",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.Reference__highlightStatus == 'off' || datum.Actual__highlightStatus == 'off'",
+            "value": 0.25
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "point_actual_hit_target",
+      "transform": [
+        {
+          "filter": "datum.Row_Type == 'Original'"
+        },
+        {
+          "calculate": "datum.Plot_Actual - datum.Plot_Reference",
+          "as": "Variance"
+        },
+        {
+          "calculate": "format(datum.Variance, '+,.0f')",
+          "as": "VarianceLabel"
+        },
+        {
+          "calculate": "datum.Plot_Reference == 0 ? 'N/A (เป้าหมาย = 0)' : format(datum.Variance / datum.Plot_Reference, '+.1%')",
+          "as": "VariancePercentLabel"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 40,
+        "color": "#2563EB"
+      },
+      "encoding": {
+        "x": {
+          "field": "Plot_Position",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Plot_Actual",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.Actual__highlightStatus == 'off' || datum.Reference__highlightStatus == 'off'",
+            "value": 0.25
+          },
+          "value": 1
+        },
+        "tooltip": [
+          {
+            "field": "Category",
+            "type": "nominal",
+            "title": "เดือน"
+          },
+          {
+            "field": "Plot_Actual",
+            "type": "quantitative",
+            "title": "ยอดขายจริง",
+            "format": ",.0f"
+          },
+          {
+            "field": "Plot_Reference",
+            "type": "quantitative",
+            "title": "เป้าหมาย",
+            "format": ",.0f"
+          },
+          {
+            "field": "VarianceLabel",
+            "type": "nominal",
+            "title": "ผลต่าง"
+          },
+          {
+            "field": "VariancePercentLabel",
+            "type": "nominal",
+            "title": "ผลต่าง %"
+          }
+        ]
+      }
+    },
+    {
+      "name": "label_actual",
+      "transform": [
+        {
+          "filter": "datum.Row_Type == 'Original'"
+        },
+        {
+          "calculate": "length(format(datum.Plot_Actual, ',.0f'))",
+          "as": "lenA"
+        },
+        {
+          "calculate": "length(format(datum.Plot_Reference, ',.0f'))",
+          "as": "lenR"
+        },
+        {
+          "calculate": "max(datum.lenA, datum.lenR)",
+          "as": "maxLen"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "maxLen",
+              "as": "globalMaxLen"
+            },
+            {
+              "op": "count",
+              "field": "Plot_Actual",
+              "as": "n"
+            },
+            {
+              "op": "max",
+              "field": "Sort_Order",
+              "as": "lastSort"
+            }
+          ]
+        },
+        {
+          "calculate": "max(1, ceil((datum.globalMaxLen * 10 * 0.62 + 14) / (width / datum.n)))",
+          "as": "labelStep"
+        },
+        {
+          "calculate": "(datum.Sort_Order - 1) % datum.labelStep == 0 || datum.Sort_Order == datum.lastSort",
+          "as": "showLabel"
+        },
+        {
+          "filter": "datum.showLabel"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": {
+          "expr": "datum.Plot_Actual >= datum.Plot_Reference ? -12 : 12"
+        },
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "color": "#2563EB",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "Plot_Position",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Plot_Actual",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Plot_Actual",
+          "type": "quantitative",
+          "format": ",.0f"
+        }
+      }
+    },
+    {
+      "name": "label_reference",
+      "transform": [
+        {
+          "filter": "datum.Row_Type == 'Original'"
+        },
+        {
+          "calculate": "length(format(datum.Plot_Actual, ',.0f'))",
+          "as": "lenA"
+        },
+        {
+          "calculate": "length(format(datum.Plot_Reference, ',.0f'))",
+          "as": "lenR"
+        },
+        {
+          "calculate": "max(datum.lenA, datum.lenR)",
+          "as": "maxLen"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "maxLen",
+              "as": "globalMaxLen"
+            },
+            {
+              "op": "count",
+              "field": "Plot_Reference",
+              "as": "n"
+            },
+            {
+              "op": "max",
+              "field": "Sort_Order",
+              "as": "lastSort"
+            }
+          ]
+        },
+        {
+          "calculate": "max(1, ceil((datum.globalMaxLen * 10 * 0.62 + 14) / (width / datum.n)))",
+          "as": "labelStep"
+        },
+        {
+          "calculate": "(datum.Sort_Order - 1) % datum.labelStep == 0 || datum.Sort_Order == datum.lastSort",
+          "as": "showLabel"
+        },
+        {
+          "filter": "datum.showLabel"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": {
+          "expr": "datum.Plot_Actual >= datum.Plot_Reference ? 12 : -12"
+        },
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "color": "#B45309",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "Plot_Position",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Plot_Reference",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Plot_Reference",
+          "type": "quantitative",
+          "format": ",.0f"
+        }
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "y": "shared",
+      "x": "shared"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domainColor": "#D1D5DB",
+      "gridColor": "#F3F4F6"
+    }
+  }
+}

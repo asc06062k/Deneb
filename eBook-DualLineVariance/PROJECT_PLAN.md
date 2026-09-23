@@ -9,6 +9,7 @@ Workflow ของโครงการนี้สลับบทบาทจ�
 - **Claude Code (ผู้เขียน)** วิเคราะห์ ออกแบบ เขียนเนื้อหา สร้าง Dataset, DAX, Vega-Lite Spec, ภาพประกอบ และปกหนังสือ
 - **Codex CLI (ผู้รีวิว)** ตรวจทานทุก Phase แบบอิสระ ให้ Verdict `PASS`, `REVISE`, หรือ `BLOCKED` ก่อนเริ่ม Phase ถัดไปเสมอ
 - ทุก Phase ที่ผ่านการรีวิวแล้ว commit เข้า git แยก commit ต่อ Phase
+- **ข้อบังคับการสื่อสาร**: Claude ต้องตอบกลับ/อธิบายทุกอย่างในแชทเป็น**ภาษาไทย**เสมอ (ยกเว้น Technical Term, ชื่อ Field, โค้ด) — ผู้ใช้ย้ำข้อนี้ซ้ำหลายครั้งแล้ว ห้ามลืมหรือสลับกลับไปตอบเป็นภาษาอังกฤษไม่ว่าขั้นตอนภายใน (debug, tool call) จะใช้ภาษาอังกฤษก็ตาม
 
 Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DATA\Custom viz\dualLineVarianceChart` (D3 + powerbi-visuals-api) เนื้อหาจะสร้าง **สิ่งที่ทำงานคล้ายกันด้วย Deneb/Vega-Lite** ไม่ใช่การพอร์ตโค้ด TypeScript ตรงตัว เพราะ Deneb ไม่รันโค้ด D3 ที่กำหนดเอง
 
@@ -224,6 +225,7 @@ Blank/Reference เป็นศูนย์ (ตามนโยบายที�
 - Deneb ไม่รองรับ Custom animation แบบ Web Animations API ที่ต้นแบบใช้ — จะไม่สัญญาฟีเจอร์นี้; Context menu ของ Power BI ใช้ได้จริงผ่าน `Show context menu on right-click` และ `Attempt to resolve data point-specific actions` (section Context menu ของ Project setup pane) ไม่ใช่ข้อจำกัด (ชื่อ/ตำแหน่งตั้งค่าต้องยืนยันกับเวอร์ชันที่ Lock จริงก่อนเขียน ไม่ใช้ชื่อ UI จากเอกสารรุ่นเก่าปนกับรุ่นที่ใช้จริง)
 - Variance area ที่แบ่งสีตรงจุดตัด (crossing case) ขึ้นกับผลพิสูจน์ใน Phase 1 ข้อ 1 — ถ้าทำได้เฉพาะแบบ precompute หรือแบบง่าย (ทาสีทั้งช่วง) ต้องระบุข้อจำกัดเทียบต้นแบบตรงจุดที่สอน ไม่ใช้คำว่า "เทียบเท่า" เกินจริง
 - Field contract ผูกกับ dataset ตัวอย่างของเล่มนี้เท่านั้น ไม่ใช่คำแนะนำสถาปัตยกรรม Data model ระดับองค์กร
+- **เส้น Actual/Reference ใช้ `interpolate: "monotone"` (โค้งมน) แต่พื้นที่สี Good/Bad (Area), เส้นขอบเส้นประของ Bad segment, และ Connector line ยังคงเป็นเส้นตรง** — เป็นการตัดสินใจของผู้ใช้ (ดู `qa/PHASE2_STATIC_TEST_LOG.md` หัวข้อ M-11) ที่ยอมรับความไม่ sync กันระหว่างเส้นโค้งกับพื้นที่สีเส้นตรงชั่วคราว โดยไม่รอให้ Codex ให้ `PASS` Phase 2 ส่วน static ก่อน (Codex ยัง flag เป็น Mandatory finding M-11 อยู่) ต้องระบุข้อจำกัดนี้ตรงไปตรงมาในบทที่เกี่ยวข้อง (จุดตัดที่เห็นจากเส้นโค้งอาจไม่ตรงกับขอบพื้นที่สีเป๊ะระหว่างจุดข้อมูล) จนกว่าจะมีการทบทวนใหม่ก่อน Phase 4/5
 
 ## 10 Definition of Done
 
