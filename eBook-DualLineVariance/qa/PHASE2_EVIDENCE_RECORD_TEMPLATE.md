@@ -18,6 +18,8 @@ Claude/Codex ไม่มีสิทธิ์เข้าถึง Power BI Des
 - ชื่อใน Values ต้องเป็นชื่อ field ตรงตัว (เช่น `Actual` ไม่ใช่ `Sum of Actual`) — ถ้า Power BI เติม "Sum of" ให้ rename ในช่อง Values
 - หลังผูกแล้ว Data pane ของ Deneb ต้องแสดง **1-52 of 52**
 
+**สภาพแวดล้อมที่ใช้ทดสอบจริง (ยืนยัน 24 ก.ย. 2026 จากหน้าต่าง About ที่ผู้ใช้แคปมา — ภาพในแชท ไม่ได้เก็บไฟล์เพราะมี User ID/Session ID และชื่อบัญชี)**: Power BI Desktop **2.157.1354.0 64-bit (August 2026)** และ Deneb **2.0.0.0** (Publisher: Daniel Marsh-Patrick, Source: AppSource) — **ตรงกับเวอร์ชันที่ Lock ไว้**; ไฟล์ PBIX: `deneb demo.pbix` (ไม่มี hash); ผู้ทดสอบ: ผู้ใช้ (เจ้าของโครงการ) บนเครื่องจริง; viewport ของ Visual ระหว่างทดสอบ interaction ≈ 998×767 px (ขณะแคปหน้า About) ยกเว้น Test ที่ระบุขนาดเอง — ใช้ค่าเหล่านี้กับทุก Test ID ที่บันทึกวันที่ 24 ก.ย. 2026 ซึ่งเขียนว่า "ยังขาด Evidence record fields"
+
 แบบฟอร์มด้านล่างมีทุกช่องพร้อม Test ID และ Expected ที่ Lock ไว้แล้ว — กรอกเฉพาะส่วนที่เหลือ (Actual, หลักฐาน, ผู้ทดสอบ, วันที่, ผลสรุป)
 
 ---
