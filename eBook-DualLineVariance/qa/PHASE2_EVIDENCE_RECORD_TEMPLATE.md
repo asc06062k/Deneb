@@ -319,7 +319,8 @@ Actual รอบที่ 1 (24 ก.ย. 2026, สภาพแวดล้อม
 หลักฐาน: qa/evidence/phase2-powerbi/T27-01-import-field-mapping.png, T27-02-import-error-illegal-token.png, T27-template-export.json, T27-imported-spec.json, T27-template-fixed.json
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง) + วิเคราะห์ไฟล์แบบ headless
 วันที่: 24 ก.ย. 2026
-ผลสรุป: FAIL (template ที่ export ตรงๆ ใช้ไม่ได้เพราะบั๊ก escaping ของ Deneb) — รอทดสอบ import ไฟล์ที่แก้แล้วบน Deneb จริง; บทที่ 9 ต้องสอนขั้นตอนแก้ไฟล์หรือแจก template ที่แก้แล้ว
+Actual รอบที่ 2 (24 ก.ย. 2026, ภาพ T27-03): Import T27-template-fixed.json บน Deneb จริง → กราฟ render ครบ (เส้น, พื้นที่สี, connector, ป้าย, แกน), dataset 1-50 of 52, ไม่มี error
+ผลสรุป: PASS WITH LIMITATION — template ที่ Deneb 2.0.0.0 export ตรงๆ ใช้ไม่ได้ (บั๊ก escaping) แต่หลังแทนที่ `\'` → `'` import ได้ถูกต้องบน Deneb จริง; ทดสอบเฉพาะการ import กับข้อมูลชุดเดิม — ข้อจำกัดตอนนำไปใช้กับข้อมูลใหม่ (ต้องทำ Power Query step เอง, labelExpr ชื่อเดือน 12 ค่าตายตัว) ยังเป็นไปตาม Design Plan 2.5/4.1 และไม่ได้ทดสอบกับข้อมูลใหม่; บทที่ 9 ต้องแจก template ที่แก้แล้ว + สอนวิธีแก้ไฟล์ export เอง
 ```
 
 ---
