@@ -13,8 +13,8 @@
       ],
       "mark": { "type": "area", "opacity": 0.35, "tooltip": null },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative", "axis": null },
-        "y": { "field": "Plot_Actual", "type": "quantitative", "axis": null },
+        "x": { "field": "Plot_Position", "type": "quantitative" },
+        "y": { "field": "Plot_Actual", "type": "quantitative" },
         "y2": { "field": "Plot_Reference" },
         "detail": { "field": "Segment_ID", "type": "nominal" },
         "color": {
@@ -41,8 +41,8 @@
       ],
       "mark": { "type": "line", "color": "#B45309", "strokeWidth": 1, "strokeDash": [3, 2], "point": false, "tooltip": null },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative", "axis": null },
-        "y": { "field": "Plot_Actual", "type": "quantitative", "axis": null },
+        "x": { "field": "Plot_Position", "type": "quantitative" },
+        "y": { "field": "Plot_Actual", "type": "quantitative" },
         "detail": { "field": "Segment_ID", "type": "nominal" }
       }
     },
@@ -53,8 +53,8 @@
       ],
       "mark": { "type": "line", "color": "#B45309", "strokeWidth": 1, "strokeDash": [3, 2], "point": false, "tooltip": null },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative", "axis": null },
-        "y": { "field": "Plot_Reference", "type": "quantitative", "axis": null },
+        "x": { "field": "Plot_Position", "type": "quantitative" },
+        "y": { "field": "Plot_Reference", "type": "quantitative" },
         "detail": { "field": "Segment_ID", "type": "nominal" }
       }
     },

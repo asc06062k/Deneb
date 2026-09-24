@@ -757,13 +757,11 @@
       "encoding": {
         "x": {
           "field": "Plot_Position",
-          "type": "quantitative",
-          "axis": null
+          "type": "quantitative"
         },
         "y": {
           "field": "Plot_Actual",
-          "type": "quantitative",
-          "axis": null
+          "type": "quantitative"
         },
         "y2": {
           "field": "Plot_Reference"
@@ -807,8 +805,8 @@
         "tooltip": null
       },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative", "axis": null },
-        "y": { "field": "Plot_Actual", "type": "quantitative", "axis": null },
+        "x": { "field": "Plot_Position", "type": "quantitative" },
+        "y": { "field": "Plot_Actual", "type": "quantitative" },
         "detail": { "field": "Segment_ID", "type": "nominal" }
       }
     },
@@ -828,8 +826,8 @@
         "tooltip": null
       },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative", "axis": null },
-        "y": { "field": "Plot_Reference", "type": "quantitative", "axis": null },
+        "x": { "field": "Plot_Position", "type": "quantitative" },
+        "y": { "field": "Plot_Reference", "type": "quantitative" },
         "detail": { "field": "Segment_ID", "type": "nominal" }
       }
     },

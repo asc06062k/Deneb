@@ -1,0 +1,131 @@
+[
+  {
+    "id": "CH05-S01",
+    "file": "CH05-S01-line-actual.vl.json",
+    "title": "first line: Actual only, Row_Type = Original filter, Thai month axis",
+    "layers": [
+      "line_actual"
+    ]
+  },
+  {
+    "id": "CH05-S02",
+    "file": "CH05-S02-line-reference.vl.json",
+    "title": "add Reference line as second layer (dashed amber)",
+    "layers": [
+      "line_reference",
+      "line_actual"
+    ]
+  },
+  {
+    "id": "CH05-S03",
+    "file": "CH05-S03-points.vl.json",
+    "title": "add point marks for Actual and Reference",
+    "layers": [
+      "line_reference",
+      "line_actual",
+      "point_reference",
+      "point_actual_hit_target"
+    ]
+  },
+  {
+    "id": "CH05-S04",
+    "file": "CH05-S04-monotone.vl.json",
+    "title": "curve both lines with interpolate: monotone (known limitation M-11)",
+    "layers": [
+      "line_reference",
+      "line_actual",
+      "point_reference",
+      "point_actual_hit_target"
+    ]
+  },
+  {
+    "id": "CH06-S01",
+    "file": "CH06-S01-variance-area.vl.json",
+    "title": "variance area between lines, Good/Bad color from Business_Type",
+    "layers": [
+      "variance_area",
+      "line_reference",
+      "line_actual",
+      "point_reference",
+      "point_actual_hit_target"
+    ]
+  },
+  {
+    "id": "CH06-S02",
+    "file": "CH06-S02-bad-area-border.vl.json",
+    "title": "dashed border on Bad segments (non-color cue)",
+    "layers": [
+      "variance_area",
+      "bad_area_border_actual",
+      "bad_area_border_reference",
+      "line_reference",
+      "line_actual",
+      "point_reference",
+      "point_actual_hit_target"
+    ]
+  },
+  {
+    "id": "CH06-S03",
+    "file": "CH06-S03-connector-rule.vl.json",
+    "title": "connector rule between Actual and Reference per category",
+    "layers": [
+      "variance_area",
+      "bad_area_border_actual",
+      "bad_area_border_reference",
+      "connector_rule",
+      "line_reference",
+      "line_actual",
+      "point_reference",
+      "point_actual_hit_target"
+    ]
+  },
+  {
+    "id": "CH07-S01",
+    "file": "CH07-S01-tooltip.vl.json",
+    "title": "variance tooltip on Actual point (Variance, VarianceLabel, VariancePercentLabel)",
+    "layers": [
+      "variance_area",
+      "bad_area_border_actual",
+      "bad_area_border_reference",
+      "connector_rule",
+      "line_reference",
+      "line_actual",
+      "point_reference",
+      "point_actual_hit_target"
+    ]
+  },
+  {
+    "id": "CH07-S02",
+    "file": "CH07-S02-data-labels.vl.json",
+    "title": "Actual/Reference data labels with width-based thinning",
+    "layers": [
+      "variance_area",
+      "bad_area_border_actual",
+      "bad_area_border_reference",
+      "connector_rule",
+      "line_reference",
+      "line_actual",
+      "point_reference",
+      "point_actual_hit_target",
+      "label_actual",
+      "label_reference"
+    ]
+  },
+  {
+    "id": "CH08-S01",
+    "file": "CH08-S01-cross-highlight-opacity.vl.json",
+    "title": "dim lines/points when __highlightStatus is off (= final spec)",
+    "layers": [
+      "variance_area",
+      "bad_area_border_actual",
+      "bad_area_border_reference",
+      "connector_rule",
+      "line_reference",
+      "line_actual",
+      "point_reference",
+      "point_actual_hit_target",
+      "label_actual",
+      "label_reference"
+    ]
+  }
+]

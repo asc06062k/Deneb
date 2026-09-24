@@ -1,0 +1,286 @@
+PASS CH05-S01 manifest layers match file layers :: manifest=line_actual
+PASS CH05-S01 layer set matches the expected lesson plan :: got line_actual
+PASS CH05-S01 layer line_actual is a structural subset of final spec
+PASS CH05-S01 top-level $schema equals final spec
+PASS CH05-S01 top-level width equals final spec
+PASS CH05-S01 top-level height equals final spec
+PASS CH05-S01 top-level autosize equals final spec
+PASS CH05-S01 top-level data equals final spec
+PASS CH05-S01 top-level config equals final spec
+PASS CH05-S01 data binds to Deneb dataset
+PASS CH05-S01 layer order is a subsequence of final spec order
+PASS CH05-S01 cumulative: keeps every layer of previous step :: prev=
+PASS CH05-S01 vega-lite compile
+PASS CH05-S01 no compile warnings
+PASS CH05-S01 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH05-S01 renders to SVG
+PASS CH05-S01 mark count line_actual :: got 1, expected 1
+PASS CH05-S01 monotone introduced only from CH05-S04
+PASS CH05-S02 manifest layers match file layers :: manifest=line_reference,line_actual
+PASS CH05-S02 layer set matches the expected lesson plan :: got line_reference,line_actual
+PASS CH05-S02 layer line_reference is a structural subset of final spec
+PASS CH05-S02 layer line_actual is a structural subset of final spec
+PASS CH05-S02 top-level $schema equals final spec
+PASS CH05-S02 top-level width equals final spec
+PASS CH05-S02 top-level height equals final spec
+PASS CH05-S02 top-level autosize equals final spec
+PASS CH05-S02 top-level data equals final spec
+PASS CH05-S02 top-level resolve equals final spec
+PASS CH05-S02 top-level config equals final spec
+PASS CH05-S02 data binds to Deneb dataset
+PASS CH05-S02 layer order is a subsequence of final spec order
+PASS CH05-S02 cumulative: keeps every layer of previous step :: prev=line_actual
+PASS CH05-S02 vega-lite compile
+PASS CH05-S02 no compile warnings
+PASS CH05-S02 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH05-S02 renders to SVG
+PASS CH05-S02 mark count line_reference :: got 1, expected 1
+PASS CH05-S02 mark count line_actual :: got 1, expected 1
+PASS CH05-S02 monotone introduced only from CH05-S04
+PASS CH05-S03 manifest layers match file layers :: manifest=line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH05-S03 layer set matches the expected lesson plan :: got line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH05-S03 layer line_reference is a structural subset of final spec
+PASS CH05-S03 layer line_actual is a structural subset of final spec
+PASS CH05-S03 layer point_reference is a structural subset of final spec
+PASS CH05-S03 layer point_actual_hit_target is a structural subset of final spec
+PASS CH05-S03 top-level $schema equals final spec
+PASS CH05-S03 top-level width equals final spec
+PASS CH05-S03 top-level height equals final spec
+PASS CH05-S03 top-level autosize equals final spec
+PASS CH05-S03 top-level data equals final spec
+PASS CH05-S03 top-level resolve equals final spec
+PASS CH05-S03 top-level config equals final spec
+PASS CH05-S03 data binds to Deneb dataset
+PASS CH05-S03 layer order is a subsequence of final spec order
+PASS CH05-S03 cumulative: keeps every layer of previous step :: prev=line_reference,line_actual
+PASS CH05-S03 vega-lite compile
+PASS CH05-S03 no compile warnings
+PASS CH05-S03 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH05-S03 renders to SVG
+PASS CH05-S03 mark count line_reference :: got 1, expected 1
+PASS CH05-S03 mark count line_actual :: got 1, expected 1
+PASS CH05-S03 mark count point_reference :: got 12, expected 12
+PASS CH05-S03 mark count point_actual_hit_target :: got 12, expected 12
+PASS CH05-S03 monotone introduced only from CH05-S04
+PASS CH05-S04 manifest layers match file layers :: manifest=line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH05-S04 layer set matches the expected lesson plan :: got line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH05-S04 layer line_reference is a structural subset of final spec
+PASS CH05-S04 layer line_actual is a structural subset of final spec
+PASS CH05-S04 layer point_reference is a structural subset of final spec
+PASS CH05-S04 layer point_actual_hit_target is a structural subset of final spec
+PASS CH05-S04 top-level $schema equals final spec
+PASS CH05-S04 top-level width equals final spec
+PASS CH05-S04 top-level height equals final spec
+PASS CH05-S04 top-level autosize equals final spec
+PASS CH05-S04 top-level data equals final spec
+PASS CH05-S04 top-level resolve equals final spec
+PASS CH05-S04 top-level config equals final spec
+PASS CH05-S04 data binds to Deneb dataset
+PASS CH05-S04 layer order is a subsequence of final spec order
+PASS CH05-S04 cumulative: keeps every layer of previous step :: prev=line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH05-S04 vega-lite compile
+PASS CH05-S04 no compile warnings
+PASS CH05-S04 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH05-S04 renders to SVG
+PASS CH05-S04 mark count line_reference :: got 1, expected 1
+PASS CH05-S04 mark count line_actual :: got 1, expected 1
+PASS CH05-S04 mark count point_reference :: got 12, expected 12
+PASS CH05-S04 mark count point_actual_hit_target :: got 12, expected 12
+PASS CH05-S04 monotone introduced only from CH05-S04
+PASS CH06-S01 manifest layers match file layers :: manifest=variance_area,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH06-S01 layer set matches the expected lesson plan :: got variance_area,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH06-S01 layer variance_area is a structural subset of final spec
+PASS CH06-S01 layer line_reference is a structural subset of final spec
+PASS CH06-S01 layer line_actual is a structural subset of final spec
+PASS CH06-S01 layer point_reference is a structural subset of final spec
+PASS CH06-S01 layer point_actual_hit_target is a structural subset of final spec
+PASS CH06-S01 top-level $schema equals final spec
+PASS CH06-S01 top-level width equals final spec
+PASS CH06-S01 top-level height equals final spec
+PASS CH06-S01 top-level autosize equals final spec
+PASS CH06-S01 top-level data equals final spec
+PASS CH06-S01 top-level resolve equals final spec
+PASS CH06-S01 top-level config equals final spec
+PASS CH06-S01 data binds to Deneb dataset
+PASS CH06-S01 layer order is a subsequence of final spec order
+PASS CH06-S01 cumulative: keeps every layer of previous step :: prev=line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH06-S01 vega-lite compile
+PASS CH06-S01 no compile warnings
+PASS CH06-S01 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH06-S01 renders to SVG
+PASS CH06-S01 mark count variance_area :: got 20, expected 20
+PASS CH06-S01 mark count line_reference :: got 1, expected 1
+PASS CH06-S01 mark count line_actual :: got 1, expected 1
+PASS CH06-S01 mark count point_reference :: got 12, expected 12
+PASS CH06-S01 mark count point_actual_hit_target :: got 12, expected 12
+PASS CH06-S01 monotone introduced only from CH05-S04
+PASS CH06-S02 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH06-S02 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH06-S02 layer variance_area is a structural subset of final spec
+PASS CH06-S02 layer bad_area_border_actual is a structural subset of final spec
+PASS CH06-S02 layer bad_area_border_reference is a structural subset of final spec
+PASS CH06-S02 layer line_reference is a structural subset of final spec
+PASS CH06-S02 layer line_actual is a structural subset of final spec
+PASS CH06-S02 layer point_reference is a structural subset of final spec
+PASS CH06-S02 layer point_actual_hit_target is a structural subset of final spec
+PASS CH06-S02 top-level $schema equals final spec
+PASS CH06-S02 top-level width equals final spec
+PASS CH06-S02 top-level height equals final spec
+PASS CH06-S02 top-level autosize equals final spec
+PASS CH06-S02 top-level data equals final spec
+PASS CH06-S02 top-level resolve equals final spec
+PASS CH06-S02 top-level config equals final spec
+PASS CH06-S02 data binds to Deneb dataset
+PASS CH06-S02 layer order is a subsequence of final spec order
+PASS CH06-S02 cumulative: keeps every layer of previous step :: prev=variance_area,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH06-S02 vega-lite compile
+PASS CH06-S02 no compile warnings
+PASS CH06-S02 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH06-S02 renders to SVG
+PASS CH06-S02 mark count variance_area :: got 20, expected 20
+PASS CH06-S02 mark count bad_area_border_actual :: got 10, expected 10
+PASS CH06-S02 mark count bad_area_border_reference :: got 10, expected 10
+PASS CH06-S02 mark count line_reference :: got 1, expected 1
+PASS CH06-S02 mark count line_actual :: got 1, expected 1
+PASS CH06-S02 mark count point_reference :: got 12, expected 12
+PASS CH06-S02 mark count point_actual_hit_target :: got 12, expected 12
+PASS CH06-S02 monotone introduced only from CH05-S04
+PASS CH06-S03 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH06-S03 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH06-S03 layer variance_area is a structural subset of final spec
+PASS CH06-S03 layer bad_area_border_actual is a structural subset of final spec
+PASS CH06-S03 layer bad_area_border_reference is a structural subset of final spec
+PASS CH06-S03 layer connector_rule is a structural subset of final spec
+PASS CH06-S03 layer line_reference is a structural subset of final spec
+PASS CH06-S03 layer line_actual is a structural subset of final spec
+PASS CH06-S03 layer point_reference is a structural subset of final spec
+PASS CH06-S03 layer point_actual_hit_target is a structural subset of final spec
+PASS CH06-S03 top-level $schema equals final spec
+PASS CH06-S03 top-level width equals final spec
+PASS CH06-S03 top-level height equals final spec
+PASS CH06-S03 top-level autosize equals final spec
+PASS CH06-S03 top-level data equals final spec
+PASS CH06-S03 top-level resolve equals final spec
+PASS CH06-S03 top-level config equals final spec
+PASS CH06-S03 data binds to Deneb dataset
+PASS CH06-S03 layer order is a subsequence of final spec order
+PASS CH06-S03 cumulative: keeps every layer of previous step :: prev=variance_area,bad_area_border_actual,bad_area_border_reference,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH06-S03 vega-lite compile
+PASS CH06-S03 no compile warnings
+PASS CH06-S03 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH06-S03 renders to SVG
+PASS CH06-S03 mark count variance_area :: got 20, expected 20
+PASS CH06-S03 mark count bad_area_border_actual :: got 10, expected 10
+PASS CH06-S03 mark count bad_area_border_reference :: got 10, expected 10
+PASS CH06-S03 mark count connector_rule :: got 12, expected 12
+PASS CH06-S03 mark count line_reference :: got 1, expected 1
+PASS CH06-S03 mark count line_actual :: got 1, expected 1
+PASS CH06-S03 mark count point_reference :: got 12, expected 12
+PASS CH06-S03 mark count point_actual_hit_target :: got 12, expected 12
+PASS CH06-S03 monotone introduced only from CH05-S04
+PASS CH07-S01 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH07-S01 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH07-S01 layer variance_area is a structural subset of final spec
+PASS CH07-S01 layer bad_area_border_actual is a structural subset of final spec
+PASS CH07-S01 layer bad_area_border_reference is a structural subset of final spec
+PASS CH07-S01 layer connector_rule is a structural subset of final spec
+PASS CH07-S01 layer line_reference is a structural subset of final spec
+PASS CH07-S01 layer line_actual is a structural subset of final spec
+PASS CH07-S01 layer point_reference is a structural subset of final spec
+PASS CH07-S01 layer point_actual_hit_target is a structural subset of final spec
+PASS CH07-S01 top-level $schema equals final spec
+PASS CH07-S01 top-level width equals final spec
+PASS CH07-S01 top-level height equals final spec
+PASS CH07-S01 top-level autosize equals final spec
+PASS CH07-S01 top-level data equals final spec
+PASS CH07-S01 top-level resolve equals final spec
+PASS CH07-S01 top-level config equals final spec
+PASS CH07-S01 data binds to Deneb dataset
+PASS CH07-S01 layer order is a subsequence of final spec order
+PASS CH07-S01 cumulative: keeps every layer of previous step :: prev=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH07-S01 vega-lite compile
+PASS CH07-S01 no compile warnings
+PASS CH07-S01 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH07-S01 renders to SVG
+PASS CH07-S01 mark count variance_area :: got 20, expected 20
+PASS CH07-S01 mark count bad_area_border_actual :: got 10, expected 10
+PASS CH07-S01 mark count bad_area_border_reference :: got 10, expected 10
+PASS CH07-S01 mark count connector_rule :: got 12, expected 12
+PASS CH07-S01 mark count line_reference :: got 1, expected 1
+PASS CH07-S01 mark count line_actual :: got 1, expected 1
+PASS CH07-S01 mark count point_reference :: got 12, expected 12
+PASS CH07-S01 mark count point_actual_hit_target :: got 12, expected 12
+PASS CH07-S01 monotone introduced only from CH05-S04
+PASS CH07-S02 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target,label_actual,label_reference
+PASS CH07-S02 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target,label_actual,label_reference
+PASS CH07-S02 layer variance_area is a structural subset of final spec
+PASS CH07-S02 layer bad_area_border_actual is a structural subset of final spec
+PASS CH07-S02 layer bad_area_border_reference is a structural subset of final spec
+PASS CH07-S02 layer connector_rule is a structural subset of final spec
+PASS CH07-S02 layer line_reference is a structural subset of final spec
+PASS CH07-S02 layer line_actual is a structural subset of final spec
+PASS CH07-S02 layer point_reference is a structural subset of final spec
+PASS CH07-S02 layer point_actual_hit_target is a structural subset of final spec
+PASS CH07-S02 layer label_actual is a structural subset of final spec
+PASS CH07-S02 layer label_reference is a structural subset of final spec
+PASS CH07-S02 top-level $schema equals final spec
+PASS CH07-S02 top-level width equals final spec
+PASS CH07-S02 top-level height equals final spec
+PASS CH07-S02 top-level autosize equals final spec
+PASS CH07-S02 top-level data equals final spec
+PASS CH07-S02 top-level resolve equals final spec
+PASS CH07-S02 top-level config equals final spec
+PASS CH07-S02 data binds to Deneb dataset
+PASS CH07-S02 layer order is a subsequence of final spec order
+PASS CH07-S02 cumulative: keeps every layer of previous step :: prev=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
+PASS CH07-S02 vega-lite compile
+PASS CH07-S02 no compile warnings
+PASS CH07-S02 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH07-S02 renders to SVG
+PASS CH07-S02 mark count variance_area :: got 20, expected 20
+PASS CH07-S02 mark count bad_area_border_actual :: got 10, expected 10
+PASS CH07-S02 mark count bad_area_border_reference :: got 10, expected 10
+PASS CH07-S02 mark count connector_rule :: got 12, expected 12
+PASS CH07-S02 mark count line_reference :: got 1, expected 1
+PASS CH07-S02 mark count line_actual :: got 1, expected 1
+PASS CH07-S02 mark count point_reference :: got 12, expected 12
+PASS CH07-S02 mark count point_actual_hit_target :: got 12, expected 12
+PASS CH07-S02 monotone introduced only from CH05-S04
+PASS CH08-S01 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target,label_actual,label_reference
+PASS CH08-S01 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target,label_actual,label_reference
+PASS CH08-S01 layer variance_area is a structural subset of final spec
+PASS CH08-S01 layer bad_area_border_actual is a structural subset of final spec
+PASS CH08-S01 layer bad_area_border_reference is a structural subset of final spec
+PASS CH08-S01 layer connector_rule is a structural subset of final spec
+PASS CH08-S01 layer line_reference is a structural subset of final spec
+PASS CH08-S01 layer line_actual is a structural subset of final spec
+PASS CH08-S01 layer point_reference is a structural subset of final spec
+PASS CH08-S01 layer point_actual_hit_target is a structural subset of final spec
+PASS CH08-S01 layer label_actual is a structural subset of final spec
+PASS CH08-S01 layer label_reference is a structural subset of final spec
+PASS CH08-S01 top-level $schema equals final spec
+PASS CH08-S01 top-level width equals final spec
+PASS CH08-S01 top-level height equals final spec
+PASS CH08-S01 top-level autosize equals final spec
+PASS CH08-S01 top-level data equals final spec
+PASS CH08-S01 top-level resolve equals final spec
+PASS CH08-S01 top-level config equals final spec
+PASS CH08-S01 data binds to Deneb dataset
+PASS CH08-S01 layer order is a subsequence of final spec order
+PASS CH08-S01 cumulative: keeps every layer of previous step :: prev=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target,label_actual,label_reference
+PASS CH08-S01 vega-lite compile
+PASS CH08-S01 no compile warnings
+PASS CH08-S01 x and y axes present with Thai titles :: ["เดือน","ยอดขาย (พันบาท)"]
+PASS CH08-S01 renders to SVG
+PASS CH08-S01 mark count variance_area :: got 20, expected 20
+PASS CH08-S01 mark count bad_area_border_actual :: got 10, expected 10
+PASS CH08-S01 mark count bad_area_border_reference :: got 10, expected 10
+PASS CH08-S01 mark count connector_rule :: got 12, expected 12
+PASS CH08-S01 mark count line_reference :: got 1, expected 1
+PASS CH08-S01 mark count line_actual :: got 1, expected 1
+PASS CH08-S01 mark count point_reference :: got 12, expected 12
+PASS CH08-S01 mark count point_actual_hit_target :: got 12, expected 12
+PASS CH08-S01 monotone introduced only from CH05-S04
+PASS FINAL last step equals final spec (except description)
+
+284 passed, 0 failed
