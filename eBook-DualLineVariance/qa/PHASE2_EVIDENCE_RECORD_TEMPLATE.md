@@ -341,40 +341,40 @@ Actual รอบที่ 2 (24 ก.ย. 2026, ภาพ T27-03): Import T27-tem
 Test ID: T29 (ตัดฝั่งขวา — Case B, strict crossing)
 ขั้นตอนทำซ้ำ: ใช้ Slicer กรอง Category ออก 1 ตัวที่เป็นฝั่งขวาของ segment ที่มีจุดตัด (เช่น กรอง "ก.พ." ออก ซึ่งเป็นฝั่งขวาของ segment 0-a/0-b, Row_Type=Crossing)
 Expected: แถว Fill ของ segment นั้นยังไม่ถูกตัด (dangling) เพราะ Filter_Key ยังตรงกับฝั่งซ้าย (ม.ค.)
-Actual: หลักฐานทางอ้อมจาก T20-01 (กรองเหลือ ก.ค. ผ่าน Column chart ไม่ใช่ Slicer): segment ก.ค.–ส.ค. (strict crossing) ที่ฝั่งขวา ส.ค. ถูกกรองออก ยังแสดงพื้นที่ครบ — สอดคล้องกับ Expected; ยังต้องทดสอบตามขั้นตอน Slicer
-หลักฐาน:
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual: Slicer = DualLineVariance_Workshop_Data[Category] เอา ก.พ. ออก → พื้นที่ ม.ค.–ก.พ. (Filter_Key ม.ค.) ยังอยู่ยื่นไปถึงตำแหน่ง ก.พ.; พื้นที่ ก.พ.–มี.ค. หายไป (ก่อนหน้ามีหลักฐานทางอ้อมจาก T20-01)
+หลักฐาน: qa/evidence/phase2-powerbi/T29-02-workshop-slicer-exclude-feb.png (รอบ 1 ที่ Slicer ใช้ DualLine_PlotData[Category] ไม่นับ — ดูหัวข้อด้านบน)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS — สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / deneb demo.pbix, spec rev 5
 
 Test ID: T33 (ตัดฝั่งซ้าย — Case B, strict crossing)
 ขั้นตอนทำซ้ำ: กรอง Category ฝั่งซ้ายของ segment เดียวกันออก (เช่น กรอง "ม.ค." ออก)
 Expected: แถว Fill ของ segment นั้นถูกตัดออกทั้งหมด เพราะ Filter_Key ของทุกแถว = key(ม.ค.)
-Actual:
-หลักฐาน:
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual: Slicer = DualLineVariance_Workshop_Data[Category] เอา ม.ค. ออก → พื้นที่ ม.ค.–ก.พ. หายทั้งหมด แกน X เริ่มที่ ก.พ.
+หลักฐาน: qa/evidence/phase2-powerbi/T33-02-workshop-slicer-exclude-jan.png (รอบ 1 ที่ Slicer ใช้ DualLine_PlotData[Category] ไม่นับ — ดูหัวข้อด้านบน)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS — สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / deneb demo.pbix, spec rev 5
 ```
 
 ```text
 Test ID: T29-C (ตัดฝั่งขวา — Case C, ไม่มีจุดตัด/same-sign segment)
 ขั้นตอนทำซ้ำ: ใช้ Slicer กรอง Category ออก 1 ตัวที่เป็นฝั่งขวาของ segment แบบ Case C (เช่น segment "4" ระหว่าง พ.ค.→มิ.ย. — กรอง "มิ.ย." ออก)
 Expected: แถว Fill ของ segment "4" ยังไม่ถูกตัด เพราะ Filter_Key ของทั้งสองแถว Boundary = key(พ.ค.)
-Actual:
-หลักฐาน:
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual: Slicer = DualLineVariance_Workshop_Data[Category] เอา มิ.ย. ออก → พื้นที่ พ.ค.–มิ.ย. (segment "4") ยังอยู่ยื่นไปถึงตำแหน่ง มิ.ย.; พื้นที่ มิ.ย.–ก.ค. หายไป
+หลักฐาน: qa/evidence/phase2-powerbi/T29C-02-workshop-slicer-exclude-jun.png (รอบ 1 ที่ Slicer ใช้ DualLine_PlotData[Category] ไม่นับ — ดูหัวข้อด้านบน)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS — สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / deneb demo.pbix, spec rev 5
 
 Test ID: T33-C (ตัดฝั่งซ้าย — Case C, ไม่มีจุดตัด/same-sign segment)
 ขั้นตอนทำซ้ำ: กรอง Category ฝั่งซ้ายของ segment "4" ออก (กรอง "พ.ค." ออก)
 Expected: แถว Fill ของ segment "4" ถูกตัดออกทั้งหมด เพราะ Filter_Key ของทั้งสองแถว = key(พ.ค.)
-Actual: หลักฐานทางอ้อมจาก T20-01: segment มิ.ย.–ก.ค. (Case C) ที่ฝั่งซ้าย มิ.ย. ถูกกรองออก พื้นที่หายทั้งหมด — สอดคล้องกับพฤติกรรม T33-C (คนละ segment กับที่ระบุ); ยังต้องทดสอบตามขั้นตอน Slicer
-หลักฐาน:
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual: Slicer = DualLineVariance_Workshop_Data[Category] เอา พ.ค. ออก → พื้นที่ พ.ค.–มิ.ย. (segment "4") หายทั้งหมด; พื้นที่ เม.ย.–พ.ค. ยังอยู่ (ก่อนหน้ามีหลักฐานทางอ้อมจาก T20-01)
+หลักฐาน: qa/evidence/phase2-powerbi/T33C-02-workshop-slicer-exclude-may.png (รอบ 1 ที่ Slicer ใช้ DualLine_PlotData[Category] ไม่นับ — ดูหัวข้อด้านบน)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS — สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / deneb demo.pbix, spec rev 5
 ```
 
 ---

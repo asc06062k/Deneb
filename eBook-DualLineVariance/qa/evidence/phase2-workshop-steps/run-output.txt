@@ -457,6 +457,10 @@ PASS AXIS-T10-24-1200x220 first label = first Category :: ม.ค. 68
 PASS AXIS-T10-24-320x700 x-axis shows at least 2 labels :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
 PASS AXIS-T10-24-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
 PASS AXIS-T10-24-320x700 first label = first Category :: ม.ค. 68
+PASS AXIS-edge-gaps renders without error and tick array is bounded :: xAxisValues length 14
+PASS AXIS-edge-hugeGap renders without error and tick array is bounded :: xAxisValues length 0
+PASS AXIS-edge-nullSome renders without error and tick array is bounded :: xAxisValues length 11
+PASS AXIS-edge-empty renders without error and tick array is bounded :: xAxisValues length 0
 PASS FINAL last step equals final spec (except description)
 
-460 passed, 0 failed
+464 passed, 0 failed

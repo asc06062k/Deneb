@@ -280,6 +280,43 @@ for (const step of manifest) {
   }
 }
 
+// Regression (Codex R17 M-27): Sort_Order edge cases must not crash and must bound the tick array.
+{
+  const base = JSON.parse(readFileSync(join(root, "qa", "scripts", "workshop-plotdata.json"), "utf8"));
+  const orig = base.filter((r) => r.Row_Type === "Original");
+  const cases = {
+    // Original rows only with gaps: Sort_Order 1,2,5,6,... (positions follow Sort_Order per M code)
+    gaps: orig.map((r, i) => ({ ...r, Sort_Order: i < 2 ? i + 1 : i + 3, Plot_Position: i < 2 ? i + 1 : i + 3 })),
+    // one Original row with a huge Sort_Order: range > 1000 -> no explicit ticks (bounded)
+    hugeGap: orig.map((r, i) => (i === orig.length - 1 ? { ...r, Sort_Order: 100000, Plot_Position: 100000 } : r)),
+    // some Original rows with null Sort_Order (bad source data)
+    nullSome: orig.map((r, i) => (i % 5 === 0 ? { ...r, Sort_Order: null } : r)),
+    empty: [],
+  };
+  for (const [name, rows] of Object.entries(cases)) {
+    const s = JSON.parse(JSON.stringify(finalSpec));
+    s.data = { name: "dataset", values: rows };
+    s.width = 640;
+    s.height = 320;
+    let ok = true, detail = "";
+    try {
+      const view = new vega.View(vega.parse(vl.compile(s).spec), { renderer: "none" });
+      await view.toSVG();
+      const vals = view.signal("xAxisValues");
+      detail = `xAxisValues length ${vals.length}`;
+      if (!Array.isArray(vals) || vals.length > 1001) ok = false;
+      if (name === "gaps" && vals.length !== 14) ok = false; // 1..14 (2 blank ticks at 3,4)
+      if (name === "hugeGap" && vals.length !== 0) ok = false;
+      if (name === "empty" && vals.length !== 0) ok = false;
+      view.finalize();
+    } catch (e) {
+      ok = false;
+      detail = e.message;
+    }
+    check("AXIS-edge-" + name, "renders without error and tick array is bounded", ok, detail);
+  }
+}
+
 const last = JSON.parse(readFileSync(join(root, "specs", "steps", manifest[manifest.length - 1].file), "utf8"));
 const strip = (s) => { const c = JSON.parse(JSON.stringify(s)); delete c.description; return c; };
 check("FINAL", "last step equals final spec (except description)", JSON.stringify(strip(last)) === JSON.stringify(strip(finalSpec)));

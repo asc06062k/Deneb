@@ -280,7 +280,9 @@ Prototype รอบนี้ใช้ array คงที่ (`['Jan','Feb',...]`
 - `labelExpr` = `xAxisCategories[indexof(xAxisSortOrders, datum.value)]` (ว่างถ้าเดือนนั้นถูกกรองออก)
 - `labelOverlap: "greedy"` (Group B) + `labelLimit: 120` ตัดชื่อยาวด้วย "…"
 - หลักฐาน headless: ชื่อบนแกนมาจาก Category ครบทั้ง baseline/T09 (ชื่อยาว 38 ตัวอักษร)/T10 (24 categories) ทุก 6 viewport (AXIS-* ใน run-output.txt) — **การไม่ทับซ้อน (Group B) ตัดสินบน Power BI จริงเท่านั้น** เพราะ headless วัดความกว้างอักษรไทยไม่ได้
-- ข้อจำกัดเดิม "ต้องแก้ labelExpr เองเมื่อเปลี่ยนข้อมูล" ถูกถอนออก; ข้อจำกัดที่ยังเหลือ: `Sort_Order` ต้องเป็นเลขจำนวนเต็มเรียงกัน และเดือนที่ถูกกรองออกจะไม่มีชื่อบนแกน
+- ข้อจำกัดเดิม "ต้องแก้ labelExpr เองเมื่อเปลี่ยนข้อมูล" ถูกถอนออก
+- **Field contract ของ `Sort_Order` (เพิ่มตาม Codex R17 M-27)**: ควรเป็นเลขจำนวนเต็มเรียงต่อกัน (1, 2, 3, …) — ถ้ามีช่องว่าง ตำแหน่งที่ไม่มีข้อมูลจะเป็น tick ไม่มีชื่อ; ถ้าช่วง min–max ของ Sort_Order เกิน 1000 `xAxisValues` จะเป็น array ว่าง (กันหน่วยความจำ) และแกน X จะไม่มีชื่อเลย; แถว Original ที่ Sort_Order เป็น null จะไม่มีชื่อบนแกน — ครอบคลุมด้วย regression AXIS-edge-* (gaps, hugeGap, nullSome, empty); เดือนที่ถูกกรองออกจะไม่มีชื่อบนแกน
+- **ข้อจำกัดของ Template (พบระหว่างวิเคราะห์ T27)**: Deneb template tokenize ชื่อ field ใน `field`/expression ที่อ้าง `datum.X` แต่**ไม่** tokenize ชื่อ field ที่เป็นสตริงใน `pluck(data('dataset'), 'Sort_Order')` ฯลฯ ของ params แกน X/Y — template จึงใช้ได้เมื่อชื่อ field ของผู้ใช้ตรงกับ Field contract (Sort_Order, Category, Plot_Actual, Plot_Reference) เท่านั้น ต้องระบุในบทที่ 9
 
 ### 4.2 กลไก Responsive (Lock เบื้องต้น รอ Phase 2 ยืนยัน)
 

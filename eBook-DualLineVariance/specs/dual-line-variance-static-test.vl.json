@@ -756,7 +756,7 @@
     },
     {
       "name": "xAxisValues",
-      "expr": "isValid(xAxisSortExtent[0]) ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []"
+      "expr": "isValid(xAxisSortExtent[0]) && xAxisSortExtent[1] - xAxisSortExtent[0] <= 1000 ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []"
     },
     {
       "name": "yRawMin",

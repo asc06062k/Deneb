@@ -9,7 +9,7 @@
     { "name": "xAxisSortOrders", "expr": "pluck(data('dataset'), 'Sort_Order')" },
     { "name": "xAxisCategories", "expr": "pluck(data('dataset'), 'Category')" },
     { "name": "xAxisSortExtent", "expr": "extent(xAxisSortOrders)" },
-    { "name": "xAxisValues", "expr": "isValid(xAxisSortExtent[0]) ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []" },
+    { "name": "xAxisValues", "expr": "isValid(xAxisSortExtent[0]) && xAxisSortExtent[1] - xAxisSortExtent[0] <= 1000 ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []" },
     { "name": "yRawMin", "expr": "min(extent(pluck(data('dataset'), 'Plot_Actual'))[0], extent(pluck(data('dataset'), 'Plot_Reference'))[0])" },
     { "name": "yRawMax", "expr": "max(extent(pluck(data('dataset'), 'Plot_Actual'))[1], extent(pluck(data('dataset'), 'Plot_Reference'))[1])" },
     { "name": "yPad", "expr": "(yRawMax - yRawMin) * 0.18 || abs(yRawMax) * 0.1 || 1" },
