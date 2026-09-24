@@ -310,11 +310,16 @@ Expected: label re-evaluate ทุกครั้งที่ resize (container 
 Test ID: T27
 ขั้นตอนทำซ้ำ: Export Deneb Template จาก Workshop dataset แล้ว Import เข้า report ใหม่พร้อมข้อมูลอื่น
 Expected: Field mapping ทำงาน แต่ crossing-case (ต้อง Power Query ใหม่) และ labelExpr array (ต้องแก้ manual) ไม่ทำงานอัตโนมัติ — ตามข้อจำกัดที่ระบุใน PHASE1_DESIGN_PLAN.md หัวข้อ 2.5/4.1
-Actual:
-หลักฐาน:
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual รอบที่ 1 (24 ก.ย. 2026, สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / deneb demo.pbix): Export template จาก Visual เดิม (spec rev 5) แล้ว Import เข้า Deneb visual ใหม่ในหน้าใหม่ของ PBIX เดิม
+  - หน้า "Create or import new specification" จับคู่ field ครบตามชื่อ (ภาพ T27-01) — template เก็บ Supporting fields (Highlight value/status ของ Actual/Reference) และระบุ measure "DualLine Row Count" เป็น field ที่ต้องจับคู่ด้วย
+  - หลังกด Create: กราฟว่าง, Logs = "[Error] Unexpected token ILLEGAL" (ภาพ T27-02)
+  - **สาเหตุ (ยืนยันแล้ว)**: ไฟล์ template ที่ Deneb 2.0.0.0 export (T27-template-export.json) แปลง `datum.X` เป็น `datum['__dataset.N__']` แต่ occurrence ที่ 2 เป็นต้นไปในสตริงเดียวกันถูก escape เป็น `datum['__dataset.N__']` (backslash หลุดเข้าไปใน expression) รวม 66 จุด — Vega expression parser จึง error; spec หลัง import (T27-imported-spec.json) มีปัญหาเดียวกัน — **เป็นบั๊กของ Deneb export ไม่ใช่ของ spec**
+  - **ทางแก้ที่พิสูจน์แบบ headless**: แทนที่ `\'` ด้วย `'` ในไฟล์ template (ไฟล์ T27-template-fixed.json) แล้วจำลองการ import (แทน `__dataset.N__` ด้วยชื่อ field ตาม usermeta) → compile/render ได้ (จุด 12 จุด) และเท่ากับ final spec เมื่อ normalize `datum['x']` → `datum.x` — **ยังไม่ได้ทดสอบ import ไฟล์ที่แก้แล้วบน Deneb จริง**
+  - ข้อสังเกต: Visual ใหม่ใช้ measure ชื่อ "Sum of Actual"/"Sum of Reference" (ไม่ได้ rename) Deneb จึงแปลงชื่อ highlight fields เป็น `Sum of Actual__highlightStatus` ให้อัตโนมัติ — สอดคล้องกัน
+หลักฐาน: qa/evidence/phase2-powerbi/T27-01-import-field-mapping.png, T27-02-import-error-illegal-token.png, T27-template-export.json, T27-imported-spec.json, T27-template-fixed.json
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง) + วิเคราะห์ไฟล์แบบ headless
+วันที่: 24 ก.ย. 2026
+ผลสรุป: FAIL (template ที่ export ตรงๆ ใช้ไม่ได้เพราะบั๊ก escaping ของ Deneb) — รอทดสอบ import ไฟล์ที่แก้แล้วบน Deneb จริง; บทที่ 9 ต้องสอนขั้นตอนแก้ไฟล์หรือแจก template ที่แก้แล้ว
 ```
 
 ---

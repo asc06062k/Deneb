@@ -1,0 +1,704 @@
+{
+  "usermeta": {
+    "information": {
+      "uuid": "a2fc6779-ee66-4b93-8ac1-938b27262c63",
+      "generated": "2026-09-24T06:59:44.230Z",
+      "previewImageBase64PNG": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+      "name": "[No Name Provided]",
+      "description": "[No Description Provided]",
+      "author": "[No Author Details Provided]"
+    },
+    "deneb": {
+      "build": "2.0.0",
+      "metaVersion": 2,
+      "provider": "vegaLite",
+      "providerVersion": "6.4.3"
+    },
+    "interactivity": {
+      "tooltip": true,
+      "contextMenu": true,
+      "contextMenuSelector": true,
+      "selection": true,
+      "selectionMode": "simple",
+      "highlight": true,
+      "dataPointLimit": 50
+    },
+    "config": "{}",
+    "datasets": {
+      "dataset": [
+        {
+          "key": "__dataset.0__",
+          "name": "Category",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.1__",
+          "name": "Business_Type",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.2__",
+          "name": "Filter_Key",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.3__",
+          "name": "Plot_Actual",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.4__",
+          "name": "Plot_Position",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.5__",
+          "name": "Plot_Reference",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.6__",
+          "name": "Row_Type",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.7__",
+          "name": "Run_Sign",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.8__",
+          "name": "Segment_ID",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.9__",
+          "name": "Sort_Order",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.10__",
+          "name": "Actual",
+          "description": "",
+          "kind": "measure",
+          "type": "numeric",
+          "supportFieldConfiguration": {
+            "highlight": true,
+            "highlightStatus": true,
+            "highlightComparator": false,
+            "format": false,
+            "formatted": false
+          }
+        },
+        {
+          "key": "__dataset.11__",
+          "name": "Reference",
+          "description": "",
+          "kind": "measure",
+          "type": "numeric",
+          "supportFieldConfiguration": {
+            "highlight": true,
+            "highlightStatus": true,
+            "highlightComparator": false,
+            "format": false,
+            "formatted": false
+          }
+        },
+        {
+          "key": "__dataset.12__",
+          "name": "DualLine Row Count",
+          "description": "",
+          "kind": "measure",
+          "type": "numeric"
+        }
+      ]
+    }
+  },
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 5: highlight dims points, connector and data labels of non-highlighted months to 0.5, lines never dim (user request); rev 4: highlight rule per real Deneb evidence T19 (status on + __highlight null for non-highlighted rows); rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
+  "width": "container",
+  "height": "container",
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "data": {
+    "name": "dataset"
+  },
+  "params": [
+    {
+      "name": "yRawMin",
+      "expr": "min(extent(pluck(data('dataset'), '__dataset.3__'))[0], extent(pluck(data('dataset'), '__dataset.5__'))[0])"
+    },
+    {
+      "name": "yRawMax",
+      "expr": "max(extent(pluck(data('dataset'), '__dataset.3__'))[1], extent(pluck(data('dataset'), '__dataset.5__'))[1])"
+    },
+    {
+      "name": "yPad",
+      "expr": "(yRawMax - yRawMin) * 0.18 || abs(yRawMax) * 0.1 || 1"
+    },
+    {
+      "name": "yDomainMin",
+      "expr": "isFinite(yRawMin) ? yRawMin - yPad : 0"
+    },
+    {
+      "name": "yDomainMax",
+      "expr": "isFinite(yRawMax) ? max(yRawMax + yPad, yDomainMin + 1) : 1"
+    }
+  ],
+  "layer": [
+    {
+      "name": "variance_area",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Boundary' || datum['__dataset.6__'] == 'Crossing'"
+        }
+      ],
+      "mark": {
+        "type": "area",
+        "opacity": 0.35,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "__dataset.5__"
+        },
+        "detail": {
+          "field": "__dataset.8__",
+          "type": "nominal"
+        },
+        "color": {
+          "condition": {
+            "test": "(datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.7__'] > 0) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.7__'] < 0)",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "stroke": {
+          "condition": {
+            "test": "(datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.7__'] > 0) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.7__'] < 0)",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "strokeWidth": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "bad_area_border_actual",
+      "transform": [
+        {
+          "filter": "(datum['__dataset.6__'] == 'Boundary' || datum['__dataset.6__'] == 'Crossing') && !((datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.7__'] > 0) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.7__'] < 0))"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#B45309",
+        "strokeWidth": 1,
+        "strokeDash": [
+          3,
+          2
+        ],
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "detail": {
+          "field": "__dataset.8__",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "name": "bad_area_border_reference",
+      "transform": [
+        {
+          "filter": "(datum['__dataset.6__'] == 'Boundary' || datum['__dataset.6__'] == 'Crossing') && !((datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.7__'] > 0) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.7__'] < 0))"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#B45309",
+        "strokeWidth": 1,
+        "strokeDash": [
+          3,
+          2
+        ],
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.5__",
+          "type": "quantitative"
+        },
+        "detail": {
+          "field": "__dataset.8__",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "name": "connector_rule",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "__dataset.5__"
+        },
+        "color": {
+          "condition": {
+            "test": "(datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.3__'] > datum['__dataset.5__']) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.3__'] < datum['__dataset.5__'])",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "strokeWidth": {
+          "condition": {
+            "test": "(datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.3__'] > datum['__dataset.5__']) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.3__'] < datum['__dataset.5__'])",
+            "value": 3
+          },
+          "value": 2
+        },
+        "opacity": {
+          "condition": {
+            "test": "((isDefined(datum['__dataset.10____highlightStatus']) && datum['__dataset.10____highlightStatus'] != 'neutral') || (isDefined(datum['__dataset.11____highlightStatus']) && datum['__dataset.11____highlightStatus'] != 'neutral')) && !((isDefined(datum['__dataset.10____highlightStatus']) && datum['__dataset.10____highlightStatus'] == 'on' && isDefined(datum['__dataset.10____highlight']) && datum['__dataset.10____highlight'] === datum['__dataset.10__']) || (isDefined(datum['__dataset.11____highlightStatus']) && datum['__dataset.11____highlightStatus'] == 'on' && isDefined(datum['__dataset.11____highlight']) && datum['__dataset.11____highlight'] === datum['__dataset.11__']))",
+            "value": 0.5
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "line_reference",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "monotone",
+        "color": "#F59E0B",
+        "strokeWidth": 2,
+        "strokeDash": [
+          5,
+          3
+        ],
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.5__",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "name": "line_actual",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "monotone",
+        "color": "#2563EB",
+        "strokeWidth": 2,
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative",
+          "title": "เดือน",
+          "axis": {
+            "values": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "labelExpr": "['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][datum.value - 1]",
+            "labelOverlap": "greedy",
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative",
+          "title": "ยอดขาย (พันบาท)",
+          "scale": {
+            "domain": [
+              {
+                "expr": "yDomainMin"
+              },
+              {
+                "expr": "yDomainMax"
+              }
+            ],
+            "zero": false,
+            "nice": false
+          }
+        }
+      }
+    },
+    {
+      "name": "point_reference",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 40,
+        "color": "#F59E0B",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.5__",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "test": "(isDefined(datum['__dataset.11____highlightStatus']) && (datum['__dataset.11____highlightStatus'] == 'off' || (datum['__dataset.11____highlightStatus'] == 'on' && isDefined(datum['__dataset.11____highlight']) && datum['__dataset.11____highlight'] !== datum['__dataset.11__'])))",
+            "value": 0.5
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "point_actual_hit_target",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        },
+        {
+          "calculate": "datum['__dataset.3__'] - datum['__dataset.5__']",
+          "as": "Variance"
+        },
+        {
+          "calculate": "format(datum.Variance, '+,.0f')",
+          "as": "VarianceLabel"
+        },
+        {
+          "calculate": "datum['__dataset.5__'] == 0 ? 'N/A (เป้าหมาย = 0)' : format(datum.Variance / datum['__dataset.5__'], '+.1%')",
+          "as": "VariancePercentLabel"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 40,
+        "color": "#2563EB"
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "test": "(isDefined(datum['__dataset.10____highlightStatus']) && (datum['__dataset.10____highlightStatus'] == 'off' || (datum['__dataset.10____highlightStatus'] == 'on' && isDefined(datum['__dataset.10____highlight']) && datum['__dataset.10____highlight'] !== datum['__dataset.10__'])))",
+            "value": 0.5
+          },
+          "value": 1
+        },
+        "tooltip": [
+          {
+            "field": "__dataset.0__",
+            "type": "nominal",
+            "title": "เดือน"
+          },
+          {
+            "field": "__dataset.3__",
+            "type": "quantitative",
+            "title": "ยอดขายจริง",
+            "format": ",.0f"
+          },
+          {
+            "field": "__dataset.5__",
+            "type": "quantitative",
+            "title": "เป้าหมาย",
+            "format": ",.0f"
+          },
+          {
+            "field": "VarianceLabel",
+            "type": "nominal",
+            "title": "ผลต่าง"
+          },
+          {
+            "field": "VariancePercentLabel",
+            "type": "nominal",
+            "title": "ผลต่าง %"
+          }
+        ]
+      }
+    },
+    {
+      "name": "label_actual",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        },
+        {
+          "calculate": "length(format(datum['__dataset.3__'], ',.0f'))",
+          "as": "lenA"
+        },
+        {
+          "calculate": "length(format(datum['__dataset.5__'], ',.0f'))",
+          "as": "lenR"
+        },
+        {
+          "calculate": "max(datum.lenA, datum.lenR)",
+          "as": "maxLen"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "maxLen",
+              "as": "globalMaxLen"
+            },
+            {
+              "op": "count",
+              "field": "__dataset.3__",
+              "as": "n"
+            },
+            {
+              "op": "max",
+              "field": "__dataset.9__",
+              "as": "lastSort"
+            }
+          ]
+        },
+        {
+          "calculate": "max(1, ceil((datum.globalMaxLen * 10 * 0.62 + 14) / (width / datum.n)))",
+          "as": "labelStep"
+        },
+        {
+          "calculate": "(datum['__dataset.9__'] - 1) % datum.labelStep == 0 || datum['__dataset.9__'] == datum.lastSort",
+          "as": "showLabel"
+        },
+        {
+          "filter": "datum.showLabel"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": {
+          "expr": "datum['__dataset.3__'] >= datum['__dataset.5__'] ? -12 : 12"
+        },
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "color": "#2563EB",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "__dataset.3__",
+          "type": "quantitative",
+          "format": ",.0f"
+        },
+        "opacity": {
+          "condition": {
+            "test": "(isDefined(datum['__dataset.10____highlightStatus']) && (datum['__dataset.10____highlightStatus'] == 'off' || (datum['__dataset.10____highlightStatus'] == 'on' && isDefined(datum['__dataset.10____highlight']) && datum['__dataset.10____highlight'] !== datum['__dataset.10__'])))",
+            "value": 0.5
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "label_reference",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        },
+        {
+          "calculate": "length(format(datum['__dataset.3__'], ',.0f'))",
+          "as": "lenA"
+        },
+        {
+          "calculate": "length(format(datum['__dataset.5__'], ',.0f'))",
+          "as": "lenR"
+        },
+        {
+          "calculate": "max(datum.lenA, datum.lenR)",
+          "as": "maxLen"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "maxLen",
+              "as": "globalMaxLen"
+            },
+            {
+              "op": "count",
+              "field": "__dataset.5__",
+              "as": "n"
+            },
+            {
+              "op": "max",
+              "field": "__dataset.9__",
+              "as": "lastSort"
+            }
+          ]
+        },
+        {
+          "calculate": "max(1, ceil((datum.globalMaxLen * 10 * 0.62 + 14) / (width / datum.n)))",
+          "as": "labelStep"
+        },
+        {
+          "calculate": "(datum['__dataset.9__'] - 1) % datum.labelStep == 0 || datum['__dataset.9__'] == datum.lastSort",
+          "as": "showLabel"
+        },
+        {
+          "filter": "datum.showLabel"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": {
+          "expr": "datum['__dataset.3__'] >= datum['__dataset.5__'] ? 12 : -12"
+        },
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "color": "#B45309",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.5__",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "__dataset.5__",
+          "type": "quantitative",
+          "format": ",.0f"
+        },
+        "opacity": {
+          "condition": {
+            "test": "(isDefined(datum['__dataset.11____highlightStatus']) && (datum['__dataset.11____highlightStatus'] == 'off' || (datum['__dataset.11____highlightStatus'] == 'on' && isDefined(datum['__dataset.11____highlight']) && datum['__dataset.11____highlight'] !== datum['__dataset.11__'])))",
+            "value": 0.5
+          },
+          "value": 1
+        }
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "y": "shared",
+      "x": "shared"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domainColor": "#D1D5DB",
+      "gridColor": "#F3F4F6"
+    }
+  }
+}
