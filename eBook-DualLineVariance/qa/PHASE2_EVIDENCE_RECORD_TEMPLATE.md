@@ -74,6 +74,9 @@ Expected: จุดข้อมูลที่ไม่ถูกเลือก�
 Actual ส่วนที่ 1 — ชื่อ field (24 ก.ย. 2026): เปิด Highlight value + Highlight status ของ Actual และ Reference แล้ว Data pane มีคอลัมน์ Actual__highlight, **Actual__highlightStatus**, Reference__highlight, **Reference__highlightStatus** — ชื่อตรงกับที่ spec ใช้ใน opacity condition ทุกตัว (ยืนยัน M-05/M-09 ที่ระดับชื่อ field); ขณะยังไม่มี highlight จาก Visual อื่น แถวที่เห็นในภาพ (Actual = null) มีค่า status = "on" — spec ทำให้จางเฉพาะเมื่อ = "off" จึงแสดงปกติ (opacity 1) ไม่ว่าค่าตอนไม่มี highlight จะเป็น "on" หรือ "neutral"; dataset ยังคง 52 แถว (1-50 of 52)
 Actual ส่วนที่ 2 — ความพยายามครั้งที่ 1 (24 ก.ย. 2026, วิดีโอ 42 วินาที ScreenSketch 20260924-0654-08 — ไฟล์วิดีโอ 19.9 MB ไม่ได้คัดลอกเข้า repo; ใช้ภาพ timeline 1 fps แทน): อยู่ในโหมด Edit interactions แล้วคลิกแท่ง ต.ค. และ มิ.ย. ของ Column chart → Power BI เปิดหน้า "Category/Actual" แบบตาราง (ต.ค. 560, มิ.ย. 480) แทนการเลือกแท่ง ไม่เกิด highlight บน Dual-Line chart; เมื่อเปิด Deneb editor ภายหลัง Data pane แสดง Actual__highlightStatus/Reference__highlightStatus = "neutral" และ 1-50 of 52 แถว — **ยังไม่ได้ทดสอบพฤติกรรม highlight จริง** (การเห็นค่า "on" ใน T19-01 น่าจะเกิดขณะมี selection ค้างอยู่ — ยังไม่ยืนยัน)
 หลักฐานเพิ่ม: qa/evidence/phase2-powerbi/T19-02-status-neutral-52rows.png, T19-03-attempt1-video-timeline.png
+  ปัญหาที่พบ (ใช้ประกอบบทที่ 8 "ปัญหาที่อาจพบ"): Column chart ตัวเดิมเปิดหน้า "Show data point as a table" ทุกครั้งที่คลิกซ้ายที่แท่ง (ภาพ T19-00) — แก้ได้โดยลบแล้วสร้าง Clustered column chart ใหม่ (สาเหตุของ Visual ตัวเดิมยังไม่ทราบ)
+Actual ส่วนที่ 2 — ความพยายามครั้งที่ 2 (24 ก.ย. 2026): Column chart ใหม่ คลิกแท่ง ก.ค. → แท่ง ก.ค. ถูกเลือก (แท่งอื่นจาง) แต่ Dual-Line chart **ไม่จางลงเลย** (ภาพ T19-04) — ยังไม่ทราบว่า Edit interactions ของ Column chart ใหม่ → Dual-Line ตั้งเป็น Highlight แล้วหรือไม่ และ Deneb ได้รับค่า __highlightStatus = off หรือไม่ (ถ้าเป็น Filter กราฟควรเหลือเฉพาะ ก.ค. — ไม่เป็นเช่นนั้น) → FAIL/INCONCLUSIVE รอตรวจ interaction mode + Data pane
+Actual ส่วนที่ 2 — ความพยายามครั้งที่ 3 (24 ก.ย. 2026, ภาพ T19-05): อยู่ในโหมด Edit interactions (ไอคอน Filter/Highlight/None ใต้ Dual-Line) ผู้ใช้ระบุว่าตั้ง Highlight — เลือกแท่ง ก.ค. แล้ว Dual-Line **ไม่จางเลย** และแสดงครบทุกเดือน (ภาพไม่ชัดพอจะยืนยันว่าไอคอนใดถูกเลือก) — ยังไม่ทราบค่า __highlightStatus ขณะนั้น
 หลักฐาน (ภาพ/วิดีโอ): qa/evidence/phase2-powerbi/T19-01-highlightstatus-fields.png
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
@@ -89,8 +92,10 @@ Test ID: T20
 Visual ต้นทาง: Clustered bar chart, Edit interactions = Filter
 ขั้นตอนทำซ้ำ: เลือกแถบใน Visual ต้นทาง
 Expected: Dual-Line Variance Chart ถูกกรองแบบ Filter ปกติ ไม่ใช่ Highlight fields
-Actual:
-หลักฐาน:
+Actual (24 ก.ย. 2026, ภาพ T20-01): Clustered column chart (ใหม่) ตั้ง Filter แล้วเลือกแท่ง ก.ค. → Dual-Line เหลือจุด/label ของ ก.ค. เดียว (ไม่มีเส้นเพราะเหลือแถว Original แถวเดียว) + พื้นที่สีของ segment ก.ค.–ส.ค. ครบทั้งสามเหลี่ยมน้ำตาลและเขียวจนถึงตำแหน่ง ส.ค. (Filter_Key = ก.ค.) แต่ไม่มีจุด ส.ค.; พื้นที่ของ segment มิ.ย.–ก.ค. หายไป (Filter_Key = มิ.ย.); แกน X แสดง ก.ค.–ส.ค.; แกน Y คำนวณใหม่ ~496–534 สอดคล้องกับสูตร ±18% ของ extent 500–530 (คาด [494.6, 535.4] — ยังไม่เห็นค่า signal)
+  ข้อสังเกตด้าน UX: พื้นที่สีที่ยื่นไปถึงตำแหน่งเดือนที่ถูกกรองออก (ส.ค.) โดยไม่มีจุด ส.ค. เป็นผลตาม Design (T29) ที่ผู้อ่านอาจงง — ต้องอธิบายในบทที่ 9
+หลักฐาน: qa/evidence/phase2-powerbi/T20-01-filter-mode-july.png
+ผลสรุป (เบื้องต้น): PASS — กรองตาม Filter_Key ตาม Design (ยังขาด Evidence record fields: version, PBIX)
 ผู้ทดสอบ:
 วันที่:
 ผลสรุป: PASS / FAIL / NOT TESTED
@@ -303,7 +308,7 @@ Actual:
 Test ID: T29 (ตัดฝั่งขวา — Case B, strict crossing)
 ขั้นตอนทำซ้ำ: ใช้ Slicer กรอง Category ออก 1 ตัวที่เป็นฝั่งขวาของ segment ที่มีจุดตัด (เช่น กรอง "ก.พ." ออก ซึ่งเป็นฝั่งขวาของ segment 0-a/0-b, Row_Type=Crossing)
 Expected: แถว Fill ของ segment นั้นยังไม่ถูกตัด (dangling) เพราะ Filter_Key ยังตรงกับฝั่งซ้าย (ม.ค.)
-Actual:
+Actual: หลักฐานทางอ้อมจาก T20-01 (กรองเหลือ ก.ค. ผ่าน Column chart ไม่ใช่ Slicer): segment ก.ค.–ส.ค. (strict crossing) ที่ฝั่งขวา ส.ค. ถูกกรองออก ยังแสดงพื้นที่ครบ — สอดคล้องกับ Expected; ยังต้องทดสอบตามขั้นตอน Slicer
 หลักฐาน:
 ผู้ทดสอบ:
 วันที่:
@@ -332,7 +337,7 @@ Actual:
 Test ID: T33-C (ตัดฝั่งซ้าย — Case C, ไม่มีจุดตัด/same-sign segment)
 ขั้นตอนทำซ้ำ: กรอง Category ฝั่งซ้ายของ segment "4" ออก (กรอง "พ.ค." ออก)
 Expected: แถว Fill ของ segment "4" ถูกตัดออกทั้งหมด เพราะ Filter_Key ของทั้งสองแถว = key(พ.ค.)
-Actual:
+Actual: หลักฐานทางอ้อมจาก T20-01: segment มิ.ย.–ก.ค. (Case C) ที่ฝั่งซ้าย มิ.ย. ถูกกรองออก พื้นที่หายทั้งหมด — สอดคล้องกับพฤติกรรม T33-C (คนละ segment กับที่ระบุ); ยังต้องทดสอบตามขั้นตอน Slicer
 หลักฐาน:
 ผู้ทดสอบ:
 วันที่:
