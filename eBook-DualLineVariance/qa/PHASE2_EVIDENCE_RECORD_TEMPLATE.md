@@ -293,6 +293,13 @@ Group A — Actual/Reference data label ชนกันหรือไม่: �
 ```
 
 ```text
+Test ID: T09 × 6 viewport (ชื่อ Category ยาว, data/test/DualLineVariance_T09_LongCategory.csv) — รอบที่ 1 ด้วย spec rev 6 (24 ก.ย. 2026)
+Group B: 480×270, 800×450, 1200×675, 1200×220 — ชื่อถูกตัดด้วย "…" และสลับแสดง ไม่ทับซ้อน ✅; **280×180 และ 320×700 — ชื่อบนแกน 2 ชื่อทับกัน (ม.ค. ... กับ ก.ย. ...) ❌**
+สาเหตุ (จำลองได้ด้วย qa/scripts/run-axis-overlap-sim.mjs ที่วัดอักษรด้วย canvas): เมื่อ autosize "fit" ย่อพื้นที่กราฟ ตำแหน่ง label ขยับเข้าหากันหลังจาก greedy overlap ตัดสินไปแล้ว ประกอบกับ labelFlush ทำให้ label แรกชิดซ้ายและยื่นไปทางขวา
+การแก้ (spec rev 7): labelFlush false + labelLimit = max(40, width/3) + labelSeparation 4 — จำลองแล้วไม่ทับ 18/18 (baseline/T09/T10 × 6 viewport, qa/evidence/phase2-workshop-steps/axis-overlap-sim-output.txt) — **ต้องทดสอบซ้ำบน Power BI ด้วย rev 7**
+หลักฐาน: qa/evidence/phase2-powerbi/T09-rev6-<ขนาด>.png (6 ไฟล์)
+ผลสรุป: FAIL (rev 6) → รอทดสอบ rev 7
+
 Test ID: T25 (สรุป Group B — Category axis label ไม่ทับซ้อน ทุกขนาด)
 Expected: T14–T17, T34, T35 ทั้งหมด Group B ต้อง PASS (ใช้ labelOverlap:"greedy" + width:"container")
 ผลสรุป: PARTIAL — Baseline 12 เดือน PASS ครบทั้ง 6 ขนาด (24 ก.ย. 2026); ยังไม่ได้ทดสอบ T09 (ชื่อ Category ยาว) และ T10 (24 categories) ที่หัวข้อนี้กำหนดให้รวมด้วย

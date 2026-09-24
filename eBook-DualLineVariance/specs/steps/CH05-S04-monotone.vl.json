@@ -85,7 +85,11 @@
               "expr": "xAxisValues"
             },
             "labelExpr": "indexof(xAxisSortOrders, datum.value) >= 0 ? xAxisCategories[indexof(xAxisSortOrders, datum.value)] : ''",
-            "labelLimit": 120,
+            "labelLimit": {
+              "expr": "max(40, width / 3)"
+            },
+            "labelFlush": false,
+            "labelSeparation": 4,
             "labelOverlap": "greedy",
             "labelAngle": 0
           }

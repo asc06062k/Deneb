@@ -400,9 +400,9 @@ PASS HL-zeroValue label_reference opacity per Reference measure :: 0 wrong of 12
 PASS HL-zeroValue lines never dim :: actual 1, reference 1
 PASS HL-regression rev-3 condition fails HL-observed expectations (test has teeth) :: rev-3 wrong points 11
 PASS HL-regression OR-of-both point condition fails HL-actualOnly (test has teeth) :: wrong actual points 1
-PASS AXIS-baseline axis uses greedy overlap removal + labelLimit
-PASS AXIS-baseline-280x180 x-axis shows at least 2 labels :: ม.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
-PASS AXIS-baseline-280x180 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline axis uses greedy overlap + width-based labelLimit + no flush + separation
+PASS AXIS-baseline-280x180 x-axis shows at least 2 labels :: ม.ค. | มี.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline-280x180 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | มี.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
 PASS AXIS-baseline-280x180 first label = first Category :: ม.ค.
 PASS AXIS-baseline-480x270 x-axis shows at least 2 labels :: ม.ค. | มี.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
 PASS AXIS-baseline-480x270 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | มี.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
@@ -416,18 +416,18 @@ PASS AXIS-baseline-1200x675 first label = first Category :: ม.ค.
 PASS AXIS-baseline-1200x220 x-axis shows at least 2 labels :: ม.ค. | ก.พ. | มี.ค. | เม.ย. | พ.ค. | มิ.ย. | ก.ค. | ส.ค. | ก.ย. | ต.ค. | พ.ย. | ธ.ค.
 PASS AXIS-baseline-1200x220 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | ก.พ. | มี.ค. | เม.ย. | พ.ค. | มิ.ย. | ก.ค. | ส.ค. | ก.ย. | ต.ค. | พ.ย. | ธ.ค.
 PASS AXIS-baseline-1200x220 first label = first Category :: ม.ค.
-PASS AXIS-baseline-320x700 x-axis shows at least 2 labels :: ม.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
-PASS AXIS-baseline-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline-320x700 x-axis shows at least 2 labels :: ม.ค. | มี.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | มี.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
 PASS AXIS-baseline-320x700 first label = first Category :: ม.ค.
-PASS AXIS-T09-long axis uses greedy overlap removal + labelLimit
-PASS AXIS-T09-long-280x180 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
-PASS AXIS-T09-long-280x180 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long axis uses greedy overlap + width-based labelLimit + no flush + separation
+PASS AXIS-T09-long-280x180 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร
+PASS AXIS-T09-long-280x180 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร
 PASS AXIS-T09-long-280x180 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
-PASS AXIS-T09-long-480x270 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
-PASS AXIS-T09-long-480x270 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-480x270 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร
+PASS AXIS-T09-long-480x270 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร
 PASS AXIS-T09-long-480x270 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
-PASS AXIS-T09-long-800x450 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | เม.ย. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | มิ.ย. สาขาเชียงใหม่ภาคเหนือตอนบน | ส.ค. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | ต.ค. สาขาเชียงใหม่ภาคเหนือตอนบน
-PASS AXIS-T09-long-800x450 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | เม.ย. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | มิ.ย. สาขาเชียงใหม่ภาคเหนือตอนบน | ส.ค. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | ต.ค. สาขาเชียงใหม่ภาคเหนือตอนบน
+PASS AXIS-T09-long-800x450 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | เม.ย. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ต.ค. สาขาเชียงใหม่ภาคเหนือตอนบน
+PASS AXIS-T09-long-800x450 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | เม.ย. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ต.ค. สาขาเชียงใหม่ภาคเหนือตอนบน
 PASS AXIS-T09-long-800x450 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
 PASS AXIS-T09-long-1200x675 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | มี.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
 PASS AXIS-T09-long-1200x675 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | มี.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
@@ -435,12 +435,12 @@ PASS AXIS-T09-long-1200x675 first label = first Category :: ม.ค. สำน�
 PASS AXIS-T09-long-1200x220 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | มี.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
 PASS AXIS-T09-long-1200x220 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | มี.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
 PASS AXIS-T09-long-1200x220 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
-PASS AXIS-T09-long-320x700 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
-PASS AXIS-T09-long-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-320x700 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร
+PASS AXIS-T09-long-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร
 PASS AXIS-T09-long-320x700 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
-PASS AXIS-T10-24 axis uses greedy overlap removal + labelLimit
-PASS AXIS-T10-24-280x180 x-axis shows at least 2 labels :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
-PASS AXIS-T10-24-280x180 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
+PASS AXIS-T10-24 axis uses greedy overlap + width-based labelLimit + no flush + separation
+PASS AXIS-T10-24-280x180 x-axis shows at least 2 labels :: ม.ค. 68 | พ.ค. 68 | ก.ย. 68 | ม.ค. 69 | พ.ค. 69 | ก.ย. 69
+PASS AXIS-T10-24-280x180 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | พ.ค. 68 | ก.ย. 68 | ม.ค. 69 | พ.ค. 69 | ก.ย. 69
 PASS AXIS-T10-24-280x180 first label = first Category :: ม.ค. 68
 PASS AXIS-T10-24-480x270 x-axis shows at least 2 labels :: ม.ค. 68 | พ.ค. 68 | ก.ย. 68 | ม.ค. 69 | พ.ค. 69 | ก.ย. 69
 PASS AXIS-T10-24-480x270 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | พ.ค. 68 | ก.ย. 68 | ม.ค. 69 | พ.ค. 69 | ก.ย. 69
@@ -448,14 +448,14 @@ PASS AXIS-T10-24-480x270 first label = first Category :: ม.ค. 68
 PASS AXIS-T10-24-800x450 x-axis shows at least 2 labels :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
 PASS AXIS-T10-24-800x450 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
 PASS AXIS-T10-24-800x450 first label = first Category :: ม.ค. 68
-PASS AXIS-T10-24-1200x675 x-axis shows at least 2 labels :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
-PASS AXIS-T10-24-1200x675 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
+PASS AXIS-T10-24-1200x675 x-axis shows at least 2 labels :: ม.ค. 68 | ก.พ. 68 | มี.ค. 68 | เม.ย. 68 | พ.ค. 68 | มิ.ย. 68 | ก.ค. 68 | ส.ค. 68 | ก.ย. 68 | ต.ค. 68 | พ.ย. 68 | ธ.ค. 68 | ม.ค. 69 | ก.พ. 69 | มี.ค. 69 | เม.ย. 69 | พ.ค. 69 | มิ.ย. 69 | ก.ค. 69 | ส.ค. 69 | ก.ย. 69 | ต.ค. 69 | พ.ย. 69 | ธ.ค. 69
+PASS AXIS-T10-24-1200x675 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | ก.พ. 68 | มี.ค. 68 | เม.ย. 68 | พ.ค. 68 | มิ.ย. 68 | ก.ค. 68 | ส.ค. 68 | ก.ย. 68 | ต.ค. 68 | พ.ย. 68 | ธ.ค. 68 | ม.ค. 69 | ก.พ. 69 | มี.ค. 69 | เม.ย. 69 | พ.ค. 69 | มิ.ย. 69 | ก.ค. 69 | ส.ค. 69 | ก.ย. 69 | ต.ค. 69 | พ.ย. 69 | ธ.ค. 69
 PASS AXIS-T10-24-1200x675 first label = first Category :: ม.ค. 68
-PASS AXIS-T10-24-1200x220 x-axis shows at least 2 labels :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
-PASS AXIS-T10-24-1200x220 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
+PASS AXIS-T10-24-1200x220 x-axis shows at least 2 labels :: ม.ค. 68 | ก.พ. 68 | มี.ค. 68 | เม.ย. 68 | พ.ค. 68 | มิ.ย. 68 | ก.ค. 68 | ส.ค. 68 | ก.ย. 68 | ต.ค. 68 | พ.ย. 68 | ธ.ค. 68 | ม.ค. 69 | ก.พ. 69 | มี.ค. 69 | เม.ย. 69 | พ.ค. 69 | มิ.ย. 69 | ก.ค. 69 | ส.ค. 69 | ก.ย. 69 | ต.ค. 69 | พ.ย. 69 | ธ.ค. 69
+PASS AXIS-T10-24-1200x220 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | ก.พ. 68 | มี.ค. 68 | เม.ย. 68 | พ.ค. 68 | มิ.ย. 68 | ก.ค. 68 | ส.ค. 68 | ก.ย. 68 | ต.ค. 68 | พ.ย. 68 | ธ.ค. 68 | ม.ค. 69 | ก.พ. 69 | มี.ค. 69 | เม.ย. 69 | พ.ค. 69 | มิ.ย. 69 | ก.ค. 69 | ส.ค. 69 | ก.ย. 69 | ต.ค. 69 | พ.ย. 69 | ธ.ค. 69
 PASS AXIS-T10-24-1200x220 first label = first Category :: ม.ค. 68
-PASS AXIS-T10-24-320x700 x-axis shows at least 2 labels :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
-PASS AXIS-T10-24-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
+PASS AXIS-T10-24-320x700 x-axis shows at least 2 labels :: ม.ค. 68 | พ.ค. 68 | ก.ย. 68 | ม.ค. 69 | พ.ค. 69 | ก.ย. 69
+PASS AXIS-T10-24-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | พ.ค. 68 | ก.ย. 68 | ม.ค. 69 | พ.ค. 69 | ก.ย. 69
 PASS AXIS-T10-24-320x700 first label = first Category :: ม.ค. 68
 PASS AXIS-edge-gaps renders without error and tick array is bounded :: xAxisValues length 14
 PASS AXIS-edge-hugeGap renders without error and tick array is bounded :: xAxisValues length 0

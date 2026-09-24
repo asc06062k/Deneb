@@ -251,7 +251,7 @@ for (const step of manifest) {
   for (const [label, file] of sets) {
     const rows = JSON.parse(readFileSync(join(root, "qa", "scripts", file), "utf8"));
     const lineAxis = finalSpec.layer.find((l) => l.name === "line_actual").encoding.x.axis;
-    check("AXIS-" + label, "axis uses greedy overlap removal + labelLimit", lineAxis.labelOverlap === "greedy" && lineAxis.labelLimit > 0);
+    check("AXIS-" + label, "axis uses greedy overlap + width-based labelLimit + no flush + separation", lineAxis.labelOverlap === "greedy" && !!lineAxis.labelLimit.expr && lineAxis.labelFlush === false && lineAxis.labelSeparation > 0);
     const names = rows.filter((r) => r.Row_Type === "Original").sort((a, b) => a.Sort_Order - b.Sort_Order).map((r) => r.Category);
     for (const [w, h] of sizes) {
       const s = JSON.parse(JSON.stringify(finalSpec));

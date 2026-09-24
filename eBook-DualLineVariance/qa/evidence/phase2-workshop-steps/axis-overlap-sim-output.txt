@@ -1,0 +1,19 @@
+PASS baseline 280x180 labels=6 overlaps=0
+PASS baseline 480x270 labels=6 overlaps=0
+PASS baseline 800x450 labels=12 overlaps=0
+PASS baseline 1200x675 labels=12 overlaps=0
+PASS baseline 1200x220 labels=12 overlaps=0
+PASS baseline 320x700 labels=6 overlaps=0
+PASS T09 280x180 labels=3 overlaps=0
+PASS T09 480x270 labels=3 overlaps=0
+PASS T09 800x450 labels=4 overlaps=0
+PASS T09 1200x675 labels=6 overlaps=0
+PASS T09 1200x220 labels=6 overlaps=0
+PASS T09 320x700 labels=3 overlaps=0
+PASS T10 280x180 labels=6 overlaps=0
+PASS T10 480x270 labels=6 overlaps=0
+PASS T10 800x450 labels=12 overlaps=0
+PASS T10 1200x675 labels=24 overlaps=0
+PASS T10 1200x220 labels=24 overlaps=0
+PASS T10 320x700 labels=6 overlaps=0
+no overlaps

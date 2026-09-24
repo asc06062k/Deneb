@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 6: x-axis labels read Category from the dataset via Sort_Order lookup (T09/T10, user decision); rev 5: highlight dims points, connector and data labels of non-highlighted months to 0.5, lines never dim (user request); rev 4: highlight rule per real Deneb evidence T19 (status on + __highlight null for non-highlighted rows); rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
+  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 7: x-axis labelFlush false + labelLimit width/3 + labelSeparation 4 after T09 overlap on real Power BI; rev 6: x-axis labels read Category from the dataset via Sort_Order lookup (T09/T10, user decision); rev 5: highlight dims points, connector and data labels of non-highlighted months to 0.5, lines never dim (user request); rev 4: highlight rule per real Deneb evidence T19 (status on + __highlight null for non-highlighted rows); rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
   "width": "container",
   "height": "container",
   "autosize": { "type": "fit", "contains": "padding", "resize": true },
@@ -118,7 +118,9 @@
           "axis": {
             "values": { "expr": "xAxisValues" },
             "labelExpr": "indexof(xAxisSortOrders, datum.value) >= 0 ? xAxisCategories[indexof(xAxisSortOrders, datum.value)] : ''",
-            "labelLimit": 120,
+            "labelLimit": { "expr": "max(40, width / 3)" },
+            "labelFlush": false,
+            "labelSeparation": 4,
             "labelOverlap": "greedy",
             "labelAngle": 0
           }
