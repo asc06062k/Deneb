@@ -84,7 +84,8 @@ Actual ส่วนที่ 2 — ข้อมูลที่ Deneb ได้�
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
 Actual ส่วนที่ 2 — spec rev 4 บน Deneb จริง (24 ก.ย. 2026, ภาพ T19-07 + ภาพขยาย T19-08): ขณะ highlight ก.ค. จาก Column chart, preview ใน Deneb editor แสดงเส้น Actual/Reference จางทั้งเส้น, จุด Actual/Reference ของเดือนอื่นจาง, จุด ก.ค. ทั้ง 510 (Actual) และ 520 (Reference) แสดงเข้ม — ตรงกับ HL-observed; dataset 1-52 of 52; พื้นที่สี/connector/label ไม่จางตาม Design — ข้อจำกัด: เห็นผลใน preview ของ Deneb editor ขณะมี highlight (ไม่ใช่ภาพหน้ารายงาน), ภาพไม่แสดงคอลัมน์ Reference__highlight* แต่จุด Reference ของ ก.ค. เข้มและเดือนอื่นจางสอดคล้องกับ rev 4, ยืนยันไม่ได้จากภาพว่าเป็น spec rev 4 ล่าสุด (หลัง M-25) — ผู้ใช้ได้รับแจ้งให้ copy ใหม่ก่อนทดสอบ
-ผลสรุป: PASS WITH LIMITATION — ชื่อ field PASS; rev 3 FAIL (สาเหตุยืนยันแล้ว T19-06); rev 4 แสดงผลจางถูกต้องบน Deneb จริง (T19-07/08) — ยังขาด Evidence record fields (version, PBIX) และภาพหน้ารายงาน
+หน้ารายงาน (24 ก.ย. 2026, ภาพในแชท (ไม่มีไฟล์บนเครื่อง)): Column chart เลือก ก.ค. (Highlight) → Dual-Line บนหน้ารายงาน เส้นจาง จุดเดือนอื่นจาง จุด ก.ค. เข้ม — ตรงกับ preview
+ผลสรุป: PASS WITH LIMITATION — ชื่อ field PASS; rev 3 FAIL (สาเหตุยืนยันแล้ว T19-06); rev 4 แสดงผลจางถูกต้องบน Deneb จริงทั้ง preview และหน้ารายงาน — ยังขาด Evidence record fields (Power BI/Deneb version, PBIX)
 ```
 
 ---
