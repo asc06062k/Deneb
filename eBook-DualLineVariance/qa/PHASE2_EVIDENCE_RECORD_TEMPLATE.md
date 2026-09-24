@@ -72,7 +72,8 @@ Interactivity settings อื่นที่เปิดใน Deneb: Expose cro
 ขั้นตอนทำซ้ำ: คลิก/เลือกแถบใน Clustered bar chart แล้วดู Dual-Line Variance Chart
 Expected: จุดข้อมูลที่ไม่ถูกเลือกแสดงผลจางลง/ต่างจากจุดที่ถูก highlight (ตาม __highlight/__highlightStatus)
 Actual ส่วนที่ 1 — ชื่อ field (24 ก.ย. 2026): เปิด Highlight value + Highlight status ของ Actual และ Reference แล้ว Data pane มีคอลัมน์ Actual__highlight, **Actual__highlightStatus**, Reference__highlight, **Reference__highlightStatus** — ชื่อตรงกับที่ spec ใช้ใน opacity condition ทุกตัว (ยืนยัน M-05/M-09 ที่ระดับชื่อ field); ขณะยังไม่มี highlight จาก Visual อื่น แถวที่เห็นในภาพ (Actual = null) มีค่า status = "on" — spec ทำให้จางเฉพาะเมื่อ = "off" จึงแสดงปกติ (opacity 1) ไม่ว่าค่าตอนไม่มี highlight จะเป็น "on" หรือ "neutral"; dataset ยังคง 52 แถว (1-50 of 52)
-Actual ส่วนที่ 2 — การ highlight จริงจาก Clustered bar chart: ยังไม่ได้ทดสอบ
+Actual ส่วนที่ 2 — ความพยายามครั้งที่ 1 (24 ก.ย. 2026, วิดีโอ 42 วินาที ScreenSketch 20260924-0654-08 — ไฟล์วิดีโอ 19.9 MB ไม่ได้คัดลอกเข้า repo; ใช้ภาพ timeline 1 fps แทน): อยู่ในโหมด Edit interactions แล้วคลิกแท่ง ต.ค. และ มิ.ย. ของ Column chart → Power BI เปิดหน้า "Category/Actual" แบบตาราง (ต.ค. 560, มิ.ย. 480) แทนการเลือกแท่ง ไม่เกิด highlight บน Dual-Line chart; เมื่อเปิด Deneb editor ภายหลัง Data pane แสดง Actual__highlightStatus/Reference__highlightStatus = "neutral" และ 1-50 of 52 แถว — **ยังไม่ได้ทดสอบพฤติกรรม highlight จริง** (การเห็นค่า "on" ใน T19-01 น่าจะเกิดขณะมี selection ค้างอยู่ — ยังไม่ยืนยัน)
+หลักฐานเพิ่ม: qa/evidence/phase2-powerbi/T19-02-status-neutral-52rows.png, T19-03-attempt1-video-timeline.png
 หลักฐาน (ภาพ/วิดีโอ): qa/evidence/phase2-powerbi/T19-01-highlightstatus-fields.png
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
@@ -358,7 +359,7 @@ Actual (ระบุความต่างถ้ามี): [กรอกบ�
   - Cross-highlighting: "Expose cross-highlight values for measures" (เปิดอยู่) — ตรง
   - "Supporting fields: dataset" — เป็น section ใน Project setup (ภาพที่ 2) แสดงรายการ field ที่ผูกไว้ (Category, Business_Type = ไอคอนตาราง; Actual, Reference = ไอคอน measure พร้อมจุดสี) แต่ละตัวขยายได้ — ภาพที่ 3–4: **measure** (Actual, Reference) มี "Highlight value" (ติ๊กไว้โดย default), "Highlight status", "Highlight comparator" (ไม่ติ๊กโดย default) — ตรงกับเอกสารและกับข้อความใน Plan ว่า "ค่าเริ่มต้นเปิดเฉพาะ Highlight value"; ทั้ง column และ measure มีตัวเลือกเพิ่มที่เอกสารเราไม่ได้อ้าง: "Format string", "Formatted value", "Treat as field parameter"
   - Context menu (ภาพที่ 2): "Show context menu on right-click" (เปิด) และ "Attempt to resolve data point-specific actions" (เปิด) — ตรงทั้งสองชื่อ
-  - section อื่นที่พบแต่เอกสารเราไม่ได้อ้าง: "Semantic model integration", "Tooltips"
+  - section อื่นที่พบแต่เอกสารเราไม่ได้อ้าง: "General", "Continuous view" (ภาพ T19-02), "Semantic model integration", "Tooltips"
   - Data pane มี dropdown "Data set" = `dataset` — ยืนยันชื่อ data source ที่ spec ใช้ (`data: {name: "dataset"}` และ `data('dataset')` ใน params ของแกน Y)
   - Footer แสดง "Vega-Lite 6.4.3" — ตรงกับเวอร์ชันที่ใช้ทดสอบ headless
   - Data pane แสดงคอลัมน์ __row__, __selected__ (neutral), Actual__highlight... — ชื่อ highlight field ใช้ชื่อที่แสดงของ field ("Actual") สอดคล้องกับ spec (T19 ต้องยืนยัน Actual__highlightStatus ต่อ)
