@@ -132,11 +132,13 @@ Actual (ข):
 Test ID: T23
 ขั้นตอนทำซ้ำ: เปิด Data pane ของ Deneb ตรวจจำนวนแถวใน dataset เทียบกับจำนวนแถวจริงของ DualLine_PlotData (52 แถวสำหรับ Workshop dataset — ดู qa/scripts/workshop-plotdata.json)
 Expected: จำนวนแถวตรงกันพอดี ไม่ถูก Deneb aggregate/group ซ้ำ
-Actual:
-หลักฐาน (screenshot ของ Data pane):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual: [รอบที่ 1 — 24 ก.ย. 2026] ผูกครบ 12 field จากตาราง DualLine_PlotData (ตั้งชื่อถูกแล้ว) แต่ Data pane แสดง **1-12 of 12** — มีเฉพาะแถว Original (Run_Sign/Segment_ID = null) แถว Boundary/Crossing 40 แถวหายทั้งหมด กราฟจึงไม่มีพื้นที่สี Variance
+  สมมติฐาน (ยังไม่ยืนยัน): Actual/Reference ผูกเป็น Sum (implicit measure) เพื่อให้มี __highlight field — แถว Boundary/Crossing มี Actual/Reference = Blank ตาม Field contract (PHASE1_DESIGN_PLAN.md หัวข้อ 5) เมื่อ measure ทุกตัวของแถวเป็น Blank Power BI จะตัดแถวนั้นออกจาก query ก่อนส่งให้ Visual — Design Plan ไม่ได้คาดการณ์เรื่องนี้
+  ทดสอบวินิจฉัย: (1) เอา Actual/Reference ออกจาก Values ชั่วคราว → ถ้าได้ 52 แถว สมมติฐานถูก (2) ใส่กลับ + เพิ่ม measure ที่ไม่ Blank ทุกแถว เช่น DualLine Row Count = COUNTROWS ( DualLine_PlotData ) → คาดว่าได้ 52 แถวพร้อม __highlight fields
+หลักฐาน (screenshot ของ Data pane): qa/evidence/phase2-powerbi/T23-01-dataset-12-rows.png
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: FAIL (รอบที่ 1) — รอผลทดสอบวินิจฉัย
 ```
 
 ---
@@ -148,8 +150,9 @@ spec คำนวณ domain จาก `data('dataset')` ทุกแถว ด�
 ```text
 Test ID: T36-A (ข้อมูลเต็ม ไม่มี filter)
 Expected: Signal yDomainMin = 340.4, yDomainMax = 639.6 (ข้อมูล 380–600); แกน Y ไม่เริ่มที่ 0; ยืนยันด้วยว่า Deneb ใช้ชื่อ data source "dataset" จริง (ถ้าไม่ใช่ แกนจะเป็น [0, 1] หรือ error)
-Actual:
-หลักฐาน (screenshot กราฟ + Signal viewer):
+Actual: [24 ก.ย. 2026] Signals: yRawMax = 600, yPad = 39.6, yDomainMin = 340.4, yDomainMax = 639.6 ตรงกับที่คาด; Data set dropdown = "dataset"; กราฟแสดงแกน X/Y ครบ (ยืนยันการแก้ "axis": null บน Deneb จริง), เส้น monotone, จุด, connector, label — **ข้อจำกัด**: ทดสอบกับ dataset ที่มีเพียง 12 แถว (T23 FAIL รอบที่ 1) แต่ค่า extent เท่ากันเพราะแถว Boundary/Crossing อยู่ในช่วงเดียวกับแถว Original เสมอ — ควรดูซ้ำหลังแก้ T23
+หลักฐาน (screenshot กราฟ + Signal viewer): qa/evidence/phase2-powerbi/T36A-01-signals-ydomain.png, T23-01-dataset-12-rows.png
+ผลสรุป T36-A: PASS (ยืนยันซ้ำหลังแก้ T23)
 
 Test ID: T36-B (รับ Filter จาก Visual อื่น — Edit interactions = Filter หรือ Slicer)
 ขั้นตอนทำซ้ำ: กรองให้เหลือบางเดือน
