@@ -118,11 +118,11 @@ Test ID: T21
 Visual ต้นทาง: Clustered bar chart, Edit interactions = None
 ขั้นตอนทำซ้ำ: เลือกแถบใน Visual ต้นทาง
 Expected: Dual-Line Variance Chart ไม่ตอบสนองเลย
-Actual:
-หลักฐาน:
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual (24 ก.ย. 2026, spec rev 5, ภาพ T21-01): Clustered column chart (ใหม่) ตั้ง Edit interactions = None แล้วเลือกแท่ง ก.ค. → Dual-Line แสดงครบทุกเดือน จุด/connector/ป้ายตัวเลข/เส้น/พื้นที่สีเข้มปกติทั้งหมด ไม่กรองและไม่จาง
+หลักฐาน: qa/evidence/phase2-powerbi/T21-01-none-mode-july.png
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS (ยังขาด Evidence record fields: Power BI/Deneb version, PBIX)
 ```
 
 ---
