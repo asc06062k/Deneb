@@ -338,16 +338,16 @@ Actual (ระบุความต่างถ้ามี): [กรอกบ�
   - Cross-filtering: "Expose cross-filtering values for dataset rows" (เปิดอยู่) — ตรง
   - "Cross-filtering management": Simple ("Let Deneb attempt to resolve cross-filtering for me") / Advanced ("available for Vega only") — ตรง; มีการตั้งค่าเพิ่ม "Data point limit" = 50 (default) ที่เอกสารของเราไม่ได้อ้างถึง
   - Cross-highlighting: "Expose cross-highlight values for measures" (เปิดอยู่) — ตรง
-  - "Supporting fields: dataset" — เป็น section ใน Project setup (ภาพที่ 2) แสดงรายการ field ที่ผูกไว้ (Category, Business_Type = ไอคอนตาราง; Actual, Reference = ไอคอน measure พร้อมจุดสี) แต่ละตัวขยายได้ — ยังไม่เห็นตัวเลือก Highlight value/status/comparator ข้างใน (ต้องขยาย Actual)
+  - "Supporting fields: dataset" — เป็น section ใน Project setup (ภาพที่ 2) แสดงรายการ field ที่ผูกไว้ (Category, Business_Type = ไอคอนตาราง; Actual, Reference = ไอคอน measure พร้อมจุดสี) แต่ละตัวขยายได้ — ภาพที่ 3–4: **measure** (Actual, Reference) มี "Highlight value" (ติ๊กไว้โดย default), "Highlight status", "Highlight comparator" (ไม่ติ๊กโดย default) — ตรงกับเอกสารและกับข้อความใน Plan ว่า "ค่าเริ่มต้นเปิดเฉพาะ Highlight value"; ทั้ง column และ measure มีตัวเลือกเพิ่มที่เอกสารเราไม่ได้อ้าง: "Format string", "Formatted value", "Treat as field parameter"
   - Context menu (ภาพที่ 2): "Show context menu on right-click" (เปิด) และ "Attempt to resolve data point-specific actions" (เปิด) — ตรงทั้งสองชื่อ
   - section อื่นที่พบแต่เอกสารเราไม่ได้อ้าง: "Semantic model integration", "Tooltips"
   - Data pane มี dropdown "Data set" = `dataset` — ยืนยันชื่อ data source ที่ spec ใช้ (`data: {name: "dataset"}` และ `data('dataset')` ใน params ของแกน Y)
   - Footer แสดง "Vega-Lite 6.4.3" — ตรงกับเวอร์ชันที่ใช้ทดสอบ headless
   - Data pane แสดงคอลัมน์ __row__, __selected__ (neutral), Actual__highlight... — ชื่อ highlight field ใช้ชื่อที่แสดงของ field ("Actual") สอดคล้องกับ spec (T19 ต้องยืนยัน Actual__highlightStatus ต่อ)
-หลักฐาน (screenshot แต่ละหน้าตั้งค่า): qa/evidence/phase2-powerbi/T30-01-project-setup-crossfilter-highlight.png, qa/evidence/phase2-powerbi/T30-02-supporting-fields-context-menu.png
+หลักฐาน (screenshot แต่ละหน้าตั้งค่า): qa/evidence/phase2-powerbi/T30-01-project-setup-crossfilter-highlight.png, T30-02-supporting-fields-context-menu.png, T30-03-supporting-fields-expanded-columns.png, T30-04-supporting-fields-expanded-measures.png
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
-ผลสรุป: PARTIAL — เหลือเฉพาะภาพตอนขยาย Actual ใน "Supporting fields: dataset" เพื่อยืนยันชื่อ Highlight value / Highlight status / Highlight comparator
+ผลสรุป: PASS — ทุกชื่อ UI ที่ Design Plan อ้างอิงตรงกับ Deneb จริง (ข้อสังเกต: "Project setup" เป็นแท็บของ Editor; "Supporting fields: dataset" เป็น section ใน Project setup แยกราย field; มี "Data point limit", "Semantic model integration", "Tooltips", "Format string", "Formatted value", "Treat as field parameter" เพิ่มเติม — ใช้ประกอบการเขียนบทที่ 2 และ 8) — Power BI Desktop/Deneb version ยังไม่ได้บันทึกจากเครื่องจริง (ภาพแสดงเฉพาะ Vega-Lite 6.4.3)
 ```
 
 ---
