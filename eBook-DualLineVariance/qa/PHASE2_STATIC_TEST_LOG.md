@@ -103,15 +103,15 @@
 
 สีเส้น Reference (`#F59E0B`, amber-500) กับสี Bad-fill (`#B45309`, amber-700) อยู่ในกลุ่มสีอำพันเดียวกัน เมื่อพื้นที่ Bad-fill (opacity 0.35) วางอยู่ติดกับเส้น Reference สีอำพัน ทำให้แยกยากด้วยตาที่ขนาดเล็ก แม้ตอนนี้จะมี Pattern เส้นประขอบพื้นที่ Bad ที่ใช้งานได้จริงแล้ว (แก้บั๊กด้านบน) ก็ยังแนะนำให้ Phase 3 พิจารณาเพิ่ม: (ก) เปลี่ยนสีเส้น Reference เป็นสีที่ห่างจากคู่สี Good/Bad มากขึ้น (เช่น เทาเข้ม) หรือ (ข) เพิ่ม contrast ของพื้นที่ Bad-fill ให้เข้มขึ้น — ไม่ใช่การแก้ Style Guide ที่ Lock ไว้ใน Phase 1 แต่เป็นการปรับแต่งการนำไปใช้จริงในบทที่เกี่ยวข้อง
 
-## M code (`specs/DualLine_PlotData_PowerQuery.pq`) [M-NOT-COMPILED]
+## M code (`specs/DualLine_PlotData_PowerQuery.pq`) — สถานะปัจจุบัน: COMPILED บน Power BI จริง (ผู้ใช้รายงาน 24 ก.ย. 2026)
 
-**อัปเดต 24 ก.ย. 2026 — compile จริงแล้ว (ผู้ใช้รายงาน)**: วางใน Power Query Advanced Editor แล้ว compile ผ่าน ได้ **52 แถว** ตรงกับ WORKSHOP ในชั้นที่ 1 (12 Original + 18 Crossing + 22 Boundary) และคอลัมน์ที่เห็นใน Data pane ตรงกับ schema (Actual, Business_Type, Category, Filter_Key, Plot_Actual, Plot_Position, Plot_Reference, Reference, Row_Type, Run_Sign, Segment_ID, Sort_Order) — **แต่ query ยังชื่อ `Query`** ต้องเปลี่ยนเป็น `DualLine_PlotData` ตาม Design Plan หัวข้อ 2.1 สถานะด้านล่างนี้คือบันทึกก่อน compile
+- วางใน Power Query Advanced Editor แล้ว compile ผ่าน ได้ **52 แถว** ตรงกับ WORKSHOP ในชั้นที่ 1 (12 Original + 18 Crossing + 22 Boundary) คอลัมน์ใน Data pane ตรงกับ schema (Actual, Business_Type, Category, Filter_Key, Plot_Actual, Plot_Position, Plot_Reference, Reference, Row_Type, Run_Sign, Segment_ID, Sort_Order)
+- query เปลี่ยนชื่อเป็น `DualLine_PlotData` แล้ว (เห็นในภาพ `qa/evidence/phase2-powerbi/T23-01-dataset-12-rows.png`)
+- จำนวน 52 แถวเป็นคำรายงานของผู้ใช้ ยังไม่มีภาพจาก Power Query Editor โดยตรง (ภาพ T23-02/T23-03 แสดง 52 แถวที่ปลายทาง Deneb)
 
-ตรวจได้เฉพาะการอ่านโค้ดด้วยตา (code review) — **ยังไม่ได้รันจริงใน Power Query Editor** เพราะ Claude/Codex ไม่มีสิทธิ์เข้าถึง Power BI Desktop:
+### บันทึกก่อน compile (ประวัติ — ไม่ใช่สถานะปัจจุบัน)
 
-- แก้ M-06 แล้ว: เพิ่ม guard `Table.RowCount(DualLineVariance_Settings) = 1` ก่อนอ่าน `Business_Type_Source` — throw `error Error.Record("DualLine.SettingsRowCountInvalid", ...)` ถ้าไม่ใช่ 1 แถวพอดี
-- โครงสร้าง Case A/B/C, `Filter_Key` binding ฝั่งซ้าย, `Boundary.Plot_Reference` คัดลอกจาก `Reference` จริง (ไม่ใช่ `Plot_Actual`) — ตรงกับที่ Codex ตรวจสอบโดยตรงแล้วว่าถูกต้องในรอบก่อน
-- **ยังต้องรอผู้ใช้**: paste เข้า Power Query Advanced Editor จริงแล้วยืนยันว่า compile ผ่าน ไม่มี syntax error (List.Generate accumulator, Table.FromRecords กับ type ที่ประกาศ) — ดู T-code ที่เกี่ยวข้องใน Evidence Template
+ตรวจด้วยการอ่านโค้ดก่อนผู้ใช้ทดสอบ: guard `Table.RowCount(DualLineVariance_Settings) = 1` (M-06), โครงสร้าง Case A/B/C, `Filter_Key` ฝั่งซ้าย, `Boundary.Plot_Reference` คัดลอกจาก `Reference` จริง
 
 ## สิ่งที่ยังพิสูจน์ไม่ได้ในชั้น Static (ต้องรอ Power BI จริง) [POWERBI-NOT-TESTED]
 

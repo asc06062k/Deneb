@@ -1,6 +1,6 @@
 -- Deneb Dual-Line Variance Chart — DAX measures
 --
--- These measures are for OTHER visuals on the report page (KPI cards, a
+-- Apart from [DualLine Row Count] below, these measures are for OTHER visuals on the report page (KPI cards, a
 -- Clustered bar/column chart used as the cross-highlight source in บทที่ 8,
 -- etc.) — NOT for the Dual-Line Variance Chart itself. The chart binds
 -- directly to the DualLine_PlotData table built by Power Query
@@ -9,6 +9,22 @@
 --
 -- Table: DualLineVariance_Workshop_Data (the raw input table, before
 -- Power Query builds DualLine_PlotData from it)
+
+-- ---------------------------------------------------------------------------
+-- Table: DualLine_PlotData (the Power Query table the chart binds to)
+--
+-- REQUIRED in the Deneb Values well (Phase 2 evidence T23, 24 Sep 2026):
+-- Actual/Reference are bound as Sum (implicit measures) so Deneb can expose
+-- Actual__highlight / __highlightStatus for cross-highlight. Boundary/Crossing
+-- rows have Actual/Reference = Blank, and Power BI drops rows whose measures are
+-- all Blank -> the dataset shrank from 52 to 12 rows and the variance area
+-- disappeared. This measure is never Blank, so every row is kept. The spec does
+-- not read it. See PHASE1_DESIGN_PLAN.md section 2.1.1.
+DualLine Row Count =
+COUNTROWS ( DualLine_PlotData )
+
+-- ---------------------------------------------------------------------------
+-- Table: DualLineVariance_Workshop_Data (measures for other visuals)
 
 Total Actual =
 SUM ( DualLineVariance_Workshop_Data[Actual] )

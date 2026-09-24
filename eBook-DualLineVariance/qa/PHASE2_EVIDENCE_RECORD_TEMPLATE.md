@@ -13,7 +13,8 @@ Claude/Codex ไม่มีสิทธิ์เข้าถึง Power BI Des
 **วิธีผูก Values ของ Deneb (เพิ่ม 24 ก.ย. 2026 หลังเห็นภาพ T30-01 ที่ผูกไว้เพียง 4 field จาก query ชื่อ `Query` จนได้ dataset 12 แถวและกราฟว่าง)** — ต้องผูกจากตาราง `DualLine_PlotData` (เปลี่ยนชื่อ query จาก `Query` ใน Power Query ก่อน):
 - ตั้งเป็น **Don't summarize** (คลิกลูกศรที่ field ในช่อง Values): `Plot_Position`, `Plot_Actual`, `Plot_Reference`, `Run_Sign`, `Sort_Order` — ถ้าปล่อยเป็น Sum จะเหลือไม่ถึง 52 แถว (คอลัมน์ข้อความอย่างเดียวแยกแถวได้แค่ 50 แถว ตรวจจาก `qa/scripts/workshop-plotdata.json`)
 - คอลัมน์ข้อความ: `Row_Type`, `Category`, `Segment_ID`, `Business_Type`, `Filter_Key`
-- **คง Sum ไว้** (เป็น measure): `Actual`, `Reference` — เพื่อให้ Deneb สร้าง `Actual__highlight`/`Actual__highlightStatus`/`Reference__highlight`/`Reference__highlightStatus` ที่ spec ใช้ (แถว Boundary/Crossing มีค่า null อยู่แล้ว ผลรวมจึงไม่เปลี่ยนค่า)
+- **measure ที่ต้องมีเสมอ**: `DualLine Row Count = COUNTROWS ( DualLine_PlotData )` (ดู `dax/workshop-measures.dax`) — ถ้าไม่มี แถว Boundary/Crossing จะหายเหลือ 12 แถว (T23 รอบที่ 1)
+- **คง Sum ไว้** (เป็น measure): `Actual`, `Reference` — เพื่อให้ Deneb สร้าง `Actual__highlight`/`Actual__highlightStatus`/`Reference__highlight`/`Reference__highlightStatus` ที่ spec ใช้ (แถว Boundary/Crossing มีค่า null — Power BI จะตัดแถวเหล่านี้ทิ้งถ้าไม่มี `DualLine Row Count`)
 - ชื่อใน Values ต้องเป็นชื่อ field ตรงตัว (เช่น `Actual` ไม่ใช่ `Sum of Actual`) — ถ้า Power BI เติม "Sum of" ให้ rename ในช่อง Values
 - หลังผูกแล้ว Data pane ของ Deneb ต้องแสดง **1-52 of 52**
 
@@ -41,12 +42,13 @@ Interactivity settings อื่นที่เปิดใน Deneb: Expose cro
 Expected:
   (ก) Visual อื่นกรองเหลือเฉพาะเดือนที่คลิกจริง
   (ข) เป็นคำถามเปิด — บันทึกผลจริงว่า Visual อื่นเหลือ Category ใดบ้าง (ดู PHASE1_DESIGN_PLAN.md หัวข้อ 2.2 ว่าอาจกรองผิดหลาย Category พร้อมกัน)
-Actual (ก):
-Actual (ข):
-หลักฐาน (ภาพ/วิดีโอ):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual (ก) (24 ก.ย. 2026): Clear selections แล้วคลิกซ้ายที่จุดของ ต.ค. → Clustered column chart "Sum of Actual by Category" highlight แท่ง ต.ค. เพียงแท่งเดียว (Visual ปลายทางใช้ Highlight ตาม default interaction ไม่ใช่ Filter — ผลการเลือกเดือนตรงกัน)
+Actual (ข) ครั้งที่ 1 (24 ก.ย. 2026): Clear selections แล้วคลิกซ้ายในพื้นที่สีของ segment พ.ค.–มิ.ย. ชิดฝั่ง มิ.ย. → column chart highlight แท่ง **มิ.ย.** — **สรุปไม่ได้**: ตาม Field contract แถว Boundary ทั้งสองแถวของ segment นี้มี Filter_Key = พ.ค. ถ้าคลิกโดน Area จริงควรได้ พ.ค.; การได้ มิ.ย. บ่งว่าคลิกโดน mark อื่น (จุด/เส้น/connector ของแถว Original มิ.ย.) เพราะ segment นี้เป็นกรณี C ที่ diff = 0 ที่ มิ.ย. พื้นที่สีจึงแคบลงเหลือศูนย์ใกล้ มิ.ย. — ต้องทดสอบซ้ำใน segment ที่พื้นที่สีกว้างฝั่งขวา
+Visual ปลายทาง: Clustered column chart ใช้ Category จาก DualLineVariance_Workshop_Data (ผู้ใช้ยืนยัน) — relationship DualLine_PlotData → DualLineVariance_Workshop_Data: Many-to-one, Cross filter direction = Both (ผู้ใช้ยืนยัน 24 ก.ย. 2026); คอลัมน์ที่ใช้เชื่อม (Filter_Key หรือ Category) ยังไม่ได้ยืนยัน
+หลักฐาน (ภาพ/วิดีโอ): ภาพ 2 ภาพที่ผู้ใช้ส่งในแชท 24 ก.ย. 2026 (ยังไม่ได้บันทึกเป็นไฟล์ใน qa/evidence — ต้องขอไฟล์ภาพ)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: (ก) PASS (รอไฟล์ภาพ) / (ข) INCONCLUSIVE — ทดสอบซ้ำ
 ```
 
 **ถ้า (ข) กรองผิด**: ต้องเปลี่ยน interaction architecture (เช่น Advanced cross-filtering mode ของ Deneb) ก่อน Phase 2 จะ `PASS` ตาม `PROJECT_PLAN.md` Phase 2 ข้อ 7 — แจ้งผลกลับก่อนดำเนินการต่อ ไม่ต้องแก้เอง
@@ -64,11 +66,12 @@ Supporting Fields ที่เปิด: Highlight value + Highlight status ส�
 Interactivity settings อื่นที่เปิดใน Deneb: Expose cross-highlight values for measures
 ขั้นตอนทำซ้ำ: คลิก/เลือกแถบใน Clustered bar chart แล้วดู Dual-Line Variance Chart
 Expected: จุดข้อมูลที่ไม่ถูกเลือกแสดงผลจางลง/ต่างจากจุดที่ถูก highlight (ตาม __highlight/__highlightStatus)
-Actual:
-หลักฐาน (ภาพ/วิดีโอ):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual ส่วนที่ 1 — ชื่อ field (24 ก.ย. 2026): เปิด Highlight value + Highlight status ของ Actual และ Reference แล้ว Data pane มีคอลัมน์ Actual__highlight, **Actual__highlightStatus**, Reference__highlight, **Reference__highlightStatus** — ชื่อตรงกับที่ spec ใช้ใน opacity condition ทุกตัว (ยืนยัน M-05/M-09 ที่ระดับชื่อ field); ขณะยังไม่มี highlight จาก Visual อื่น แถวที่เห็นในภาพ (Actual = null) มีค่า status = "on" — spec ทำให้จางเฉพาะเมื่อ = "off" จึงแสดงปกติ (opacity 1) ไม่ว่าค่าตอนไม่มี highlight จะเป็น "on" หรือ "neutral"; dataset ยังคง 52 แถว (1-50 of 52)
+Actual ส่วนที่ 2 — การ highlight จริงจาก Clustered bar chart: ยังไม่ได้ทดสอบ
+หลักฐาน (ภาพ/วิดีโอ): qa/evidence/phase2-powerbi/T19-01-highlightstatus-fields.png
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PARTIAL — ชื่อ field PASS, พฤติกรรม highlight NOT TESTED
 ```
 
 ---
@@ -116,12 +119,16 @@ Interactivity settings: Show context menu on right-click + Attempt to resolve da
 Expected:
   (ก) Context menu resolve เป็นแถว Original/Category จริง
   (ข) คำถามเปิด — บันทึกว่า resolve เป็นอะไรจริง (ไม่ควร resolve ผิด Category)
-Actual (ก):
-Actual (ข):
-หลักฐาน:
+Actual (เบื้องต้น 24 ก.ย. 2026 — ตีความจากภาพ ยังไม่ได้ยืนยันจุดคลิกกับผู้ใช้):
+  - Context menu ของ Power BI ขึ้นจริงทั้งสองภาพ รายการ: Copy, Show as a table, Include, Exclude, Group (ปิด), Clear selections, Summarize (ปิด), Format, New visual calculation, Set up a verified answer (ปิด) — มี Include/Exclude แปลว่า resolve เป็น data point ได้
+  - ภาพ T22-01: เมนูเปิดที่ตำแหน่งใกล้จุด Reference ของ พ.ค. (470); Clustered column chart "Sum of Actual by Category" ด้านขวา highlight แท่ง พ.ค. เพียงแท่งเดียว
+  - ภาพ T22-02: เมนูเปิดที่ตำแหน่งในพื้นที่สีเขียวของ segment พ.ค.–มิ.ย. (ชิดฝั่ง พ.ค.); column chart highlight แท่ง พ.ค. เพียงแท่งเดียว — สอดคล้องกับ Filter_Key ของแถว Boundary = Category ฝั่งซ้ายของ segment
+  - ยังไม่ทราบ: (1) highlight บน column chart มาจากการคลิกขวาครั้งนี้หรือจากการคลิกซ้ายก่อนหน้า (2) column chart ใช้ Category จากตารางใด และมี relationship Filter_Key ตามที่ Lock หรือไม่ (3) กรณีคลิกพื้นที่สีชิดฝั่งขวาของ segment (ใกล้ มิ.ย.) จะ resolve เป็น พ.ค. หรือไม่ — ซึ่งจะเป็นความเสี่ยง "resolve ผิด Category" ตาม M-23
+หลักฐาน: qa/evidence/phase2-powerbi/T22-01-rightclick-near-may-reference-point.png, T22-02-rightclick-area-may-june-segment.png
+ผลสรุปเบื้องต้น: PARTIAL — Context menu ทำงาน; ความถูกต้องของ Category ที่ resolve จาก Area ยังสรุปไม่ได้
 ผู้ทดสอบ:
 วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+ผลสรุป: PARTIAL (ดูผลสรุปเบื้องต้นด้านบน)
 ```
 
 ---
@@ -131,14 +138,17 @@ Actual (ข):
 ```text
 Test ID: T23
 ขั้นตอนทำซ้ำ: เปิด Data pane ของ Deneb ตรวจจำนวนแถวใน dataset เทียบกับจำนวนแถวจริงของ DualLine_PlotData (52 แถวสำหรับ Workshop dataset — ดู qa/scripts/workshop-plotdata.json)
-Expected: จำนวนแถวตรงกันพอดี ไม่ถูก Deneb aggregate/group ซ้ำ
+Expected: จำนวนแถวตรงกันพอดี ไม่ถูก Deneb aggregate/group ซ้ำ — configuration ที่ Lock (Design Plan 2.1.1): Actual/Reference = Sum, มี DualLine Row Count, Plot_*/Run_Sign/Sort_Order = Don't summarize; ต้องได้ 52 แถว = Original 12 + Boundary 22 + Crossing 18 และพื้นที่สีครบ; ต้องยังครบ 52 แถวขณะรับ Cross-highlight (ตรวจร่วมกับ T19)
 Actual: [รอบที่ 1 — 24 ก.ย. 2026] ผูกครบ 12 field จากตาราง DualLine_PlotData (ตั้งชื่อถูกแล้ว) แต่ Data pane แสดง **1-12 of 12** — มีเฉพาะแถว Original (Run_Sign/Segment_ID = null) แถว Boundary/Crossing 40 แถวหายทั้งหมด กราฟจึงไม่มีพื้นที่สี Variance
   สมมติฐาน (ยังไม่ยืนยัน): Actual/Reference ผูกเป็น Sum (implicit measure) เพื่อให้มี __highlight field — แถว Boundary/Crossing มี Actual/Reference = Blank ตาม Field contract (PHASE1_DESIGN_PLAN.md หัวข้อ 5) เมื่อ measure ทุกตัวของแถวเป็น Blank Power BI จะตัดแถวนั้นออกจาก query ก่อนส่งให้ Visual — Design Plan ไม่ได้คาดการณ์เรื่องนี้
   ทดสอบวินิจฉัย: (1) เอา Actual/Reference ออกจาก Values ชั่วคราว → ถ้าได้ 52 แถว สมมติฐานถูก (2) ใส่กลับ + เพิ่ม measure ที่ไม่ Blank ทุกแถว เช่น DualLine Row Count = COUNTROWS ( DualLine_PlotData ) → คาดว่าได้ 52 แถวพร้อม __highlight fields
 หลักฐาน (screenshot ของ Data pane): qa/evidence/phase2-powerbi/T23-01-dataset-12-rows.png
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
-ผลสรุป: FAIL (รอบที่ 1) — รอผลทดสอบวินิจฉัย
+ผลสรุป: FAIL (รอบที่ 1)
+Actual รอบที่ 2 (24 ก.ย. 2026): ผลทดสอบวินิจฉัยยืนยันสมมติฐาน — (1) เอา Actual/Reference ออก → 1-50 of 52 และพื้นที่สีแสดง (2) ใส่กลับ + measure DualLine Row Count → 1-50 of 52 (รวม 52 แถว) พื้นที่สี Good/Bad แสดงครบบน Deneb จริง, Category = null และ Filter_Key มีค่าในแถว Boundary/Crossing ตาม Field contract
+หลักฐาน รอบที่ 2: qa/evidence/phase2-powerbi/T23-02-diagnostic-no-measures-52-rows.png, T23-03-row-count-measure-52-rows.png
+ผลสรุป รอบที่ 2: PARTIAL — (ก) base configuration PASS: 52 แถวรวม (เห็นยอดรวม 1-50 of 52 และตัวอย่างแถว Boundary/Crossing แต่ภาพไม่ได้แสดงการนับแยก Original 12 / Boundary 22 / Crossing 18 โดยตรง) และพื้นที่สีครบ โดยมี DualLine Row Count ใน Values (Lock ใน PHASE1_DESIGN_PLAN.md หัวข้อ 2.1.1) (ข) row preservation ระหว่างรับ Cross-highlight: NOT TESTED — ต้องทดสอบร่วมกับ T19
 ```
 
 ---
@@ -152,7 +162,7 @@ Test ID: T36-A (ข้อมูลเต็ม ไม่มี filter)
 Expected: Signal yDomainMin = 340.4, yDomainMax = 639.6 (ข้อมูล 380–600); แกน Y ไม่เริ่มที่ 0; ยืนยันด้วยว่า Deneb ใช้ชื่อ data source "dataset" จริง (ถ้าไม่ใช่ แกนจะเป็น [0, 1] หรือ error)
 Actual: [24 ก.ย. 2026] Signals: yRawMax = 600, yPad = 39.6, yDomainMin = 340.4, yDomainMax = 639.6 ตรงกับที่คาด; Data set dropdown = "dataset"; กราฟแสดงแกน X/Y ครบ (ยืนยันการแก้ "axis": null บน Deneb จริง), เส้น monotone, จุด, connector, label — **ข้อจำกัด**: ทดสอบกับ dataset ที่มีเพียง 12 แถว (T23 FAIL รอบที่ 1) แต่ค่า extent เท่ากันเพราะแถว Boundary/Crossing อยู่ในช่วงเดียวกับแถว Original เสมอ — ควรดูซ้ำหลังแก้ T23
 หลักฐาน (screenshot กราฟ + Signal viewer): qa/evidence/phase2-powerbi/T36A-01-signals-ydomain.png, T23-01-dataset-12-rows.png
-ผลสรุป T36-A: PASS (ยืนยันซ้ำหลังแก้ T23)
+ผลสรุป T36-A: PASS WITH LIMITATION / RETEST REQUIRED — ค่าและชื่อ dataset ถูกต้อง แต่ภาพเป็น configuration 12 แถว ต้องมีภาพใหม่ที่เห็น 52 แถว + `DualLine Row Count` ใน Values + Signals
 
 Test ID: T36-B (รับ Filter จาก Visual อื่น — Edit interactions = Filter หรือ Slicer)
 ขั้นตอนทำซ้ำ: กรองให้เหลือบางเดือน

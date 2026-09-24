@@ -25,7 +25,7 @@
 | CH06-S03 | [`CH06-S03-connector-rule.vl.json`](../specs/steps/CH06-S03-connector-rule.vl.json) | + `connector_rule` | 6 | |
 | CH07-S01 | [`CH07-S01-tooltip.vl.json`](../specs/steps/CH07-S01-tooltip.vl.json) | `point_actual_hit_target` เพิ่ม `calculate` 3 ตัว + `tooltip` | 7 | |
 | CH07-S02 | [`CH07-S02-data-labels.vl.json`](../specs/steps/CH07-S02-data-labels.vl.json) | + `label_actual`, `label_reference` (thinning จาก signal `width`) | 7 | Group A "ลดการชน" ไม่รับประกัน |
-| CH08-S01 | [`CH08-S01-cross-highlight-opacity.vl.json`](../specs/steps/CH08-S01-cross-highlight-opacity.vl.json) | เพิ่ม `opacity` condition จาก `Actual__highlightStatus`/`Reference__highlightStatus` ใน 4 layer | 8 | **= final spec** ชื่อ field ยัง [POWERBI-NOT-TESTED] (T19) |
+| CH08-S01 | [`CH08-S01-cross-highlight-opacity.vl.json`](../specs/steps/CH08-S01-cross-highlight-opacity.vl.json) | เพิ่ม `opacity` condition จาก `Actual__highlightStatus`/`Reference__highlightStatus` ใน 4 layer | 8 | **= final spec** ชื่อ field verified บน Deneb จริง (T19-01); พฤติกรรม highlight [POWERBI-NOT-TESTED] |
 
 บทที่ไม่มี Step JSON จาก prototype นี้:
 

@@ -157,6 +157,23 @@ Deneb ผูก `dataset` ได้จาก **Values well เดียว** ข
 | `Business_Type` | ค่าเดียวที่ stamp ทั้งตาราง | เดียวกัน | เดียวกัน | Text |
 | `Filter_Key` | **ค่า Key ของ Category นั้นเอง** | **ค่า Key ของ `row[i]` (ฝั่งซ้ายของ segment) — ไม่ Blank** | **ค่า Key ของ `row[i]` (ฝั่งซ้ายของ segment) — ไม่ Blank** | Text/Date ตามชนิดของ Dimension ร่วม (แก้ M-17 — แยกจาก `Category` เพื่อไม่ให้ Relationship ตัดแถว Fill ทั้งหมดออก ดูหัวข้อ 2.2.1) |
 
+#### 2.1.1 Amendment จากหลักฐาน Power BI จริง (Phase 2, 24 ก.ย. 2026) — measure กันแถวหาย
+
+**ปัญหาที่พบ (T23 รอบที่ 1)**: ผูก `Actual`/`Reference` เข้า Values แบบ Sum (implicit measure — จำเป็นเพื่อให้ Deneb สร้าง `Actual__highlight`/`__highlightStatus` สำหรับ Cross-highlight) แล้ว Deneb `dataset` เหลือ **12 แถว** แทน 52 — แถว Boundary/Crossing หายทั้งหมดและไม่มีพื้นที่สี เพราะแถวเหล่านี้มี `Actual`/`Reference` = Blank ตามตารางด้านบน และ Power BI ตัดแถวที่ measure ทุกตัวเป็น Blank ทิ้งก่อนส่งให้ Visual
+
+**พิสูจน์สาเหตุแล้วบนเครื่องจริง**: (1) เอา `Actual`/`Reference` ออกจาก Values → 52 แถว (2) ใส่กลับพร้อม measure ที่ไม่ Blank ทุกแถว → 52 แถว และพื้นที่สีแสดงครบ (หลักฐาน `qa/evidence/phase2-powerbi/T23-02-*.png`, `T23-03-*.png`)
+
+**Lock เพิ่ม**: ต้องมี measure บนตาราง `DualLine_PlotData` ใน Values ของ Deneb เสมอ:
+
+```dax
+DualLine Row Count = COUNTROWS ( DualLine_PlotData )
+```
+
+- ไม่แก้ Field contract ของ `Actual`/`Reference` (ยังคง Blank ในแถว Boundary/Crossing — ไม่เติมค่าเพื่อกันแถวหาย เพราะจะทำให้ผลรวม `Actual` บนตารางนี้ผิดถ้ามี Visual อื่นใช้)
+- spec ไม่อ่าน field นี้ (มีไว้กันแถวหายเท่านั้น) — ห้ามลบออกจาก Values; บทที่ 4/5 ต้องอธิบายเหตุผล และบทที่ 9 (Template) ต้องระบุว่าผู้ใช้ Template ต้องสร้าง measure นี้กับข้อมูลของตนเองด้วย
+- **ทางเลือกที่ยังไม่ได้ทดสอบ** (ห้ามสอนจนกว่าจะมีหลักฐาน): ผูก `Actual`/`Reference` แบบ Don't summarize เมื่อไม่ต้องการ Cross-highlight — หลักฐาน T23-02 พิสูจน์เฉพาะกรณี *เอาสอง field ออกจาก Values* ไม่ใช่กรณี Don't summarize
+- `DualLine Row Count` เป็น measure จึงอาจมี Supporting highlight fields ของตัวเอง (`DualLine Row Count__highlight` ฯลฯ ถ้าเปิด) — spec ต้องไม่อ้างถึง fields เหล่านั้น
+
 ### 2.2 การ bind layer และ Interaction ownership (แก้ M-01, แก้ไข M-01R รอบ 3 — ถอนคำกล่าวอ้างเรื่อง `interactive:false`)
 
 **แก้ไขจากรอบ 2**: ตรวจสอบแล้วว่า **`interactive` ไม่ใช่ property ที่ Vega-Lite MarkDef รองรับ** ([Vega-Lite Mark docs](https://vega.github.io/vega-lite/docs/mark.html) ไม่มี property นี้ แม้ Vega เองจะมี) การเขียน `"mark": {"type": "area", "interactive": false}` ใน Vega-Lite spec **ไม่มีหลักฐานว่าจะทำงาน** จึงถอนคำกล่าวอ้างนี้ทั้งหมด และออกแบบใหม่ที่ไม่พึ่ง property ที่ไม่มีอยู่จริง
@@ -342,11 +359,11 @@ Grain สำหรับ Identity (Line/Point/Selection/Tooltip) = 1 แถว�
 | T20 | Edit interactions ตั้งเป็น `Filter` — ต้องกรอง Visual นี้แบบ Filter ปกติ ไม่เกิด Highlight fields | Interaction | Power BI จริง |
 | T21 | Edit interactions ตั้งเป็น `None` — Visual นี้ต้องไม่ตอบสนองต่อ Visual ต้นทางเลย | Interaction | Power BI จริง |
 | T22 | Context menu resolve data point (`Show context menu on right-click` + `Attempt to resolve data point-specific actions`) — Right-click ที่ Point layer resolve เป็นแถว Original ได้จริง; Right-click กลางแถบสี Area บันทึกผลจริงว่า resolve เป็นอะไร (คำถามเปิดเดียวกับ T18) | Interaction | Power BI จริง |
-| T23 | `Business_Type` ผูกเป็น Column แล้วจำนวนแถวใน Deneb `dataset` เท่ากับจำนวนแถวจริงของ `DualLine_PlotData` ตามที่อัลกอริทึม per-segment ในหัวข้อ 2.0 คำนวณได้ (ตรวจด้วย QA invariant ก่อนเข้า Deneb) ไม่ถูก Deneb aggregate/group ซ้ำโดยไม่ตั้งใจ | Interaction | Power BI จริง |
+| T23 | **(แก้ตาม Phase 2 amendment หัวข้อ 2.1.1)** ผูก Values ตาม configuration ที่ Lock: `Actual`/`Reference` = Sum (measure, เพื่อ Cross-highlight), มี measure ที่ไม่ Blank ทุกแถว `DualLine Row Count = COUNTROWS ( DualLine_PlotData )`, Plot_*/Run_Sign/Sort_Order = Don't summarize — Expected: Deneb `dataset` = จำนวนแถวจริงของ `DualLine_PlotData` (Workshop: 52 = Original 12 + Boundary 22 + Crossing 18) และพื้นที่สี Variance แสดงครบ; ต้องครบ 52 แถวต่อเนื่องเมื่อรับ Cross-highlight (T19) ด้วย; `Business_Type` Column ไม่ทำให้ grain เพี้ยน | Interaction | Power BI จริง |
 | T24 | Category ซ้ำในแถว Original (ตรวจว่า QA จับได้ก่อนเข้า Workshop dataset) | Blank/Data quality | Static |
 | T25 | Category axis label ไม่ทับซ้อนกันที่ทุกขนาดใน T14–T17, T34, T35 ร่วมกับข้อมูล T09/T10 | Responsive (Group B) | Power BI จริง |
 | T26 | Actual/Reference data label thinning ประเมินใหม่ทุกครั้งที่ resize ที่ทุกขนาดใน T14–T17, T34, T35 | Responsive (Group A) | Power BI จริง |
-| T27 | Template export/import แล้วนำไปใช้กับข้อมูลใหม่ — ยืนยันว่า field mapping ทำงาน แต่ crossing-case และ labelExpr array **ไม่** ทำงานอัตโนมัติตามข้อจำกัดหัวข้อ 2.5/4.1 | Template | Power BI จริง |
+| T27 | Template export/import แล้วนำไปใช้กับข้อมูลใหม่ — ยืนยันว่า field mapping ทำงาน แต่ crossing-case และ labelExpr array **ไม่** ทำงานอัตโนมัติตามข้อจำกัดหัวข้อ 2.5/4.1; **และ (amendment 2.1.1)** ผู้ใช้ Template ต้องสร้าง measure กันแถวหาย (`COUNTROWS` ของตารางตนเอง) ผูกเข้า Values และตรวจว่าจำนวนแถวใน `dataset` หลัง remap เท่ากับตารางต้นทางและพื้นที่สีครบ — Template ไม่นำ measure นี้ไปให้อัตโนมัติ | Template | Power BI จริง |
 | T28 | Tooltip เมื่อ `Reference = 0` แสดงข้อความแทนค่า % อย่างเหมาะสม ไม่แสดง `NaN`/`Infinity` | Divide-by-zero | Static |
 | T29 | Filter/Slicer ตัด Category **ฝั่งขวา** (`row[i+1]`) ของ segment ที่มี Boundary/Crossing ประกบ ผ่าน Relationship บน `Filter_Key`, ทดสอบทั้ง segment กรณี B (strict crossing) และกรณี C อย่างน้อยหนึ่งตัวอย่างแต่ละแบบ — Expected (แก้ M-17): แถว Fill ของ segment นั้น**ยังไม่ถูกตัด** (เพราะ `Filter_Key` ของทุกแถวยังตรงกับ `row[i]` ฝั่งซ้ายที่เหลืออยู่) เกิดพื้นที่สี "ค้าง" (dangling) เลยขอบ Category ที่ถูกกรองออกไปแล้ว — เอกสาร/หนังสือต้องระบุข้อจำกัดนี้ชัดเจน พร้อมแนะนำ fallback (ทาสีทั้งช่วง) ให้ผู้อ่านเลือกใช้ ถ้าไม่ต้องการผลนี้ ไม่ใช่ปล่อยให้ polygon ผิดรูปโดยไม่มีคำอธิบาย | Crossing (ข้อจำกัด) | Power BI จริง |
 | T30 | ยืนยันชื่อ/ตำแหน่ง UI จริงของ Deneb 2.0.0.0 (Project setup pane, Cross-filtering, Cross-highlighting 2 ระดับ, Supporting Fields, Context menu) ด้วยภาพจากเครื่องผู้ใช้ก่อนเขียนบทที่ 8 | UI verification | Power BI จริง |
