@@ -299,6 +299,7 @@ Group B: 480×270, 800×450, 1200×675, 1200×220 — ชื่อถูกต�
 การแก้ (spec rev 7): labelFlush false + labelLimit = max(40, width/3) + labelSeparation 4 — จำลองแล้วไม่ทับ 18/18 (baseline/T09/T10 × 6 viewport, qa/evidence/phase2-workshop-steps/axis-overlap-sim-output.txt) — **ต้องทดสอบซ้ำบน Power BI ด้วย rev 7**
 หลักฐาน: qa/evidence/phase2-powerbi/T09-rev6-<ขนาด>.png (6 ไฟล์)
 ผลสรุป: FAIL (rev 6) → รอทดสอบ rev 7
+รอบที่ 2 ด้วย spec rev 7 (24 ก.ย. 2026): 280×180 — แสดง 3 ชื่อ (ม.ค./พ.ค./ก.ย. ตัดด้วย "…") ไม่ทับซ้อน ✅ (ภาพ T09-rev7-280x180.png); 320×700 — แสดง 3 ชื่อ ไม่ทับซ้อน ✅ (ภาพ T09-rev7-320x700.png) — อีก 4 ขนาดยังไม่ได้ทดสอบซ้ำด้วย rev 7
 
 Test ID: T25 (สรุป Group B — Category axis label ไม่ทับซ้อน ทุกขนาด)
 Expected: T14–T17, T34, T35 ทั้งหมด Group B ต้อง PASS (ใช้ labelOverlap:"greedy" + width:"container")
