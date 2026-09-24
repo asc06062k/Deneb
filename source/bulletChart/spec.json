@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "description": "BulletChart reproduction for Deneb -- ports the visual look/behaviour of D:/DATA/Custom viz/bulletChart (source untouched) as a Vega spec. See README.md in this folder for field mapping and setup.",
+  "description": "BulletChart reproduction for Deneb -- ports the visual look/behaviour of ../../bulletChart (source untouched) as a Vega spec. See README.md in this folder for field mapping and setup.",
   "width": { "signal": "denebContainer.width" },
   "height": { "signal": "denebContainer.height" },
   "padding": 0,
@@ -20,7 +20,7 @@
     { "name": "rowSpacing", "value": 12 },
     { "name": "conditionalColor", "value": false },
     { "name": "varianceThreshold1", "value": -5 },
-    { "name": "varianceThreshold2", "value": 10 },
+    { "name": "varianceThreshold2", "value": 0 },
     { "name": "colorLow", "value": "#0CA30C" },
     { "name": "colorMid", "value": "#2A78D6" },
     { "name": "colorHigh", "value": "#D03B3B" },
@@ -40,13 +40,13 @@
     { "name": "axisFontColor", "value": "#898781" },
 
     { "name": "statusThreshold1", "value": -5 },
-    { "name": "statusThreshold2", "value": 10 },
+    { "name": "statusThreshold2", "value": 0 },
     { "name": "statusFontFamily", "value": "Segoe UI" },
-    { "name": "statusFontSize", "value": 11 },
+    { "name": "statusFontSize", "value": 8 },
     { "name": "statusBold", "value": true },
-    { "name": "statusLowText", "value": "" },
+    { "name": "statusLowText", "value": "UNDER SPENT" },
     { "name": "statusLowFontColor", "value": "#0CA30C" },
-    { "name": "statusLowBackColor", "value": "#FFFFFF" },
+    { "name": "statusLowBackColor", "value": "#E0E0E0" },
     { "name": "statusLowShowBackground", "value": false },
     { "name": "statusLowBlink", "value": false },
     { "name": "statusMidText", "value": "" },
@@ -54,10 +54,10 @@
     { "name": "statusMidBackColor", "value": "#FFFFFF" },
     { "name": "statusMidShowBackground", "value": false },
     { "name": "statusMidBlink", "value": false },
-    { "name": "statusHighText", "value": "OVER BURN" },
+    { "name": "statusHighText", "value": "OVER SPENT" },
     { "name": "statusHighFontColor", "value": "#D03B3B" },
-    { "name": "statusHighBackColor", "value": "#FFFFFF" },
-    { "name": "statusHighShowBackground", "value": false },
+    { "name": "statusHighBackColor", "value": "#E0E0E0" },
+    { "name": "statusHighShowBackground", "value": true },
     { "name": "statusHighBlink", "value": true },
 
     { "name": "vw", "update": "max(120, width)" },
@@ -113,13 +113,20 @@
       "name": "rows",
       "source": "dataset",
       "transform": [
+        { "type": "formula", "as": "labelInput", "expr": "datum.category" },
+        { "type": "formula", "as": "observedInput", "expr": "datum.actual" },
+        { "type": "formula", "as": "goalInput", "expr": "datum.target" },
+        { "type": "formula", "as": "extraInput1", "expr": "datum.tooltip1" },
+        { "type": "formula", "as": "extraInput2", "expr": "datum.tooltip2" },
+        { "type": "formula", "as": "extraInput3", "expr": "datum.tooltip3" },
+        { "type": "formula", "as": "extraInput4", "expr": "datum.tooltip4" },
         { "type": "window", "ops": ["row_number"], "as": ["rowIdx"] },
         { "type": "filter", "expr": "maxRows <= 0 || datum.rowIdx <= maxRows" },
         { "type": "formula", "as": "i", "expr": "datum.rowIdx - 1" },
-        { "type": "formula", "as": "categoryText", "expr": "isValid(datum.category) ? toString(datum.category) : '(Blank)'" },
-        { "type": "formula", "as": "actualV", "expr": "isNumber(datum.actual) && isFinite(datum.actual) ? datum.actual : 0" },
-        { "type": "formula", "as": "targetV", "expr": "isNumber(datum.target) && isFinite(datum.target) ? datum.target : 0" },
-        { "type": "formula", "as": "peak", "expr": "max(datum.actualV, datum.targetV)" }
+        { "type": "formula", "as": "labelText", "expr": "isValid(datum.labelInput) ? toString(datum.labelInput) : '(Blank)'" },
+        { "type": "formula", "as": "observedValue", "expr": "isNumber(datum.observedInput) && isFinite(datum.observedInput) ? datum.observedInput : 0" },
+        { "type": "formula", "as": "goalValue", "expr": "isNumber(datum.goalInput) && isFinite(datum.goalInput) ? datum.goalInput : 0" },
+        { "type": "formula", "as": "peak", "expr": "max(datum.observedValue, datum.goalValue)" }
       ]
     },
     {
@@ -133,11 +140,11 @@
       "name": "texts",
       "source": "rows",
       "transform": [
-        { "type": "formula", "as": "actualText", "expr": "replace(format((datum.actualV < 0 ? -1 : 1) * round(abs(datum.actualV / unitValue) * roundScale) / pow10d, ',.' + decimalsSafe + 'f'), '−', '-') + unitSuffix" },
-        { "type": "formula", "as": "targetText", "expr": "replace(format((datum.targetV < 0 ? -1 : 1) * round(abs(datum.targetV / unitValue) * roundScale) / pow10d, ',.' + decimalsSafe + 'f'), '−', '-') + unitSuffix" },
-        { "type": "formula", "as": "variance", "expr": "datum.actualV - datum.targetV" },
+        { "type": "formula", "as": "observedText", "expr": "replace(format((datum.observedValue < 0 ? -1 : 1) * round(abs(datum.observedValue / unitValue) * roundScale) / pow10d, ',.' + decimalsSafe + 'f'), '−', '-') + unitSuffix" },
+        { "type": "formula", "as": "goalText", "expr": "replace(format((datum.goalValue < 0 ? -1 : 1) * round(abs(datum.goalValue / unitValue) * roundScale) / pow10d, ',.' + decimalsSafe + 'f'), '−', '-') + unitSuffix" },
+        { "type": "formula", "as": "variance", "expr": "datum.observedValue - datum.goalValue" },
         { "type": "formula", "as": "varianceText", "expr": "(datum.variance >= 0 ? '+' : '') + replace(format((datum.variance < 0 ? -1 : 1) * round(abs(datum.variance / unitValue) * roundScale) / pow10d, ',.' + decimalsSafe + 'f'), '−', '-') + unitSuffix" },
-        { "type": "formula", "as": "variancePct", "expr": "datum.targetV !== 0 ? ((datum.actualV - datum.targetV) / datum.targetV) * 100 : null" },
+        { "type": "formula", "as": "variancePct", "expr": "datum.goalValue !== 0 ? ((datum.observedValue - datum.goalValue) / datum.goalValue) * 100 : null" },
         { "type": "formula", "as": "variancePctText", "expr": "datum.variancePct === null ? 'N/A' : ((datum.variancePct >= 0 ? '+' : '') + replace(format(datum.variancePct, '.1f'), '−', '-') + '%')" },
 
         { "type": "formula", "as": "colorBand", "expr": "(!conditionalColor || datum.variancePct === null) ? null : (datum.variancePct < varianceThreshold1 ? 'low' : (datum.variancePct < varianceThreshold2 ? 'mid' : 'high'))" },
@@ -151,8 +158,8 @@
         { "type": "formula", "as": "statusShowBg", "expr": "datum.statusVisible && (datum.statusBand === 'low' ? statusLowShowBackground : (datum.statusBand === 'mid' ? statusMidShowBackground : statusHighShowBackground))" },
         { "type": "formula", "as": "statusBlink", "expr": "datum.statusVisible && (datum.statusBand === 'low' ? statusLowBlink : (datum.statusBand === 'mid' ? statusMidBlink : statusHighBlink))" },
 
-        { "type": "formula", "as": "catW", "expr": "length(datum.categoryText) * categoryFontSize * (categoryBold ? 0.62 : 0.55)" },
-        { "type": "formula", "as": "valueW", "expr": "length(datum.actualText) * valueFontSize * (valueBold ? 0.62 : 0.55)" },
+        { "type": "formula", "as": "catW", "expr": "length(datum.labelText) * categoryFontSize * (categoryBold ? 0.62 : 0.55)" },
+        { "type": "formula", "as": "valueW", "expr": "length(datum.observedText) * valueFontSize * (valueBold ? 0.62 : 0.55)" },
         { "type": "formula", "as": "statusW", "expr": "datum.statusVisible ? length(datum.statusText) * statusFontSize * (statusBold ? 0.62 : 0.55) : 0" },
         { "type": "formula", "as": "blinkFlag", "expr": "datum.statusBlink ? 1 : 0" }
       ]
@@ -170,11 +177,11 @@
       "transform": [
         { "type": "formula", "as": "cy", "expr": "topMargin + datum.i * rowHeight + rowHeight / 2" },
         { "type": "formula", "as": "barY", "expr": "datum.cy - thickness / 2" },
-        { "type": "formula", "as": "actualW", "expr": "max(0, scale('xScale', datum.actualV) - chartX0)" },
-        { "type": "formula", "as": "targetX", "expr": "scale('xScale', datum.targetV)" },
+        { "type": "formula", "as": "observedW", "expr": "max(0, scale('xScale', datum.observedValue) - chartX0)" },
+        { "type": "formula", "as": "goalX", "expr": "scale('xScale', datum.goalValue)" },
         { "type": "formula", "as": "dim", "expr": "datum.__selected__ === 'off' ? 0.3 : 1" },
         { "type": "formula", "as": "pillW", "expr": "datum.statusW + 10" },
-        { "type": "formula", "as": "tooltip", "expr": "merge({'Category': datum.categoryText, 'Actual': datum.actualText, 'Target': datum.targetText, 'Variance': datum.varianceText + ' (' + datum.variancePctText + ')'}, datum.statusVisible ? {'Status': datum.statusText} : {}, isValid(datum.tooltip1) ? {'Extra 1': datum.tooltip1} : {}, isValid(datum.tooltip2) ? {'Extra 2': datum.tooltip2} : {}, isValid(datum.tooltip3) ? {'Extra 3': datum.tooltip3} : {}, isValid(datum.tooltip4) ? {'Extra 4': datum.tooltip4} : {})" }
+        { "type": "formula", "as": "tooltip", "expr": "merge({'Category': datum.labelText, 'Actual': datum.observedText, 'Target': datum.goalText, 'Variance': datum.varianceText + ' (' + datum.variancePctText + ')'}, datum.statusVisible ? {'Status': datum.statusText} : {}, isValid(datum.extraInput1) ? {'Extra 1': datum.extraInput1} : {}, isValid(datum.extraInput2) ? {'Extra 2': datum.extraInput2} : {}, isValid(datum.extraInput3) ? {'Extra 3': datum.extraInput3} : {}, isValid(datum.extraInput4) ? {'Extra 4': datum.extraInput4} : {})" }
       ]
     }
   ],
@@ -280,7 +287,7 @@
         "update": {
           "x": { "signal": "chartX0" },
           "y": { "field": "barY" },
-          "width": { "signal": "datum.actualW * barProg" },
+          "width": { "signal": "datum.observedW * barProg" },
           "height": { "signal": "thickness" },
           "cornerRadius": { "value": 3 },
           "fill": { "field": "barColor" },
@@ -294,7 +301,7 @@
       "from": { "data": "bars" },
       "encode": {
         "update": {
-          "x": { "signal": "chartX0 + (datum.targetX - chartX0) * tickProg - targetThickness / 2" },
+          "x": { "signal": "chartX0 + (datum.goalX - chartX0) * tickProg - targetThickness / 2" },
           "y": { "signal": "datum.barY - 4" },
           "width": { "signal": "targetThickness" },
           "height": { "signal": "thickness + 8" },
@@ -312,7 +319,7 @@
           "x": { "signal": "chartX0 - 8" },
           "y": { "signal": "datum.cy + categoryFontSize * 0.35" },
           "align": { "value": "right" },
-          "text": { "field": "categoryText" },
+          "text": { "field": "labelText" },
           "limit": { "signal": "max(10, chartX0 - 8)" },
           "ellipsis": { "value": "…" },
           "font": { "signal": "fontFamily" },
@@ -329,10 +336,10 @@
       "from": { "data": "bars" },
       "encode": {
         "update": {
-          "x": { "signal": "chartX0 + datum.actualW + 6" },
+          "x": { "signal": "chartX0 + datum.observedW + 6" },
           "y": { "signal": "datum.cy + valueFontSize * 0.35" },
           "align": { "value": "left" },
-          "text": { "field": "actualText" },
+          "text": { "field": "observedText" },
           "font": { "signal": "fontFamily" },
           "fontSize": { "signal": "valueFontSize" },
           "fontWeight": { "signal": "valueBold ? 'bold' : 'normal'" },

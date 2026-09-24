@@ -155,20 +155,33 @@
   "data": [
     { "name": "dataset" },
     {
-      "name": "totals",
+      "name": "inputs",
       "source": "dataset",
       "transform": [
+        { "type": "formula", "as": "planInput", "expr": "datum.plan" },
+        { "type": "formula", "as": "budgetInput", "expr": "datum.approved" },
+        { "type": "formula", "as": "spendInput", "expr": "datum.actual" },
+        { "type": "formula", "as": "extraInput1", "expr": "datum.tooltip1" },
+        { "type": "formula", "as": "extraInput2", "expr": "datum.tooltip2" },
+        { "type": "formula", "as": "extraInput3", "expr": "datum.tooltip3" },
+        { "type": "formula", "as": "extraInput4", "expr": "datum.tooltip4" }
+      ]
+    },
+    {
+      "name": "totals",
+      "source": "inputs",
+      "transform": [
         { "type": "aggregate",
-          "fields": ["plan", "approved", "actual", "plan", "approved", "actual"],
+          "fields": ["planInput", "budgetInput", "spendInput", "planInput", "budgetInput", "spendInput"],
           "ops": ["sum", "sum", "sum", "valid", "valid", "valid"],
           "as": ["planTotal", "approvedTotal", "actualTotal", "planValidCount", "approvedValidCount", "actualValidCount"] }
       ]
     },
     {
       "name": "stagesRaw",
-      "source": "dataset",
+      "source": "totals",
       "transform": [
-        { "type": "formula", "as": "__stageKeys", "expr": "['plan','approved','actual']" },
+        { "type": "formula", "as": "__stageKeys", "expr": "['stageP','stageB','stageS']" },
         { "type": "flatten", "fields": ["__stageKeys"], "as": ["key"] }
       ]
     },
@@ -176,30 +189,30 @@
       "name": "stages",
       "source": "stagesRaw",
       "transform": [
-        { "type": "filter", "expr": "datum.key !== 'plan' || hasPlan" },
+        { "type": "filter", "expr": "datum.key !== 'stageP' || hasPlan" },
         { "type": "window", "ops": ["row_number"], "as": ["idx1"] },
         { "type": "formula", "as": "i", "expr": "datum.idx1 - 1" },
         { "type": "formula", "as": "isFirst", "expr": "datum.i === 0" },
         { "type": "formula", "as": "isLast", "expr": "datum.i === layerCount - 1" },
-        { "type": "formula", "as": "ghost", "expr": "(datum.key === 'plan' && planZero) || (datum.key === 'approved' && approvedZero)" },
+        { "type": "formula", "as": "ghost", "expr": "(datum.key === 'stageP' && planZero) || (datum.key === 'stageB' && approvedZero)" },
 
-        { "type": "formula", "as": "value", "expr": "datum.key === 'plan' ? planTotal : (datum.key === 'approved' ? approvedTotal : actualTotal)" },
-        { "type": "formula", "as": "ratio", "expr": "datum.key === 'plan' ? (planZero ? 0 : 100) : (datum.key === 'approved' ? (approvedZero ? 0 : approvedRatio) : actualRatio)" },
-        { "type": "formula", "as": "fieldName", "expr": "datum.key === 'plan' ? planFieldLabel : (datum.key === 'approved' ? approvedFieldLabel : actualFieldLabel)" },
-        { "type": "formula", "as": "centerLabel", "expr": "datum.key === 'plan' ? planCenterLabel : (datum.key === 'approved' ? approvedCenterLabel : actualCenterLabel)" },
-        { "type": "formula", "as": "unit", "expr": "datum.key === 'plan' ? planUnit : (datum.key === 'approved' ? approvedUnit : actualUnit)" },
-        { "type": "formula", "as": "decimals", "expr": "datum.key === 'plan' ? planDecimals : (datum.key === 'approved' ? approvedDecimals : actualDecimals)" },
-        { "type": "formula", "as": "percentDecimals", "expr": "datum.key === 'plan' ? planPercentDecimals : (datum.key === 'approved' ? approvedPercentDecimals : actualPercentDecimals)" },
-        { "type": "formula", "as": "percentPrefix", "expr": "datum.key === 'plan' ? planPercentPrefix : (datum.key === 'approved' ? approvedPercentPrefix : actualPercentPrefix)" },
-        { "type": "formula", "as": "percentSuffix", "expr": "datum.key === 'plan' ? planPercentSuffix : (datum.key === 'approved' ? approvedPercentSuffix : actualPercentSuffix)" },
-        { "type": "formula", "as": "labelFontFamily", "expr": "datum.key === 'plan' ? planFontFamily : (datum.key === 'approved' ? approvedFontFamily : actualFontFamily)" },
-        { "type": "formula", "as": "labelFontSize", "expr": "datum.key === 'plan' ? planFontSize : (datum.key === 'approved' ? approvedFontSize : actualFontSize)" },
-        { "type": "formula", "as": "labelFontColor", "expr": "datum.ghost ? (datum.key === 'plan' ? planColor : approvedColor) : datum.key === 'plan' ? planFontColor : (datum.key === 'approved' ? approvedFontColor : actualFontColor)" },
-        { "type": "formula", "as": "labelBold", "expr": "datum.key === 'plan' ? planBold : (datum.key === 'approved' ? approvedBold : actualBold)" },
-        { "type": "formula", "as": "labelBackground", "expr": "datum.key === 'plan' ? planBackground : (datum.key === 'approved' ? approvedBackground : actualBackground)" },
-        { "type": "formula", "as": "labelShowBackground", "expr": "datum.key === 'plan' ? planShowBackground : (datum.key === 'approved' ? approvedShowBackground : actualShowBackground)" },
+        { "type": "formula", "as": "value", "expr": "datum.key === 'stageP' ? planTotal : (datum.key === 'stageB' ? approvedTotal : actualTotal)" },
+        { "type": "formula", "as": "ratio", "expr": "datum.key === 'stageP' ? (planZero ? 0 : 100) : (datum.key === 'stageB' ? (approvedZero ? 0 : approvedRatio) : actualRatio)" },
+        { "type": "formula", "as": "fieldName", "expr": "datum.key === 'stageP' ? planFieldLabel : (datum.key === 'stageB' ? approvedFieldLabel : actualFieldLabel)" },
+        { "type": "formula", "as": "centerLabel", "expr": "datum.key === 'stageP' ? planCenterLabel : (datum.key === 'stageB' ? approvedCenterLabel : actualCenterLabel)" },
+        { "type": "formula", "as": "unit", "expr": "datum.key === 'stageP' ? planUnit : (datum.key === 'stageB' ? approvedUnit : actualUnit)" },
+        { "type": "formula", "as": "decimals", "expr": "datum.key === 'stageP' ? planDecimals : (datum.key === 'stageB' ? approvedDecimals : actualDecimals)" },
+        { "type": "formula", "as": "percentDecimals", "expr": "datum.key === 'stageP' ? planPercentDecimals : (datum.key === 'stageB' ? approvedPercentDecimals : actualPercentDecimals)" },
+        { "type": "formula", "as": "percentPrefix", "expr": "datum.key === 'stageP' ? planPercentPrefix : (datum.key === 'stageB' ? approvedPercentPrefix : actualPercentPrefix)" },
+        { "type": "formula", "as": "percentSuffix", "expr": "datum.key === 'stageP' ? planPercentSuffix : (datum.key === 'stageB' ? approvedPercentSuffix : actualPercentSuffix)" },
+        { "type": "formula", "as": "labelFontFamily", "expr": "datum.key === 'stageP' ? planFontFamily : (datum.key === 'stageB' ? approvedFontFamily : actualFontFamily)" },
+        { "type": "formula", "as": "labelFontSize", "expr": "datum.key === 'stageP' ? planFontSize : (datum.key === 'stageB' ? approvedFontSize : actualFontSize)" },
+        { "type": "formula", "as": "labelFontColor", "expr": "datum.ghost ? (datum.key === 'stageP' ? planColor : approvedColor) : datum.key === 'stageP' ? planFontColor : (datum.key === 'stageB' ? approvedFontColor : actualFontColor)" },
+        { "type": "formula", "as": "labelBold", "expr": "datum.key === 'stageP' ? planBold : (datum.key === 'stageB' ? approvedBold : actualBold)" },
+        { "type": "formula", "as": "labelBackground", "expr": "datum.key === 'stageP' ? planBackground : (datum.key === 'stageB' ? approvedBackground : actualBackground)" },
+        { "type": "formula", "as": "labelShowBackground", "expr": "datum.key === 'stageP' ? planShowBackground : (datum.key === 'stageB' ? approvedShowBackground : actualShowBackground)" },
 
-        { "type": "formula", "as": "color", "expr": "datum.key === 'plan' ? planColor : (datum.key === 'approved' ? ((hasPlan && !planZero && approvedConditional) ? (approvedRatio < min(approvedThreshold1, approvedThreshold2) ? approvedColorLow : (approvedRatio < max(approvedThreshold1, approvedThreshold2) ? approvedColorMid : approvedColorHigh)) : approvedColor) : (actualConditional ? (actualRatio < min(actualThreshold1, actualThreshold2) ? actualColorLow : (actualRatio < max(actualThreshold1, actualThreshold2) ? actualColorMid : actualColorHigh)) : actualColor))" },
+        { "type": "formula", "as": "color", "expr": "datum.key === 'stageP' ? planColor : (datum.key === 'stageB' ? ((hasPlan && !planZero && approvedConditional) ? (approvedRatio < min(approvedThreshold1, approvedThreshold2) ? approvedColorLow : (approvedRatio < max(approvedThreshold1, approvedThreshold2) ? approvedColorMid : approvedColorHigh)) : approvedColor) : (actualConditional ? (actualRatio < min(actualThreshold1, actualThreshold2) ? actualColorLow : (actualRatio < max(actualThreshold1, actualThreshold2) ? actualColorMid : actualColorHigh)) : actualColor))" },
 
         { "type": "formula", "as": "topHalf", "expr": "datum.i === 0 ? topHalf0 : (datum.i === 1 ? topHalf1 : topHalf2)" },
         { "type": "formula", "as": "nextTopHalf", "expr": "(datum.i + 1) === 0 ? topHalf0 : ((datum.i + 1) === 1 ? topHalf1 : topHalf2)" },
@@ -239,7 +252,7 @@
       "name": "stagesFinal",
       "source": "stages",
       "transform": [
-        { "type": "formula", "as": "tooltip", "expr": "merge(\n  hasPlan ? {'Plan': data('stages')[0].valueText} : {},\n  {'Approved': (hasPlan ? data('stages')[1] : data('stages')[0]).valueText},\n  hasPlan ? {'vs Plan': planZero ? 'N/A' : data('stages')[1].ratioText} : {},\n  {'Actual': (hasPlan ? data('stages')[2] : data('stages')[1]).valueText},\n  {'vs Approved': (hasPlan ? data('stages')[2] : data('stages')[1]).ratioText},\n  {'Remaining': format(remainingRatio, '.' + actualPercentDecimals + 'f') + actualPercentSuffix},\n  isValid(data('dataset')[0].tooltip1) ? {'Extra 1': data('dataset')[0].tooltip1} : {},\n  isValid(data('dataset')[0].tooltip2) ? {'Extra 2': data('dataset')[0].tooltip2} : {},\n  isValid(data('dataset')[0].tooltip3) ? {'Extra 3': data('dataset')[0].tooltip3} : {},\n  isValid(data('dataset')[0].tooltip4) ? {'Extra 4': data('dataset')[0].tooltip4} : {},\n  datum.floored ? {'Note': 'Width capped', '\u00a0': 'for readability'} : {}\n)" }
+        { "type": "formula", "as": "tooltip", "expr": "merge(\n  hasPlan ? {'Plan': data('stages')[0].valueText} : {},\n  {'Approved': (hasPlan ? data('stages')[1] : data('stages')[0]).valueText},\n  hasPlan ? {'vs Plan': planZero ? 'N/A' : data('stages')[1].ratioText} : {},\n  {'Actual': (hasPlan ? data('stages')[2] : data('stages')[1]).valueText},\n  {'vs Approved': (hasPlan ? data('stages')[2] : data('stages')[1]).ratioText},\n  {'Remaining': format(remainingRatio, '.' + actualPercentDecimals + 'f') + actualPercentSuffix},\n  isValid(data('inputs')[0].extraInput1) ? {'Extra 1': data('inputs')[0].extraInput1} : {},\n  isValid(data('inputs')[0].extraInput2) ? {'Extra 2': data('inputs')[0].extraInput2} : {},\n  isValid(data('inputs')[0].extraInput3) ? {'Extra 3': data('inputs')[0].extraInput3} : {},\n  isValid(data('inputs')[0].extraInput4) ? {'Extra 4': data('inputs')[0].extraInput4} : {},\n  datum.floored ? {'Note': 'Width capped', '\u00a0': 'for readability'} : {}\n)" }
       ]
     }
   ],

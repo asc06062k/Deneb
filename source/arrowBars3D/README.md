@@ -44,7 +44,7 @@ to touch the transform/mark logic below them):
 | `legendShow`, `legendPos` (`left`/`center`/`right`), `legendFontSize` | legend | true / center / 12 |
 | `animation` | fade+slide entrance on load | true |
 | `sortBy` (`none`/`ratio-asc`/`ratio-desc`) | bar order | none |
-| `cfEnabled`, `cfMode` (`gradient`/`rules`), `cfBasedOn` (`ratio`/`target`/`actual`) | conditional formatting | off |
+| `cfEnabled`, `cfMode` (`gradient`/`rules`), `cfBasedOn` (`ratio`/`goal`/`value`) | conditional formatting | off |
 | `cfMinColor`/`cfMidColor`/`cfMaxColor` | gradient mode colors | red/yellow/green |
 | `cfRedColor`/`cfYellowColor`/`cfGreenColor`, `cfRedUpTo`/`cfYellowUpTo` | rules mode | same, 80/100 |
 | `categoryColorScheme` | Vega color scheme name for per-category color | tableau10 |
