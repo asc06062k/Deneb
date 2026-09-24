@@ -58,7 +58,7 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 - ผลรีวิวทุกรอบ: `qa/PHASE1_CODEX_VERDICT.md` (รอบ 1) ถึง `..._R13.md`
 - แก้ `PROJECT_PLAN.md` เพิ่มเติมหลายจุดตามผลรีวิว (ย้าย UI screen verification และ Business_Type/Responsive prototype proof ไปเป็น Phase 2 gate อย่างเป็นทางการ, เพิ่ม Phase 2 ข้อ 7 บังคับพิสูจน์ Area interaction)
 
-### Phase 2 — กำลังดำเนินการ (ส่วน static + Workshop steps `PASS`, ส่วน Power BI จริงรอผู้ใช้)
+### Phase 2 — 24 กันยายน 2026 — PASS (Codex รอบ 19)
 - 23 ก.ย. 2026: Dataset, Power Query M, final spec, static tests — Codex รีวิว 3 รอบ ค้างที่ `REVISE` ด้วย M-11 (เส้น `monotone` กับพื้นที่สีเส้นตรงไม่ sync) ซึ่งผู้ใช้ตัดสินใจเก็บไว้เป็น Known limitation ดู `qa/PHASE2_STATIC_TEST_LOG.md`
 - 24 ก.ย. 2026: **Phase 2 ข้อ 4 — แตก Prototype เป็น Workshop steps** 10 ไฟล์ใน `specs/steps/` (บทที่ 5–8) สร้างอัตโนมัติจาก final spec ด้วย `qa/scripts/build-workshop-steps.mjs` ทดสอบด้วย `qa/scripts/run-workshop-step-tests.mjs` (compile+render headless ด้วย vega-lite 6.4.3 จริง) ดู `review/PHASE2_WORKSHOP_STEPS.md`
   - พบและแก้บั๊ก **final spec ไม่มีแกน X/Y เลย** (`"axis": null` บน layer พื้นที่สีที่อยู่ก่อน `line_actual`) — แก้ทั้ง final และ static-test spec พร้อม regression test
@@ -66,3 +66,15 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 - **ยังเหลือก่อน Phase 2 `PASS` ทั้งหมด**: Phase 2 ข้อ 5–7 ต้องให้ผู้ใช้ทดสอบบน Power BI Desktop 2.157.1354.0 + Deneb 2.0.0.0 จริงตาม `qa/PHASE2_EVIDENCE_RECORD_TEMPLATE.md` (T14–T23, T25–T30, T33–T36) และ compile M code จริง
 - 24 ก.ย. 2026 **คำตัดสินผู้ใช้**: (1) แกน Y ทำตามต้นแบบ ±18% → เพิ่ม `params` + `scale.domain` ใน final spec และ Step ใหม่ CH05-S05 (รวม 11 Step, 338/338 ผ่าน) (2) บทที่ 8 สอนเฉพาะการตั้งค่า Cross-filter ไม่ encode `__selected__` (3) คงเส้นโค้ง M-11 ไว้ — บันทึกใน `PROJECT_PLAN.md` แล้ว
   - Codex รอบ 6 `PASS` หลังเพิ่มแกน Y ±18% (`qa/PHASE2_CODEX_VERDICT_R6.md`) และเพิ่ม T36 (แกน Y บน Power BI จริง) ใน Evidence template
+
+- 24 ก.ย. 2026 **ทดสอบบน Power BI Desktop 2.157.1354.0 + Deneb 2.0.0.0 จริง** (`deneb demo.pbix`) — หลักฐานใน `qa/evidence/phase2-powerbi/` และ `qa/PHASE2_EVIDENCE_RECORD_TEMPLATE.md`; สิ่งที่ค้นพบและแก้ระหว่างทาง:
+  - ต้องมี measure `DualLine Row Count = COUNTROWS ( DualLine_PlotData )` มิฉะนั้น Power BI ตัดแถว Boundary/Crossing (Design Plan 2.1.1)
+  - Deneb 2.0 ส่ง `__highlightStatus = "on"` ทุกแถวขณะ highlight (ต่างจากเอกสาร) → เงื่อนไขจางใหม่ (Design Plan 2.2.3); รูปแบบจางตามคำขอผู้ใช้: เส้นไม่จาง จุด/connector/label เดือนอื่น 0.5
+  - คลิกพื้นที่สีเลือก "เดือนต้นช่วง" — ผู้ใช้ยอมรับและให้เขียนในบทที่ 8 (Design Plan 2.2.2)
+  - แกน X อ่านชื่อจาก Category แบบ dynamic (T09/T10) + แก้ label ทับที่ขนาดแคบ (spec rev 7)
+  - Template ที่ Deneb export มีบั๊ก escaping → template ส่งมอบที่แก้แล้ว `templates/dual-line-variance.deneb-template.json`
+- Codex รอบ 4–19 (REVISE หลายรอบ แก้ M-12 ถึง M-28 ทั้งหมด) → **รอบ 19 PASS**: gate ข้อ 5, 6, 7, 8 ผ่านครบ; M-11 (เส้นโค้ง) ยังเป็น Known limitation ตามคำตัดสินผู้ใช้
+- Final spec: `specs/dual-line-variance-final.vl.json` (rev 7), Workshop steps 11 ไฟล์ใน `specs/steps/`, tests 464/464 + axis overlap sim 18/18
+
+### Phase 3 — ยังไม่เริ่ม
+เขียนทีละบท (บทที่ 1–10) ตาม `PROJECT_PLAN.md` หัวข้อ 7
