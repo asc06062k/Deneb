@@ -18,7 +18,7 @@ Claude/Codex ไม่มีสิทธิ์เข้าถึง Power BI Des
 - ชื่อใน Values ต้องเป็นชื่อ field ตรงตัว (เช่น `Actual` ไม่ใช่ `Sum of Actual`) — ถ้า Power BI เติม "Sum of" ให้ rename ในช่อง Values
 - หลังผูกแล้ว Data pane ของ Deneb ต้องแสดง **1-52 of 52**
 
-**สภาพแวดล้อมที่ใช้ทดสอบจริง (ยืนยัน 24 ก.ย. 2026 จากหน้าต่าง About ที่ผู้ใช้แคปมา — ภาพในแชท ไม่ได้เก็บไฟล์เพราะมี User ID/Session ID และชื่อบัญชี)**: Power BI Desktop **2.157.1354.0 64-bit (August 2026)** และ Deneb **2.0.0.0** (Publisher: Daniel Marsh-Patrick, Source: AppSource) — **ตรงกับเวอร์ชันที่ Lock ไว้**; ไฟล์ PBIX: `deneb demo.pbix` (ไม่มี hash); ผู้ทดสอบ: ผู้ใช้ (เจ้าของโครงการ) บนเครื่องจริง; viewport ของ Visual ระหว่างทดสอบ interaction ≈ 998×767 px (ขณะแคปหน้า About) ยกเว้น Test ที่ระบุขนาดเอง — ใช้ค่าเหล่านี้กับทุก Test ID ที่บันทึกวันที่ 24 ก.ย. 2026 ซึ่งเขียนว่า "ยังขาด Evidence record fields"
+**สภาพแวดล้อมที่ใช้ทดสอบจริง (ยืนยัน 24 ก.ย. 2026 จากหน้าต่าง About ที่ผู้ใช้แคปมา — ภาพในแชท ไม่ได้เก็บไฟล์เพราะมี User ID/Session ID และชื่อบัญชี)**: Power BI Desktop **2.157.1354.0 64-bit (August 2026)** และ Deneb **2.0.0.0** (Publisher: Daniel Marsh-Patrick, Source: AppSource) — **ตรงกับเวอร์ชันที่ Lock ไว้**; ไฟล์ PBIX: `deneb demo.pbix` (ไม่มี hash); ผู้ทดสอบ: ผู้ใช้ (เจ้าของโครงการ) บนเครื่องจริง; viewport ของ Visual ระหว่างทดสอบ interaction ≈ 998×767 px (ขณะแคปหน้า About) ยกเว้น Test ที่ระบุขนาดเอง — ใช้ค่าเหล่านี้กับทุก Test ID ที่บันทึกวันที่ 24 ก.ย. 2026 (เติมลงในผลสรุปแต่ละรายการแล้วตาม Codex R15 M-28)
 
 แบบฟอร์มด้านล่างมีทุกช่องพร้อม Test ID และ Expected ที่ Lock ไว้แล้ว — กรอกเฉพาะส่วนที่เหลือ (Actual, หลักฐาน, ผู้ทดสอบ, วันที่, ผลสรุป)
 
@@ -57,7 +57,7 @@ Actual (ข) Case C ครั้งที่ 2 (24 ก.ย. 2026, ภาพ T18-
 หลักฐาน (ภาพ/วิดีโอ): ภาพ 2 ภาพที่ผู้ใช้ส่งในแชท 24 ก.ย. 2026 (ยังไม่ได้บันทึกเป็นไฟล์ใน qa/evidence — ต้องขอไฟล์ภาพ)
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
-ผลสรุป: (ก) PASS (รอไฟล์ภาพ) / (ข) PASS WITH DOCUMENTED LIMITATION — 3 กรณีที่ทดสอบ (crossing 2 + Case C 1): เลือก Category เดียว = ฝั่งซ้ายของ segment ตาม Design; ผู้ใช้ตัดสิน 24 ก.ย. 2026 ให้ยอมรับพฤติกรรมนี้และเขียนในบทที่ 8 (Design Plan หัวข้อ 2.2.2); ยังขาด Evidence record fields (version, PBIX/hash, viewport) — ข้อสังเกตสำหรับบทที่ 8: Clear selections จากเมนูคลิกขวาของ Dual-Line ไม่ล้าง selection ที่ผู้ใช้ทำใน Visual อื่น — (ก) ยังขาดไฟล์ภาพของการคลิกจุด ต.ค.
+ผลสรุป: (ก) PASS (รอไฟล์ภาพ) / (ข) PASS WITH DOCUMENTED LIMITATION — 3 กรณีที่ทดสอบ (crossing 2 + Case C 1): เลือก Category เดียว = ฝั่งซ้ายของ segment ตาม Design; ผู้ใช้ตัดสิน 24 ก.ย. 2026 ให้ยอมรับพฤติกรรมนี้และเขียนในบทที่ 8 (Design Plan หัวข้อ 2.2.2); สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / PBIX deneb demo.pbix (ดูหัวข้อสภาพแวดล้อมด้านบน), viewport ≈ 998×767 — ข้อสังเกตสำหรับบทที่ 8: Clear selections จากเมนูคลิกขวาของ Dual-Line ไม่ล้าง selection ที่ผู้ใช้ทำใน Visual อื่น — (ก) ยังขาดไฟล์ภาพของการคลิกจุด ต.ค.
 ```
 
 **ถ้า (ข) กรองผิด**: ต้องเปลี่ยน interaction architecture (เช่น Advanced cross-filtering mode ของ Deneb) ก่อน Phase 2 จะ `PASS` ตาม `PROJECT_PLAN.md` Phase 2 ข้อ 7 — แจ้งผลกลับก่อนดำเนินการต่อ ไม่ต้องแก้เอง
@@ -89,10 +89,10 @@ Actual ส่วนที่ 2 — ข้อมูลที่ Deneb ได้�
 วันที่: 24 ก.ย. 2026
 Actual ส่วนที่ 2 — spec rev 4 บน Deneb จริง (24 ก.ย. 2026, ภาพ T19-07 + ภาพขยาย T19-08): ขณะ highlight ก.ค. จาก Column chart, preview ใน Deneb editor แสดงเส้น Actual/Reference จางทั้งเส้น, จุด Actual/Reference ของเดือนอื่นจาง, จุด ก.ค. ทั้ง 510 (Actual) และ 520 (Reference) แสดงเข้ม — ตรงกับ HL-observed; dataset 1-52 of 52; พื้นที่สี/connector/label ไม่จางตาม Design — ข้อจำกัด: เห็นผลใน preview ของ Deneb editor ขณะมี highlight (ไม่ใช่ภาพหน้ารายงาน), ภาพไม่แสดงคอลัมน์ Reference__highlight* แต่จุด Reference ของ ก.ค. เข้มและเดือนอื่นจางสอดคล้องกับ rev 4, ยืนยันไม่ได้จากภาพว่าเป็น spec rev 4 ล่าสุด (หลัง M-25) — ผู้ใช้ได้รับแจ้งให้ copy ใหม่ก่อนทดสอบ
 หน้ารายงาน (24 ก.ย. 2026, ภาพในแชท (ไม่มีไฟล์บนเครื่อง)): Column chart เลือก ก.ค. (Highlight) → Dual-Line บนหน้ารายงาน เส้นจาง จุดเดือนอื่นจาง จุด ก.ค. เข้ม — ตรงกับ preview
-ผลสรุป: PASS WITH LIMITATION สำหรับ rev 4 — ชื่อ field PASS; rev 3 FAIL (สาเหตุยืนยันแล้ว T19-06); rev 4 แสดงผลจางถูกต้องบน Deneb จริงทั้ง preview และหน้ารายงาน — ยังขาด Evidence record fields (Power BI/Deneb version, PBIX)
+ผลสรุป: PASS WITH LIMITATION สำหรับ rev 4 — ชื่อ field PASS; rev 3 FAIL (สาเหตุยืนยันแล้ว T19-06); rev 4 แสดงผลจางถูกต้องบน Deneb จริงทั้ง preview และหน้ารายงาน — สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / PBIX deneb demo.pbix (ดูหัวข้อสภาพแวดล้อมด้านบน)
 หลังจากนั้นผู้ใช้ขอเปลี่ยนรูปแบบการจางเป็น **spec rev 5** (เส้นไม่จาง; จุด/connector/label เดือนอื่นจาง 0.5 — Design Plan 2.2.3) ผ่าน headless tests (HL-*) แล้ว
 Actual rev 5 บน Deneb จริง (24 ก.ย. 2026, หน้ารายงาน — ภาพที่ผู้ใช้วางในแชท ไม่มีไฟล์บนเครื่อง): เลือกหลายแท่งพร้อมกัน (พ.ค., ก.ค., ส.ค.) ใน Column chart โหมด Highlight → เส้น Actual/Reference และพื้นที่สีไม่จาง; จุด, connector และป้ายตัวเลขของ พ.ค./ก.ค./ส.ค. เข้ม ส่วนเดือนอื่นจาง — ตรงตามคำขอผู้ใช้และ HL-observed; ยังพิสูจน์ด้วยว่ารองรับ multi-select ของ Visual ต้นทาง
-ผลสรุป rev 5: PASS WITH LIMITATION — พฤติกรรมถูกต้องบน Deneb จริง; ยังขาดไฟล์ภาพหลักฐานและ Evidence record fields (Power BI/Deneb version, PBIX)
+ผลสรุป rev 5: PASS WITH LIMITATION — พฤติกรรมถูกต้องบน Deneb จริง; สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / PBIX deneb demo.pbix (ดูหัวข้อสภาพแวดล้อมด้านบน); ยังขาดไฟล์ภาพหลักฐาน (ภาพวางในแชท)
 ```
 
 ---
@@ -107,7 +107,7 @@ Expected: Dual-Line Variance Chart ถูกกรองแบบ Filter ปก�
 Actual (24 ก.ย. 2026, ภาพ T20-01): Clustered column chart (ใหม่) ตั้ง Filter แล้วเลือกแท่ง ก.ค. → Dual-Line เหลือจุด/label ของ ก.ค. เดียว (ไม่มีเส้นเพราะเหลือแถว Original แถวเดียว) + พื้นที่สีของ segment ก.ค.–ส.ค. ครบทั้งสามเหลี่ยมน้ำตาลและเขียวจนถึงตำแหน่ง ส.ค. (Filter_Key = ก.ค.) แต่ไม่มีจุด ส.ค.; พื้นที่ของ segment มิ.ย.–ก.ค. หายไป (Filter_Key = มิ.ย.); แกน X แสดง ก.ค.–ส.ค.; แกน Y คำนวณใหม่ ~496–534 สอดคล้องกับสูตร ±18% ของ extent 500–530 (คาด [494.6, 535.4] — ยังไม่เห็นค่า signal)
   ข้อสังเกตด้าน UX: พื้นที่สีที่ยื่นไปถึงตำแหน่งเดือนที่ถูกกรองออก (ส.ค.) โดยไม่มีจุด ส.ค. เป็นผลตาม Design (T29) ที่ผู้อ่านอาจงง — ต้องอธิบายในบทที่ 9
 หลักฐาน: qa/evidence/phase2-powerbi/T20-01-filter-mode-july.png
-ผลสรุป (เบื้องต้น): PASS — กรองตาม Filter_Key ตาม Design (ยังขาด Evidence record fields: version, PBIX)
+ผลสรุป (เบื้องต้น): PASS — กรองตาม Filter_Key ตาม Design (สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / PBIX deneb demo.pbix (ดูหัวข้อสภาพแวดล้อมด้านบน))
 ผู้ทดสอบ:
 วันที่:
 ผลสรุป: PASS / FAIL / NOT TESTED
@@ -126,7 +126,7 @@ Actual (24 ก.ย. 2026, spec rev 5, ภาพ T21-01): Clustered column chart 
 หลักฐาน: qa/evidence/phase2-powerbi/T21-01-none-mode-july.png
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
-ผลสรุป: PASS (ยังขาด Evidence record fields: Power BI/Deneb version, PBIX)
+ผลสรุป: PASS (สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / PBIX deneb demo.pbix (ดูหัวข้อสภาพแวดล้อมด้านบน))
 ```
 
 ---
@@ -151,7 +151,7 @@ Actual (เบื้องต้น 24 ก.ย. 2026 — ตีความจ�
 Actual (ข) หลังล้าง selection (24 ก.ย. 2026, ภาพ T22-03): Column chart ทุกแท่งเข้มเท่ากันก่อนทดสอบ, คลิกขวาในสามเหลี่ยมน้ำตาลของ segment ม.ค.–ก.พ. → Context menu ขึ้นพร้อม Include/Exclude (resolve เป็น data point ได้); Column chart ไม่เปลี่ยน (คลิกขวาไม่สร้าง selection — ตามพฤติกรรมปกติของ Power BI) จึงยังไม่ทราบว่า resolve เป็น Category ใด — ต้องเลือก "Show as a table" จากเมนูนี้เพื่อดูแถวที่ resolve
   ต่อ (ภาพ T22-04): "Show as a table" จากเมนูนี้แสดงข้อมูล**ทั้ง Visual** (แถวแรกเป็น เม.ย., ก.ค. ...) ไม่ใช่เฉพาะ data point ที่คลิก จึงใช้ระบุแถวที่ resolve ไม่ได้ — ขั้นต่อไป: ใช้ "Include" แล้วดูว่า Visual เหลือแถวใด/ดู filter ที่เกิดใน Filters pane แล้วลบ filter ออก
   ต่อ (ภาพ T22-05): คลิกขวาจุดเดิมแล้วเลือก "Include" → Filters pane ของ Visual มี "Included (1)": (Blank) (Category) + Higher is Good (Business_Type) + ม.ค. (Filter_Key) + ... — resolve เป็น**แถว Fill 1 แถว** (Category ว่าง, Filter_Key = ม.ค.) ของ segment ม.ค.–ก.พ. ตรงตาม Field contract; Visual เหลือแถวเดียวจึงวาดพื้นที่/เส้นไม่ได้ (คาดไว้) และ Column chart highlight ม.ค.
-ผลสรุป: (ก) PARTIAL — จุด resolve ได้และมี Include/Exclude (T22-01) แต่ยังไม่ได้พิสูจน์แถวที่ resolve ด้วยวิธี Include (ข) PASS — คลิกขวากลาง Area หลังล้าง selection resolve เป็นแถว Fill เดียวที่ Filter_Key = ม.ค. (ฝั่งซ้ายของ segment) ตาม Design; ยังขาด Evidence record fields (version, PBIX) — ข้อสังเกตสำหรับบทที่ 8: "Show as a table" ของ Deneb แสดงข้อมูลทั้ง Visual ไม่ใช่เฉพาะ data point; "Include/Exclude" บน Area จะกรอง Visual ให้เหลือแถว Fill แถวเดียว (กราฟว่าง) ต้องเตือนผู้อ่าน
+ผลสรุป: (ก) PARTIAL — จุด resolve ได้และมี Include/Exclude (T22-01) แต่ยังไม่ได้พิสูจน์แถวที่ resolve ด้วยวิธี Include (ข) PASS — คลิกขวากลาง Area หลังล้าง selection resolve เป็นแถว Fill เดียวที่ Filter_Key = ม.ค. (ฝั่งซ้ายของ segment) ตาม Design; สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / PBIX deneb demo.pbix (ดูหัวข้อสภาพแวดล้อมด้านบน) — ข้อสังเกตสำหรับบทที่ 8: "Show as a table" ของ Deneb แสดงข้อมูลทั้ง Visual ไม่ใช่เฉพาะ data point; "Include/Exclude" บน Area จะกรอง Visual ให้เหลือแถว Fill แถวเดียว (กราฟว่าง) ต้องเตือนผู้อ่าน
 ผู้ทดสอบ:
 วันที่:
 ผลสรุป: PARTIAL (ดูผลสรุปเบื้องต้นด้านบน)
@@ -386,7 +386,7 @@ Actual (ระบุความต่างถ้ามี): [กรอกบ�
 หลักฐาน (screenshot แต่ละหน้าตั้งค่า): qa/evidence/phase2-powerbi/T30-01-project-setup-crossfilter-highlight.png, T30-02-supporting-fields-context-menu.png, T30-03-supporting-fields-expanded-columns.png, T30-04-supporting-fields-expanded-measures.png
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
-ผลสรุป: PASS — ทุกชื่อ UI ที่ Design Plan อ้างอิงตรงกับ Deneb จริง (ข้อสังเกต: "Project setup" เป็นแท็บของ Editor; "Supporting fields: dataset" เป็น section ใน Project setup แยกราย field; มี "Data point limit", "Semantic model integration", "Tooltips", "Format string", "Formatted value", "Treat as field parameter" เพิ่มเติม — ใช้ประกอบการเขียนบทที่ 2 และ 8) — Power BI Desktop/Deneb version ยังไม่ได้บันทึกจากเครื่องจริง (ภาพแสดงเฉพาะ Vega-Lite 6.4.3)
+ผลสรุป: PASS — ทุกชื่อ UI ที่ Design Plan อ้างอิงตรงกับ Deneb จริง (ข้อสังเกต: "Project setup" เป็นแท็บของ Editor; "Supporting fields: dataset" เป็น section ใน Project setup แยกราย field; มี "Data point limit", "Semantic model integration", "Tooltips", "Format string", "Formatted value", "Treat as field parameter" เพิ่มเติม — ใช้ประกอบการเขียนบทที่ 2 และ 8) — เวอร์ชันยืนยันภายหลังจากหน้าต่าง About: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / PBIX deneb demo.pbix (ดูหัวข้อสภาพแวดล้อมด้านบน)
 ```
 
 ---
