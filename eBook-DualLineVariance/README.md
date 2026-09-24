@@ -76,5 +76,11 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 - Codex รอบ 4–19 (REVISE หลายรอบ แก้ M-12 ถึง M-28 ทั้งหมด) → **รอบ 19 PASS**: gate ข้อ 5, 6, 7, 8 ผ่านครบ; M-11 (เส้นโค้ง) ยังเป็น Known limitation ตามคำตัดสินผู้ใช้
 - Final spec: `specs/dual-line-variance-final.vl.json` (rev 7), Workshop steps 11 ไฟล์ใน `specs/steps/`, tests 464/464 + axis overlap sim 18/18
 
-### Phase 3 — ยังไม่เริ่ม
-เขียนทีละบท (บทที่ 1–10) ตาม `PROJECT_PLAN.md` หัวข้อ 7
+### Phase 3 — กำลังดำเนินการ (เขียนทีละบท)
+
+| บท | สถานะ | Review |
+| --- | --- | --- |
+| 1 รู้จัก Deneb | **PASS** (24 ก.ย. 2026) | `review/chapters/CH01_CODEX_VERDICT.md` (REVISE) → `..._R2.md` (PASS) |
+| 2–10 | ยังไม่เริ่ม | – |
+
+**งานค้างก่อน Phase 4 (จาก review บทที่ 1)**: ถ่ายภาพ 1-1 ใหม่จาก spec rev 7 ความละเอียดสูง (ปัจจุบันเป็นภาพ rev 5 crop 556×318 พร้อม disclosure ใน caption); พิจารณาเก็บภาพหน้าต่าง About ที่ปิดบัง User ID/Session ID/ชื่อบัญชี
