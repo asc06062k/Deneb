@@ -81,6 +81,11 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 | บท | สถานะ | Review |
 | --- | --- | --- |
 | 1 รู้จัก Deneb | **PASS** (24 ก.ย. 2026) | `review/chapters/CH01_CODEX_VERDICT.md` (REVISE) → `..._R2.md` (PASS) |
-| 2–10 | ยังไม่เริ่ม | – |
+| 2 เตรียม Power BI และ Deneb | **กำลังเก็บภาพหน้าจอจริง** (ยังไม่เขียนต้นฉบับ) | – |
+| 3–10 | ยังไม่เริ่ม | – |
 
 **งานค้างก่อน Phase 4 (จาก review บทที่ 1)**: ถ่ายภาพ 1-1 ใหม่จาก spec rev 7 ความละเอียดสูง (ปัจจุบันเป็นภาพ rev 5 crop 556×318 พร้อม disclosure ใน caption); พิจารณาเก็บภาพหน้าต่าง About ที่ปิดบัง User ID/Session ID/ชื่อบัญชี
+
+**แผนบทที่ 2 (วางไว้ 24 ก.ย. 2026)** — 5 Step ตามมาตรฐาน 12 หัวข้อ: S01 ติดตั้ง Deneb จาก AppSource (Build pane `…` > Get more visuals หรือ Insert > More visuals > From AppSource), S02 นำเข้า `data/DualLineVariance_Workshop_Data.csv` (Get data > Text/CSV), S03 วาง Deneb บนหน้าใหม่และผูก Category + Actual (ดู landing page ก่อน/หลังใส่ field), S04 เปิด Editor (visual header `…` > Edit) แล้วสร้างจาก template Vega-Lite > "Interactive bar chart", S05 ทัวร์ Editor: แท็บ Specification/Config/**Project setup** (เอกสารเรียก Settings แต่หน้าจอจริงเรียก Project setup), ปุ่ม Apply (Ctrl+Enter) / Auto-apply (Ctrl+Shift+Enter), Preview + viewport marker, Debug pane Source/Data/Signals/Logs, zoom, status bar "Show compiled Vega", Back to report — ชื่อจาก deneb.guide/docs/visual-editor และภาพจริง
+
+**ภาพจริงที่ต้องเก็บ (ผู้ใช้ตั้งหน้าจอแล้วพิมพ์ "ถ่าย" — Claude จับภาพด้วย PowerShell CopyFromScreen แล้ว crop ตัดชื่อบัญชีมุมขวาบน)**: (1) เมนู `…` ของ Build pane ที่มี Get more visuals (2) หน้าต่าง AppSource ค้นหา Deneb (3) หน้า preview ของ Text/CSV (4) Deneb landing page ตอนว่าง (5) landing page หลังใส่ field (6) เมนู `…` ของ visual ที่มี Edit (7) Create dialog เลือก Vega-Lite + รายการ template (8) หน้าจับคู่ placeholder (9) Editor หลัง Create (10) Debug pane แท็บ Source/Data/Signals/Logs (11) Show compiled Vega — ทำบน Page 2 ของ deneb demo.pbix
