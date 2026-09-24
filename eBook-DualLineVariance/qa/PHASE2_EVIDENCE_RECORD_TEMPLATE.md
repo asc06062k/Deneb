@@ -45,10 +45,15 @@ Expected:
 Actual (ก) (24 ก.ย. 2026): Clear selections แล้วคลิกซ้ายที่จุดของ ต.ค. → Clustered column chart "Sum of Actual by Category" highlight แท่ง ต.ค. เพียงแท่งเดียว (Visual ปลายทางใช้ Highlight ตาม default interaction ไม่ใช่ Filter — ผลการเลือกเดือนตรงกัน)
 Actual (ข) ครั้งที่ 1 (24 ก.ย. 2026): Clear selections แล้วคลิกซ้ายในพื้นที่สีของ segment พ.ค.–มิ.ย. ชิดฝั่ง มิ.ย. → column chart highlight แท่ง **มิ.ย.** — **สรุปไม่ได้**: ตาม Field contract แถว Boundary ทั้งสองแถวของ segment นี้มี Filter_Key = พ.ค. ถ้าคลิกโดน Area จริงควรได้ พ.ค.; การได้ มิ.ย. บ่งว่าคลิกโดน mark อื่น (จุด/เส้น/connector ของแถว Original มิ.ย.) เพราะ segment นี้เป็นกรณี C ที่ diff = 0 ที่ มิ.ย. พื้นที่สีจึงแคบลงเหลือศูนย์ใกล้ มิ.ย. — ต้องทดสอบซ้ำใน segment ที่พื้นที่สีกว้างฝั่งขวา
 Visual ปลายทาง: Clustered column chart ใช้ Category จาก DualLineVariance_Workshop_Data (ผู้ใช้ยืนยัน) — relationship DualLine_PlotData → DualLineVariance_Workshop_Data: DualLine_PlotData[Filter_Key] → DualLineVariance_Workshop_Data[Category], Many to one (*:1), Cross-filter direction = Both, active — ตรงตาม Design Plan หัวข้อ 2.2.1 (หลักฐาน qa/evidence/phase2-powerbi/T18-00-relationship-filterkey.png) ดังนั้นผล (ข) ครั้งที่ 1 ที่ได้ มิ.ย. ไม่ได้มาจาก relationship ผิด — ยิ่งสนับสนุนว่าคลิกโดน mark ของแถว Original มิ.ย.
+Actual (ข) ครั้งที่ 2 (24 ก.ย. 2026, ผู้ใช้ทำลูกศรชี้จุดคลิกในภาพ):
+  - T18-03: คลิกซ้ายกลางสามเหลี่ยมน้ำตาลของ segment ม.ค.–ก.พ. (ส่วน i-b หลังจุดตัด ชิดฝั่ง ก.พ.) → column chart highlight **ม.ค.** เพียงแท่งเดียว
+  - T18-04: คลิกซ้ายกลางสามเหลี่ยมน้ำตาลของ segment ก.พ.–มี.ค. (ส่วน i-a ก่อนจุดตัด ชิดฝั่ง ก.พ.) → highlight **ก.พ.** เพียงแท่งเดียว
+  สรุป: ใน crossing segment สองกรณีที่ทดสอบ Area-click resolve เป็น Filter_Key = Category ฝั่งซ้ายของ segment และเลือก Category เดียว ไม่พบการเลือกหลาย Category ในสองกรณีนี้ (ยังไม่ครอบคลุม Case C และ T22) — **และ** พื้นที่สีที่อยู่ติดเดือนใดเดือนหนึ่งทางด้านซ้าย (เช่น สามเหลี่ยมก่อน ก.พ.) จะเลือกเดือนก่อนหน้า (ม.ค.) ซึ่งอาจไม่ตรงกับที่ผู้ใช้คาด — ผู้ใช้ตัดสินแล้ว 24 ก.ย. 2026 ให้ยอมรับและบันทึกเป็นพฤติกรรมในหนังสือ (Design Plan หัวข้อ 2.2.2) ไม่แก้ architecture
+หลักฐาน (ข) ครั้งที่ 2: qa/evidence/phase2-powerbi/T18-03-click-area-jan-feb-near-feb.png, T18-04-click-area-feb-mar-near-feb.png
 หลักฐาน (ภาพ/วิดีโอ): ภาพ 2 ภาพที่ผู้ใช้ส่งในแชท 24 ก.ย. 2026 (ยังไม่ได้บันทึกเป็นไฟล์ใน qa/evidence — ต้องขอไฟล์ภาพ)
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
-ผลสรุป: (ก) PASS (รอไฟล์ภาพ) / (ข) INCONCLUSIVE — ทดสอบซ้ำ
+ผลสรุป: (ก) PASS (รอไฟล์ภาพ) / (ข) PARTIAL — crossing segment 2 กรณี: Category เดียว = ฝั่งซ้ายของ segment ตาม Design; ผู้ใช้ตัดสิน 24 ก.ย. 2026 ให้ยอมรับพฤติกรรมนี้และเขียนในบทที่ 8 (Design Plan หัวข้อ 2.2.2); ยังต้องทดสอบ Case C (พ.ค.–มิ.ย. บริเวณพื้นที่กว้างชิด พ.ค.) และกรอก Evidence record ให้ครบ (version, PBIX/hash, viewport) — (ก) ยังขาดไฟล์ภาพของการคลิกจุด ต.ค.
 ```
 
 **ถ้า (ข) กรองผิด**: ต้องเปลี่ยน interaction architecture (เช่น Advanced cross-filtering mode ของ Deneb) ก่อน Phase 2 จะ `PASS` ตาม `PROJECT_PLAN.md` Phase 2 ข้อ 7 — แจ้งผลกลับก่อนดำเนินการต่อ ไม่ต้องแก้เอง
