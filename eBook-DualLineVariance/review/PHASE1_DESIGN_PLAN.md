@@ -282,7 +282,7 @@ Prototype รอบนี้ใช้ array คงที่ (`['Jan','Feb',...]`
 - หลักฐาน headless: ชื่อบนแกนมาจาก Category ครบทั้ง baseline/T09 (ชื่อยาว 38 ตัวอักษร)/T10 (24 categories) ทุก 6 viewport (AXIS-* ใน run-output.txt) — **การไม่ทับซ้อน (Group B) ตัดสินบน Power BI จริงเท่านั้น** เพราะ headless วัดความกว้างอักษรไทยไม่ได้
 - ข้อจำกัดเดิม "ต้องแก้ labelExpr เองเมื่อเปลี่ยนข้อมูล" ถูกถอนออก
 - **Field contract ของ `Sort_Order` (เพิ่มตาม Codex R17 M-27)**: ควรเป็นเลขจำนวนเต็มเรียงต่อกัน (1, 2, 3, …) — ถ้ามีช่องว่าง ตำแหน่งที่ไม่มีข้อมูลจะเป็น tick ไม่มีชื่อ; ถ้าช่วง min–max ของ Sort_Order เกิน 1000 `xAxisValues` จะเป็น array ว่าง (กันหน่วยความจำ) และแกน X จะไม่มีชื่อเลย; แถว Original ที่ Sort_Order เป็น null จะไม่มีชื่อบนแกน — ครอบคลุมด้วย regression AXIS-edge-* (gaps, hugeGap, nullSome, empty); เดือนที่ถูกกรองออกจะไม่มีชื่อบนแกน
-- **ข้อจำกัดของ Template (พบระหว่างวิเคราะห์ T27)**: Deneb template tokenize ชื่อ field ใน `field`/expression ที่อ้าง `datum.X` แต่**ไม่** tokenize ชื่อ field ที่เป็นสตริงใน `pluck(data('dataset'), 'Sort_Order')` ฯลฯ ของ params แกน X/Y — template จึงใช้ได้เมื่อชื่อ field ของผู้ใช้ตรงกับ Field contract (Sort_Order, Category, Plot_Actual, Plot_Reference) เท่านั้น ต้องระบุในบทที่ 9
+- **~~ข้อจำกัดของ Template: Deneb ไม่ tokenize ชื่อ field ใน `pluck(...)`~~ — ถอนออก (แก้ 24 ก.ย. 2026)**: ข้อความเดิมผิด เขียนจากการดู spec *หลัง import* ไม่ใช่ไฟล์ template — ตรวจไฟล์ template จริงทั้งสองรุ่น (T27-template-export.json, T27-rev6-template-export.json) พบว่า Deneb **tokenize** ชื่อ field ในสตริงของ `pluck(data('dataset'), '__dataset.N__')` ด้วย จึง remap ได้ตามปกติ; ข้อจำกัดของ template ที่ยืนยันแล้วมีเพียงบั๊ก escaping (`\'`) ตอน export และการที่ผู้ใช้ต้องทำ Power Query step เอง
 
 ### 4.2 กลไก Responsive (Lock เบื้องต้น รอ Phase 2 ยืนยัน)
 

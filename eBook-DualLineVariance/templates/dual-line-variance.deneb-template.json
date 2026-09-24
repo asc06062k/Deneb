@@ -1,0 +1,714 @@
+{
+  "usermeta": {
+    "information": {
+      "uuid": "9fbcb937-87e0-44f6-89f2-d05498457b4b",
+      "generated": "2026-09-24T09:46:21.799Z",
+      "previewImageBase64PNG": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHoAAACWCAYAAAAR35wdAAAQAElEQVR4Aew9CXgURdZV3T33TBISEnJBIBcJhIRDQF0Q8V4BdVF0xXMBwWN/j/VA2f1Xdlfd33XXVXc9QMH74pRDXRBFBUFuCCEXSYDcmVwzk7mnu+t/FbfjJEz3NMqRwOSrN6/qvVev3jE9M/26usOgyN85EQFVia6ubhh7+Nix4eEi4nA4ssPJUL7H4xlcU1NjoH0lcDh8OUp8idfR0ZEn9ZVwH5DLVbJf4qn1w+v1duVDVaK1Wi3LsaxGWuhk4NTUVFVrq1kLY8ypkRNF1qxGjmF0WjVyLKtOH88wJzV24O8Jx+6EJ6gJQESm90Ugkujel5NTYlEk0ackrL1PaSTRvS8np8SiSKJPSVh7n9K+mujeF8leblGoRNNTlXSwm56DURwN/Ujr4xEIlehY8KkAIAUga+DAgf337ds93GA0DrO7XGOVAHPcCCW+xBMxznd6vWOksRwWsaBKn4DQcDkdwXTM4tzgsVyfJ4IqfeCHKn2EEFX6EMvmydkUTEcMo0ofz/NdRalQibZCglcDbAbYABWsylGjzjvkcbuLo02mXUpAeP6gEl/iMYQUmvX6PdJYDjOEVaWPReiQnI5gOhFISfBYrs9hVpU+8EOVPihwqNKHBKFIzqZgOhJFVfo4jvNADjtbqER3MiIvZ1cEIok+u/Ip600k0bKhObsYkUSfXfmU9SaSaNnQnBLGGVMaSfQZC/2pWzh7jnVi5qymK2Y8652ROaflnvS5bdGRRJ+6eJ8xzeVvJGypWDpg45sPGVZWvNH/1arFsfZQie5WGcvLyxtQUVE+SMtxaXQHiRIwDDNYiS/x4ER+iMvlypTGcpiQgCp9oiiGtY2uQYgwiOJwIAi8Kn2CoE4fnB+r0gd+nDR/8+47smfS4y3rpHdbqETTytg4EMgAyC0qKtJkZmZX+3n+WFRUVLkSgKFHlfgSD07kj5hMpgppLIcx1qjSB2+wsLbRNTBmqykOByzLqdLHsur0IZZVpQ/8OGn+OoSGeqI7UgM57GxM52v3F1oZ+whInwN8ClALEGl9KQILFzIi2yaY4/ftkswOlWiJF8F9NAIZjRf0JwiZGY0jUgLtozlUZbaP8Y4WWHtXkumkyBFNo3A2wbIZrIjYPJ6xdQS79TMTHawq0u8NEUgu7qdjiS5dZNqdwfZEEh0cjbOg7++IzcXIYOG5ZlewO5FEB0ejr/cXLuSwkDZCwM7Wnq6ESrQOhOjtN/R2mMhWIghGX2kxNptZK0RlCZy9vafNoRJNK2PJIDgKYBjdSlRYuC/TaDBk0Ht+lAAKCFlKfImHMc52u93DpLEcRohXpY8QkimnI5jOsjg9eCzXx5iE9ZXOBT/U6RNFVfaBHz/L31vGjbki0ZI4ODtZ0KdE9YvTaTQayGFnC5Vo+tn+BXA/BFhPtxLl54+qcHs8lRaLpUgJoCR4WIkv8cChcqPRWCyN5TBCnCp9EPAKOR3BdEEgVcFjuT4hOKyvdC74oU4fw6iyD/z46f7+Y1b5BwcOeKw2zlvUWn64ztHe6gsEApDDzsZ0vkZe+nwEBqC4GI0vbaiIfB08snU7h6bORRJNo3AWgMenG8IKydEi29oSyp1zNNGhQtGHaf/zPzpGJImcENVfpznsuCa6MmXVoM9/uTjmjZslryKJliLRh/FFCbbkfA3JGW85ln5BzF79VVHVxkxt+3uD+0WvkdyKJFqKRB/ECxcipu11/cSLtTWXZDDGIdW+6G3f1CYsvXVL9tOD5zY/pZ36/RuSW5FES5E4gzh9blt05j328x94IzBR2voTypw11yDL+hnGMSWL5p33zRz947cR3VWVx7Tn7Wi2eL6tu+vrNte4FfWLF7es8S03rp2hn3Ro0dzh66/X30HnhUo0LZjQZ2kMgcUiBRMIwqludKsP4qz7kmK5ZmnrT6g1r12LOqZcp6lKT61OiYljDjU3a3NbSsXY2cfWfcWQqHg31hyh86jcNcu93wyft/jQ1JXet+k4VKJpwWQQTBgP0Fkw2b9/b7Zeq812Op0FSgDyOUp8iSeKYq7H4xkhjeUwFExU6WMYJqxtdA2ExCyKw4Eo8qr0gR+q9HGiqKhv6RfOK42I27Zii3vZ7OdbH/hid9sEORttTv0GznFggUvMvYiPGm20jJjc5pzrLBibxRjLn4/qZg8f5t4rWjDZAEmju0w6CyYjR44u9/r95Waz+YASwJxSJb7Eg8SUGAyGg9JYDiPEqdIHAQ9rG10DIeYwxeGAYThV+sAPVfp4hpHVd+E9zoq/fuSJa0Dffebpt6ZsQ1VR892v+jJGPmE6zvfaf8Z5mxodjVWVlq3tVcV7beW73bb9G754epmvY/dh4bg1uMi9V/CW7CXNp2FzedYd8Ot3eZDxSIPT+InGrzuIsatharCJrS+hKBZppzdV4eqWNiPd7oUYQtqRwV/HiiSDxdq9SOGPUeBFWKchAgLLxPk1ezFBqPMWV5EQv93yHzGgqc/PntdwtWRCWY1+VFuToHV2iI2U5ifEKHKoZQHb6EeI6EqW9DtG6XIQSbRcZE4DPefOhsGYeJOdxq8hz0jsWlIUAzbTimM+XPuLzLlHR9f9QTd0gIX5dbNVrJRktBib/bxQ6tVywwWCuugSvyeOJLpnRE7jmGfxCKd+Z4AQRM90uq0ssl6PX3MUCUzjHcXOhBusTWINFrAgCRHE2NxGX6OIxDzCsZFES4HpbTh9bmU0JoHBLuNWgvCPCQy206X/rmiwcTu7hb91Umsd6qphY1HQciJqekrTHssS5ITTs+rgeaH6kSM6VFROIu3T6w037rgn4+V1N+hvWTfDkNKlmjdkuXVlGoS6DtIuVleHYTRPDn6xvJBM/GyD/v5+AhGjKI8QUeMPCMUCy18oELaI0sJBJNHhIvQz+VNWepaNf7XyvmkrvO9PW+6pk9QxjLeAN5SKiCBRonXDLGImG4+1J5qcG3YGRi7eqZ9xcIfhdqASiwhznu//RTpG2F3xZlxxt3kyAyYEnX5f0G1EScCjlbEYl8sJ5/wit3v3bo0SBAKBsDJ0vt/v52w2m6IuKsfzflX6oDCgSk4QeFVyavWpkbMtjp7PLRu07si/BufUvj0ujvp10YP1uaK+dTgxVLfqNRxLgWM4BouEoX0KJow8L6Zu0yayRvPaufUBy4CMoo36R9Dzlk+vfAqvuKhVN3RIaqJnF9UnB5A/DNDZQiWaA04qwESAvIEDB8bV1dUmGg2GAZmZeQOVgGV1SUp8iccw2mSOM6ZKYzkMn1wq9WkS5XQE0xmGC+sDlec4ZgDF4QBjZX3DAyt+4fKaf2FrFc22ZvPtWr/9D4nVL12ZkOI4Pyqm3pwd1z82u39CHIV4iyXKoNXqaD8jPiHx3ZF2S/+sm23ouvJ2aseKJ4zcOwuSNomxud9q49IK/z7HsGvVo/E6ypMDjDE9aCGNCIVKNK2MbQLuMoC1dCtRdnZOrdfnq4uJ0VcpAcOINUp8icdxqNps1h6RxnKYYbAqfQxDauV0BNMxRmF9oPIQFlVyLCuvj1mjt7dvf0Go2OX4prQk9uvasorSwi3VNdZtKyeQhq+vYT3bqgob6q0SNNjbbW4+4Cmsr2ttbjmytcCxqihwaGkltUeC3Iyo8s3/SLl/zR8ND1451lIk0eUwIcQLOexsoRLdyTgtL314kaFzmvLvf91/acas5rvg6hO9NtDNG0zMiV6XJqfDLZjolzDD44DPhRq+r863O1zp+55NW2m4NupILCKE7TGx5cv0FZwJ+9l+99iOBvNgnejs2daXp/7J82jmf29wD+Yr9SOJVoqOAq/sjQGFE4axpZVL41/veXpDFiGjp4OMqzgkeqHS5ZDUEEQMX+t/E32UH1VxKap45un4nQefTf6Ov75fZRScYrFpXGvUxrRVTCzx2IxzPDuleRKGdezlSxLuW/+k4Tmlq1ySfDCOJDo4Gmr6CwmTPbtlXPrsI+8//ZF3RcbsY/Oy57bQH69dsz0mQ2xTBXb7/cQCXxdEYvBag+Yod4FDYNlP8f3IN+juhm/viCva9mz81/xnQ9aM+yRp2ahRsfaqDsFZJc05WTiS6BOIZMbdjQmZta0zReJO7Ihd/30g5stjTuOXOh9bPi17bv2cjNnWTKrObcNj7D4mGWPy40Z6TEzbuFmkHSceoEcmlaNgvMNbnXBXx5LzDPX36OJHPaGb2VGaPA+5Ke9kQiTRPaL56TWa8wqfv2nS+hsM04MLHIPvbI/hBGauQFrLm2P+7nKTSpaY9rZ69IXN7aaPG9pNa/S8tvaOWx5ZNrOxkUtts/Ldk8WywiZudjyHuJAFDv2dvkpyybrPephz0oaRRPcI5ZS1gd35v/v4m6krPKukAkf+bY0mLSdcIzD2L9viXokmDE7CDKG/sX6YjbHg48pa7THLK5oE21Vvts67zsplxTAC0VEBKFlqdjC/8jqZ+MpQV5noVp81M3RDC/92/WRp6w+ddzIhVKKpcefsvVdkEdLgTZfcFBxkr56dKaL2amvMizEE4QT44RSybinyHv/M1Fdri7nJz71jXqxfY/nD0O+1txWsQ/Oy1xoWpGKC9gXrlfp0q8+1y31l+Y+t3Dz1v1t/JN7JwqESTQsm8bBAEkDnY5z37t01Qq/R5zsc7guUQBTxKCW+xON5Mtrp9I6XxnIYDpSRcrxgOkJsWNuoPMY4j2JZKFoxzR5zwUukdd9jjR9c9Yxz+4I7H3qt/YHLR/Exv7jouzGXpA8fd2lmTsalWTlZ45IHDjZrdCbal+D2zKixyZmXt3789MUdby3M3zzkl7PL98bfl7GBmZ0xdcJAx64XTLGya0NsIX6q/BUEVKCkR+JB5a7zGjfkUbZg8jUwux7jPHr02IPegLcwKsq4XQkYhuxT4ks8jsN7zWb9Dmkshwlh98vxgulwYSCsbVQeCghFFMuBds9vyqp2Hyzcvc2y88jWbc3vfmZL2F10kHn/6NNlqw8daPiqoqz8y8Olh78E2Flfc9QJZ8bSmOJ817qOoY1LtlL96YMM386fmfTm5y8VTPq/WYbLnpplWUTpSgDxU+UvFGoOKOmReJGtRPAu7tlcrxvHuOwkv6lKFHyi3ra1eSzeWj/8wmnJr4zN1LrjkUhIzznBYw2HtS5s3sj7WvcH02l/8kjmx1/flHAGINRH9xkw48wuSZYhFsEFw+Ld2EsEQeckUdw+/fVj+nuOvh9gGt6dHl06LErDd69g9TB5huEQe4u5MDXrfuQLZuXc1Xrhfa/4rsic1XxL+ty24ypowbKnsi8lmn4fvw0LqfqXfiB3VjWvoB9ob8Pxdo8wYJvx5tgXmMXjvKLp+xc/eG75772TN+gJ2jCcbY6Rc5rBWHtFVH1NVADt6ilT+nrctpfv1W2sWBr/Ppw/h90g0HP+yRpLiXaAQprokL8mgXd2Ny974ZESbMJExMe4MbkuTXJ7ienqFZ1OL1wo/u6xbV/8ZeB2drShJaqTFvxCCJ5gOuaY9VrUWQAAEABJREFUYK716e+1n/SKVvBSP6cvJZr+OjsfFHEA51RzLLL0r68hh1ttfFyZ5uL+LibOumY+c2PJ4viGoECQbN7+zsIBOxwjdVZjEB0xhGgWJu4l0ZqALZje2/pSoun3T1tvM06NPZl3tQ6//Z++6VlzWn+TPcs6Qc2cYBktK57XYccTWD8S92mnpVlRxvcPvm+a0vM7NeZee/sF0Q0H5sWUHNZhFJB05BvqmuNE236t11Ui0XojlhJNfxXS/4xDy3Z9qmBS8XrcobuvNH55+I24N8uXJmw9kSBblyFzi5Wx1zUS/w7jzek2Ele89a3xH7z9kGl1qO9U3a3O4mtjKw0fDFzf0o/x8jGsRzM/tsgap/Ml43k/Jv9EbDhdslKizbDgdIBoAPrxnQqY3mSXO2jQoLjy8tIUvVabbLPZhiiBKIqpSnyJFwgEBjqdzsHSWA6LYiCsvmsXttx732vOry94pO5fr61pPk9OF6WLotDNBy7h0VFuNvHXJDovqSL2hqQbZ176HZUThEAKxaGAn15dfl7BNPJ1zldXfZe6dMTEIUkF4vSGhlCyEo0Igqw+SYZiQRDC+vtfOVX6oEBED1pIJfqhYAI9P8BuAPrsC7rDZAP0Pwf49NixY0fi4xNaBVFsi46OblICOEFvVeJLPJ1O12I2m63SWA4bjdoWOR6lz36F1x21ilG8ZXtLC7O/+tUN/KTrnhNTKC8UgH3dfHAf+GCwtbLdvs1zMeMk5k23Xtm/lM7jOK2iHzETn98VHz/oESbx/Jct123+kM5RAlhXUZ80V6PRKPobJKdKH+Sv6ytGOqIHAnE0AJxNwmtQg3cF6dcv1hvgeS/03UoAR7RHiS/xqBwsoaiLynq9RHHNg5UoxeGv2+M1b2m0sl86bKgc1TS6h+fd2MzQ+T1BFH/UZ30hJrGlujWl1q5t3oV/WV3Bj9giyUMFTXFdKhc15ctyNHnde7QfDgTy47pKsqIohl2XzlcrB350XXiREu2GwNOPbB5wn2kEkcy22Hfo7wuwmfDt5tVWr2Ef9lj8twJBsbk94qSAl8n6j3Z+oArllRUvjq1WnNCDSS9n7ntm6nXH7dfuIddbhlKi7WBQGQAB6BMtZ27bCIIDLgbzSfAu/8FugvgO/SZnwFAaO2R29UVyjmy+F5mtdULSnraR+/fppsbo9eS4QofcXIlOL2eOWrD+k577tSV+b8NSokeCYYcAxgP0iSaKfIzINdgEpOnXzWC45OXSf2MF3rWp9xdndeP9d2Dh9GMNBpz5nvaZFhexWA+9ktDtSbj/FTurkJToQvAqD2AHQJ9oImLSXLodYD857uuGZzpcHv3+Rhxomxu/8GV6RtHl07KLEVxd5G5cZ5+5sYkdpqtYkrC0i3kWdyBQnd7p4ZVWfKQxDHtvGzqr2UIw38+nKWXlrip5tSW1BPujdU0Zv8uaU3551pzmb+98yXfjJ9nvvFLiz3e9i/7UTjiypfd6eXItkxJLMT3n6vqVdnKXObnaeMymCVyDQ8TYoqTZYVq7mbB8jI+tudSW+uTV/758+3/+d8C9+rXig0W8wJKKxQPC3m6qpL8v8WiCqb20TlsBHSnRg6FPv9/ovVe0iALDXtRw4EIetw5A8OMrnFU+TXEpz/HGYbaJ//jLqrYVSx1/cO12X2LjRfe34eaeTXwp0f3BKbpPjI7joD8BgP5A63wqUVlZCf0HZwPtdnumEsD5XZoSX+KB7jSXy5UujeUwwwQGheJlJIhJQwZXooKU1ISC5JQBWobRDUtI7OzTcTDkpjGmYYN3N43v3zCwypNpNCRmNm/9q+bQgRdjU0PppjRBCIT19Qc5QVYH5UvACoIqfRC/kP5KeiSsVi7UViL6q7MVEkAAKH4P8HKAzqcSDR2aS//BWQ1UZiqUgGGYY0p8iQd6j5lMpippLIdFUVPdk1fwgNhyuKUlcKClpOFAfV0TBb8o+oqtjVba74LGequ9udh5rbjC81vtu5vnp/zpn8ufyp/w5ydueCwhIfpwT73BY5bVhPWVyrMsW0txOBBYVpU+iN9x/obSrVYOKnK00gnh/rEESktl9EimRZNORm99YZBzoMA2EbmP7SR9h2F2v4NDHozepfsobWPDbcbS7VH7azXb1vseOfDctdd8eoNxTvB+7d7q58m2i35UU530XDQFOvRyJaDe21hWGBRguv9zPQayXqBr7vd0wnejfxVT0fFA/8J9Dwwq/iJ3bt1nA+62HbjkTec301Z6ryx4dM3aKSvcb0j7tdE59Ccl2gE+7wHwA/TqJjDOcX5NI7W3086bosoG7UpbkvtU/PaMDJ3vxf97+JsVg+c2fx53a1stxvAO6JSKvEiJ7hPn0f1nbbUIjDsuoGns3CRxeVRNwmRLfbzGlLBujL7hL1ffX0gPdfo7I5LZHhGQEl0PdPpsZ3qJErqnpmXPsU6khYtZL3knjX2w9foT3RESbbakCWxLZyXsPIM1ZqqlMsEkOl/TX7P7z6bZburDqTH8LNAqJfq0uFL+RsKWw2/EX7T0fv03u16IW3miO0L8fNN5PNdquyOuOOM8UwNOKqnZyX5X9+L+Z3919frr9ZetnW4ce1oc+ZmLnInpcomm16fpHuRTUjB54DUXPUc/MX/nztVgzGWPitrD+X1c3WSx/bOrFrWumbrSO2Xk/NWfAd50zSr3CV+FOjEj+q50qETT06yLwaVxAJ0Fk/379+QZjcY8u9s9XgmgJFmgxKe8hxe33bu5SFw97uHqzc982H4bpckB5lC+xPvsoUcnZ1v8E29Pt8Y/cv2tLRc+sG2AxBMQGiH1lTDmyHAlvsQjjBDWVyrLE3X64LxXlT7Esl3+Uv1yAHKq/A1VMIGcdjVaMHkXRisAOgsmI0eOKXK73UXRRuMOJWAIOaDEH/Gwv3ztLt7tiV1bWK9dte6tTU7dmAfsaXJz4LpUocR75Z2PUtJQmb1f4LuFWXkz10l0iuGc8CDF4YDw+FA4GcrHIhvWVyrHYXX6oJKlSh8ShC5/qX45ADlV/nIcd1zBBHJ66puWF5KJ6BcETWmHwDQgW/RHXkz4RLgaNTR4dShojIPv3E8rlv9xyPrpumu+vC96fixmxh72jX/pqnnHgvdbB0+L9BUiEOqjW0H857EwQcl+tvYIgvNbjAnxMrWizbzaKXCOq3Nud8RJ2qGgsRO+c6dkzvjzkYJR2GH08/28zemOZlfGQUkmgk8sAqc10UgUUjr6vWeHyusPV8kg2z5Nlcdp2M749LW/6mm6+Enukx6Bmd6EUtyF/ITaku53T/QUj4wVInDaEj38TmeiiJFZDDAJCI7mYJvc2t31PNN23pB5O6dJ9JbnTJexvqYbBD9K+cj/sE1gtXRPm8SO4BOMwGlLdIDhjSLrLEcsjg1lo8u8cQfP+q4dOOf7a/c9or+4zSVO27M76qvDZWRrHclrQ1jbHGpehKYuAicj0apWElghEXHtOsIgQ6gJPHZ4Rba1KT+q5J5K7+C7jlSIpX4/52MJdjdzQxIIz3U9GTfU/AhNOQKnLdEM/Lr24VK40IThtDe0UdNTFrnMnH3tEu/zDT5flJ8QQbfJ8FscwFxxxZuWyBEdOmyqqHKJpvdeJYCG9MzMzPiqqookvVab5PF40pRAo9Eky/EHxTN5OVmOhLyk5FgDp9EnR8fE5CUn95fgzmR37pTsuIZFC6ZsSModv/21pC9GPclumLQv5vYpd12md8jppXSMcVjbqBzHkUSKwwFCoip9hKjTB0FWpQ/8kI1fsM1wfqxKXwBjLeSws4ENnTj4hZ7mTAIC3U6UV1tbazAajS6COKfPp3cogQhfwqH4/16HmA5PwFlvb0AtHW6PIBLe7Qt4aZ/CQPGwZkZsUeP5l7z7CUKZbc/Pjv0qryD9X8gy4HtkSP747l9aSkLplWiiyLikvhIOBFhVcqKoTo4QdXKiSvsEuAarZL/E8/tFVX5AlgXIY2cLlehW4LwPsApgrdfrrU5MTHb4/O6OmBjcrgSC4HWE4i/e6NJbve1t9U67r7HD5vKLPG/zury0/0vdtn53Gb6pmnjHtleC5/5tdlTZxj9H3/3132PfC6aH6mMshFy3pyzGYlgf6ByGIar0MYw6fYgRVepT5wesq0ofge8+yGFnC5XoTsbJfIEFMwXsSEYM03mJkeqGcil+pv+WgqE6+4bL7i2HI5lSf4DOy5mzrdsunO9YlfUTb3D/QVPkVYrAaUk0Ij6DX3ewUdpsP0JnNd0cU5KEtaa3731wB71LRLKnE5fTy5lLEi7c9mzU9MM/4Qb3TiWRl24ROC2JxiwZIDC1cO0BoQnm+thVqSvH3BZdHHvfQ9+WdLMmMjhlETjliU6eW28MEEesn7N5UzUdhkFMh9+nT30hK/PKh0+ZV+oUn1NSiolOn9s2KHN2864FH+CLn1mmOZ8+wOVEo6MTULyoaSexyMfdFXuw/28H7NtvvG7fS4ZLXqV3h5youoj8T4yAYqKrFsdWVyyJH/vMTPL1ghsD39MHuJzoOkT0JbKaBu5PSXsGDTtaWX50g23hnr9OH79xVuoNayNbf040nD9ZXi7R3e69euRt/srn1mlPfPsPmBWja8ycZN6lzzE1fHjlv1s/oZcfxzyxascVS2tXXBPZ+gMROj0tVKJpwYTeED8ATMgaOHBg/52Vvvl7Dtvm21yu0UoAZ+fDg/nHtrx92QWmfXf/IiWRGXpLuVniBUQxr8PjGSmN5TDmhGFyvGA6rJsbPJbrY1YcKscLphNGyAkey/V5UZ0+BmNV+sAPVf7yhKjyl+f5rusKoRJNCyYfQ5LpM7s20P97ZU79Yp1bc7Qy5rnn9seYTHvlAH5WH5J4Bx8ytVhX3zNe43X7ni2d9nuJTrGGYYosBoOiLipHeLaY4nAA65aEk6F8IjBlFIcDLLKl4WQon2PU6RMJUaUP/FDlL4exKn857gS3EmkMTe2BQCAmuXoUvZUW3gPd27oZhpT10w1bDr18x9h11+uu3jBTd39CsnF+nT0xrtw5dHvFv7J83WdERqc7AqGO6JA2sPp2G6NnLkczZsAbr7vItOWeuqmrPBOH3/f2rqxcbeXAdC61qV6sK3UNa/OgmF77INTuXpzdI9WJRnqrHSPdyPjB8fFyISHL0z8yRwvP2Nvg2kUrPtKuGaIhYqBJTj5C/0kR+EmTGLWzMOfwIML6GWH4JLRwYdfttZsvRtzeeZqCsv81/8nT4Uv2ekR9W5NYwyOibRSHoEZDfuSIVhvkUyinOtHUhgBrbcCBhFGxDkfSorlI89WtmoKE802PEoNmRnubKOwvjPmq7ACm/48DaTGjb2YzCELaFjo3Amc2AieUaMK1dmjEAQkzNPtvGqYx/S4tS/uA3S7ycARXtjaSw8GuuIQYzsH2D5QvtrQF0yP9MxMBuUR3K5hEM17OJLq1V8RvwKMtZR2jtGl6LsCwlSXCt+1WVOv3Y29P82v1+cRJ4usQwj9s7d3CoEMAAAddSURBVEWRvzMZgVCJpgUT+nhFmuxcWjBZErXopreSVk/+47hhVb8eqj3wlf7vHpJ6RSOXMmKQOXNsigRaY0y0MSUjwZCal+VKuTR5bEEs6ujoyO0JgiBkut3uoT3pPceE8Bk9aaHGDMMMCUXvSUNIGNyTFmosirwqfeCHKn2cKKrSB36kh7KnJ00URVVyagom78C77wuAT2tqaipjksf8PSH1/IVZlz+75ubf3LF0fxVp+VfJxN0dR0trnRW76iTwu212d12l1VNb3PF9Y3rN5sLATovFUtITWJatMBqNZT3pPccYc5U9aaHG4PiRUPSeNITYoz1pocYMw6nSB36o0sczjCp94EdVKHt60uANoUruhAsmrjHvbnAM/yt99AXkHo4LTIp2GmcmY4ZUikg87jlkAiKuJm2OVscYGzsnRF7OeARCfXR3GSVVvCpfu+2yI6/cefn6GwzTKRMbbEWY4JwdhlsrRFHrobRgcONUrwPHkkNLoiM/xIIDcwb7iomWKl4Zd7+7aci9b31B/wMrtbWzpIkF53LNkylaPV9OMKZPNaIshAgxHmGHe3jMQI3+B5Lya4R7OiKgmGglA5gA9zkh3OhWxnOIIM4uyQoEaXeZpvvgiD8k0SL4zEfgJye6/J3+dZgh1X/RNWcj0VOCGUR/rSOOQ+4aUhCHWcZ65t2LWCBF4CcnmirQ8GivgNHEb8gDtZhoWliM4PMa++1MoonxeiO30KDe8/ezEn3orYRGBvHfrY17YrLAeot4XyC6UDtFRJirKn0nlV7X7j2enuOWhEq0DmKSA5ANEPapROVLknbCKVbTAnPp+a9oFo38j/Z3lxMkHoG5kdaLIhAq0SLYlwxA94gNo5WxkpJDgy0m02Cfz5cTCg69HNV461Wx1TW6sVgXHW9fvUCvDSUn0UB3RiAQyJbGcphlSbocL5iu0Whkbesux6YFj+X6GBNV+qBgokqfjuNU6YNCiCp/McZD5GwPpoerjAUgEV8BLAPofCpRbu7wox0u11GdTlcqB4/NiNn47d/MF216IeumvHTzATk5Sge9lZCcctpXAkHAVUp8iQdvGkXbfpQTjkl9JUwIVqUPSqCq9Pl4XpU+WhlTskviEUKOSH0lfMKVMUhM2EYf9zjzn/7rs2c13f5T9n+HXaDXCfQtg5iTZW750oStHzykXVm+dMA7P2X/98myI6IndAROWqJDq49Qe0sEIonuLZk4xXZEEn2KA9xb1EcS3VsycYrtCJVoWjChxZI0WDtswQRkIq0PRCBUomnBZBDY3vUY58LC/TlmozHH5XKNVgKYM1yJL/HgfDHP4/GMlMZymOOEYXK8YDqsmxs8luuzrDhUjhdMZxghrK9UHvxQpU+DsSp94Icqf+E8WpW/agomm2DRrv97lZ8/stTpdpeaTKa9SgBzDinxJR5UgIoMBsN+aSyHeZ4tluMF02HdkuCxXF8QmDI5XjBdFNmwvlJ58EOVvgAhqvSBH6r8hcqYKn9DF0xglUg7eyMQ6qP77PX2HPYskuhzJPmRREcSfY5E4BxxM3JERxJ9jkTgHHFT1RFtt9s4tyeQdqC0aqgS1De15irxJd6xusac4sNHs6SxHG6w1ufI8YLptdbW7OCxXL+htXmQHC+YXtPUkBk8lutXN6rT19TUEtZXukZNfZMqfxusrYp5oLooNDQ0dO23V5Xo1auXV69Z/uG2gpz0MiVYtfzDEiW+xFu9/KPSz9asOCyN5fDKZR+WyvG66GDTyg/fKw8ey/XXLP/oqBwvmL52xccVwWO5vlp9qz/+IKyvdI11n6xU5e8nK5cp5oHqovDhhx+2Sx9YqhL9+OOP1yxYsEC6vUYLkzFAcKNjE8jQe6QpP5gX3KdyFz7xxBPuRx99VAhmhOhzoK8U6CwAnQfouEafvMD9/ve/3w8cPYBco/PHzJ8/n95UQPXJyWmAoX3ssccOAKZ9QCEb5UWDPno/Gu2HFAIi5WnB30LoUxsAhWydfoA+Gj/aDykERKqPhdhRP0LpozGgQHXQ+JXDnM6mKtEgSSffCpg+mX824M7N+oClFgWdAgB6IeQhwHRjIaDjGn12GX2yvwU4VF8M4FAtE4jXA+QDXA5A/wFaKMfobtXHgZ8BoKSPrkvr93TtKSB73I2BQKONboocBZ0xAFMB5N4U1NfLgB9OTtI3DGQvAZDTR/87EJWhPucpyNF/skr9pbKh9N0Gc6n90wGPAOiKmdpE0xvp3oaJtQCvAvR8XAW9JWcb0I8CPAtAjzBAxzV6dyV9NnclcN4AkHseaAXw6LPO6JHwH+jTI5sA7tmKgPAUQDh9dN3VIEe3Ia8FTO0FdFw7BpQdADsBqLzcp85u4K8ECCcn6TsIsl8CyOmja1Ffqc80dnJyNMZPgx45fa8DbzsA3di5D3BXzNQmGuZEWl+OwLmcaPoxej4kj37d0N8VdAzDs7Odq4lOgnTeD0C/6+h32e3Qp88Pp3Tonn3tXE10A6TynwBLAdYD0N8LfwNM6YDOvvb/AAAA///vH+aBAAAABklEQVQDANw/o0l//dn8AAAAAElFTkSuQmCC",
+      "name": "Dual-Line Variance Chart (eBook, spec rev 7)",
+      "description": "Requires DualLine_PlotData from the eBook Power Query; field names must follow the Field contract. Map Actual/Reference as measures (Sum) with Highlight value + status, and the DualLine Row Count measure.",
+      "author": "Chawalit P."
+    },
+    "deneb": {
+      "build": "2.0.0",
+      "metaVersion": 2,
+      "provider": "vegaLite",
+      "providerVersion": "6.4.3"
+    },
+    "interactivity": {
+      "tooltip": true,
+      "contextMenu": true,
+      "contextMenuSelector": true,
+      "selection": true,
+      "selectionMode": "simple",
+      "highlight": true,
+      "dataPointLimit": 50
+    },
+    "config": "{}",
+    "datasets": {
+      "dataset": [
+        {
+          "key": "__dataset.0__",
+          "name": "Category",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.1__",
+          "name": "Business_Type",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.2__",
+          "name": "Filter_Key",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.3__",
+          "name": "Plot_Actual",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.4__",
+          "name": "Plot_Position",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.5__",
+          "name": "Plot_Reference",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.6__",
+          "name": "Row_Type",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.7__",
+          "name": "Run_Sign",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.8__",
+          "name": "Segment_ID",
+          "description": "",
+          "kind": "column",
+          "type": "text"
+        },
+        {
+          "key": "__dataset.9__",
+          "name": "Sort_Order",
+          "description": "",
+          "kind": "column",
+          "type": "numeric"
+        },
+        {
+          "key": "__dataset.10__",
+          "name": "Actual",
+          "description": "",
+          "kind": "measure",
+          "type": "numeric",
+          "supportFieldConfiguration": {
+            "highlight": true,
+            "highlightStatus": true,
+            "highlightComparator": false,
+            "format": false,
+            "formatted": false
+          }
+        },
+        {
+          "key": "__dataset.11__",
+          "name": "Reference",
+          "description": "",
+          "kind": "measure",
+          "type": "numeric",
+          "supportFieldConfiguration": {
+            "highlight": true,
+            "highlightStatus": true,
+            "highlightComparator": false,
+            "format": false,
+            "formatted": false
+          }
+        },
+        {
+          "key": "__dataset.12__",
+          "name": "DualLine Row Count",
+          "description": "",
+          "kind": "measure",
+          "type": "numeric"
+        }
+      ]
+    }
+  },
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 7: x-axis labelFlush false + labelLimit width/3 + labelSeparation 4 after T09 overlap on real Power BI; rev 6: x-axis labels read Category from the dataset via Sort_Order lookup (T09/T10, user decision); rev 5: highlight dims points, connector and data labels of non-highlighted months to 0.5, lines never dim (user request); rev 4: highlight rule per real Deneb evidence T19 (status on + __highlight null for non-highlighted rows); rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
+  "width": "container",
+  "height": "container",
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "data": {
+    "name": "dataset"
+  },
+  "params": [
+    {
+      "name": "xAxisSortOrders",
+      "expr": "pluck(data('dataset'), '__dataset.9__')"
+    },
+    {
+      "name": "xAxisCategories",
+      "expr": "pluck(data('dataset'), '__dataset.0__')"
+    },
+    {
+      "name": "xAxisSortExtent",
+      "expr": "extent(xAxisSortOrders)"
+    },
+    {
+      "name": "xAxisValues",
+      "expr": "isValid(xAxisSortExtent[0]) && xAxisSortExtent[1] - xAxisSortExtent[0] <= 1000 ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []"
+    },
+    {
+      "name": "yRawMin",
+      "expr": "min(extent(pluck(data('dataset'), '__dataset.3__'))[0], extent(pluck(data('dataset'), '__dataset.5__'))[0])"
+    },
+    {
+      "name": "yRawMax",
+      "expr": "max(extent(pluck(data('dataset'), '__dataset.3__'))[1], extent(pluck(data('dataset'), '__dataset.5__'))[1])"
+    },
+    {
+      "name": "yPad",
+      "expr": "(yRawMax - yRawMin) * 0.18 || abs(yRawMax) * 0.1 || 1"
+    },
+    {
+      "name": "yDomainMin",
+      "expr": "isFinite(yRawMin) ? yRawMin - yPad : 0"
+    },
+    {
+      "name": "yDomainMax",
+      "expr": "isFinite(yRawMax) ? max(yRawMax + yPad, yDomainMin + 1) : 1"
+    }
+  ],
+  "layer": [
+    {
+      "name": "variance_area",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Boundary' || datum['__dataset.6__'] == 'Crossing'"
+        }
+      ],
+      "mark": {
+        "type": "area",
+        "opacity": 0.35,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "__dataset.5__"
+        },
+        "detail": {
+          "field": "__dataset.8__",
+          "type": "nominal"
+        },
+        "color": {
+          "condition": {
+            "test": "(datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.7__'] > 0) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.7__'] < 0)",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "stroke": {
+          "condition": {
+            "test": "(datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.7__'] > 0) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.7__'] < 0)",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "strokeWidth": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "bad_area_border_actual",
+      "transform": [
+        {
+          "filter": "(datum['__dataset.6__'] == 'Boundary' || datum['__dataset.6__'] == 'Crossing') && !((datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.7__'] > 0) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.7__'] < 0))"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#B45309",
+        "strokeWidth": 1,
+        "strokeDash": [
+          3,
+          2
+        ],
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "detail": {
+          "field": "__dataset.8__",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "name": "bad_area_border_reference",
+      "transform": [
+        {
+          "filter": "(datum['__dataset.6__'] == 'Boundary' || datum['__dataset.6__'] == 'Crossing') && !((datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.7__'] > 0) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.7__'] < 0))"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#B45309",
+        "strokeWidth": 1,
+        "strokeDash": [
+          3,
+          2
+        ],
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.5__",
+          "type": "quantitative"
+        },
+        "detail": {
+          "field": "__dataset.8__",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "name": "connector_rule",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "__dataset.5__"
+        },
+        "color": {
+          "condition": {
+            "test": "(datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.3__'] > datum['__dataset.5__']) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.3__'] < datum['__dataset.5__'])",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "strokeWidth": {
+          "condition": {
+            "test": "(datum['__dataset.1__'] == 'Higher is Good' && datum['__dataset.3__'] > datum['__dataset.5__']) || (datum['__dataset.1__'] == 'Lower is Good' && datum['__dataset.3__'] < datum['__dataset.5__'])",
+            "value": 3
+          },
+          "value": 2
+        },
+        "opacity": {
+          "condition": {
+            "test": "((isDefined(datum['__dataset.10____highlightStatus']) && datum['__dataset.10____highlightStatus'] != 'neutral') || (isDefined(datum['__dataset.11____highlightStatus']) && datum['__dataset.11____highlightStatus'] != 'neutral')) && !((isDefined(datum['__dataset.10____highlightStatus']) && datum['__dataset.10____highlightStatus'] == 'on' && isDefined(datum['__dataset.10____highlight']) && datum['__dataset.10____highlight'] === datum['__dataset.10__']) || (isDefined(datum['__dataset.11____highlightStatus']) && datum['__dataset.11____highlightStatus'] == 'on' && isDefined(datum['__dataset.11____highlight']) && datum['__dataset.11____highlight'] === datum['__dataset.11__']))",
+            "value": 0.5
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "line_reference",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "monotone",
+        "color": "#F59E0B",
+        "strokeWidth": 2,
+        "strokeDash": [
+          5,
+          3
+        ],
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.5__",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "name": "line_actual",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "monotone",
+        "color": "#2563EB",
+        "strokeWidth": 2,
+        "point": false,
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative",
+          "title": "เดือน",
+          "axis": {
+            "values": {
+              "expr": "xAxisValues"
+            },
+            "labelExpr": "indexof(xAxisSortOrders, datum.value) >= 0 ? xAxisCategories[indexof(xAxisSortOrders, datum.value)] : ''",
+            "labelLimit": {
+              "expr": "max(40, width / 3)"
+            },
+            "labelFlush": false,
+            "labelSeparation": 4,
+            "labelOverlap": "greedy",
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative",
+          "title": "ยอดขาย (พันบาท)",
+          "scale": {
+            "domain": [
+              {
+                "expr": "yDomainMin"
+              },
+              {
+                "expr": "yDomainMax"
+              }
+            ],
+            "zero": false,
+            "nice": false
+          }
+        }
+      }
+    },
+    {
+      "name": "point_reference",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 40,
+        "color": "#F59E0B",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.5__",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "test": "(isDefined(datum['__dataset.11____highlightStatus']) && (datum['__dataset.11____highlightStatus'] == 'off' || (datum['__dataset.11____highlightStatus'] == 'on' && isDefined(datum['__dataset.11____highlight']) && datum['__dataset.11____highlight'] !== datum['__dataset.11__'])))",
+            "value": 0.5
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "point_actual_hit_target",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        },
+        {
+          "calculate": "datum['__dataset.3__'] - datum['__dataset.5__']",
+          "as": "Variance"
+        },
+        {
+          "calculate": "format(datum.Variance, '+,.0f')",
+          "as": "VarianceLabel"
+        },
+        {
+          "calculate": "datum['__dataset.5__'] == 0 ? 'N/A (เป้าหมาย = 0)' : format(datum.Variance / datum['__dataset.5__'], '+.1%')",
+          "as": "VariancePercentLabel"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 40,
+        "color": "#2563EB"
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "test": "(isDefined(datum['__dataset.10____highlightStatus']) && (datum['__dataset.10____highlightStatus'] == 'off' || (datum['__dataset.10____highlightStatus'] == 'on' && isDefined(datum['__dataset.10____highlight']) && datum['__dataset.10____highlight'] !== datum['__dataset.10__'])))",
+            "value": 0.5
+          },
+          "value": 1
+        },
+        "tooltip": [
+          {
+            "field": "__dataset.0__",
+            "type": "nominal",
+            "title": "เดือน"
+          },
+          {
+            "field": "__dataset.3__",
+            "type": "quantitative",
+            "title": "ยอดขายจริง",
+            "format": ",.0f"
+          },
+          {
+            "field": "__dataset.5__",
+            "type": "quantitative",
+            "title": "เป้าหมาย",
+            "format": ",.0f"
+          },
+          {
+            "field": "VarianceLabel",
+            "type": "nominal",
+            "title": "ผลต่าง"
+          },
+          {
+            "field": "VariancePercentLabel",
+            "type": "nominal",
+            "title": "ผลต่าง %"
+          }
+        ]
+      }
+    },
+    {
+      "name": "label_actual",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        },
+        {
+          "calculate": "length(format(datum['__dataset.3__'], ',.0f'))",
+          "as": "lenA"
+        },
+        {
+          "calculate": "length(format(datum['__dataset.5__'], ',.0f'))",
+          "as": "lenR"
+        },
+        {
+          "calculate": "max(datum.lenA, datum.lenR)",
+          "as": "maxLen"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "maxLen",
+              "as": "globalMaxLen"
+            },
+            {
+              "op": "count",
+              "field": "__dataset.3__",
+              "as": "n"
+            },
+            {
+              "op": "max",
+              "field": "__dataset.9__",
+              "as": "lastSort"
+            }
+          ]
+        },
+        {
+          "calculate": "max(1, ceil((datum.globalMaxLen * 10 * 0.62 + 14) / (width / datum.n)))",
+          "as": "labelStep"
+        },
+        {
+          "calculate": "(datum['__dataset.9__'] - 1) % datum.labelStep == 0 || datum['__dataset.9__'] == datum.lastSort",
+          "as": "showLabel"
+        },
+        {
+          "filter": "datum.showLabel"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": {
+          "expr": "datum['__dataset.3__'] >= datum['__dataset.5__'] ? -12 : 12"
+        },
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "color": "#2563EB",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.3__",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "__dataset.3__",
+          "type": "quantitative",
+          "format": ",.0f"
+        },
+        "opacity": {
+          "condition": {
+            "test": "(isDefined(datum['__dataset.10____highlightStatus']) && (datum['__dataset.10____highlightStatus'] == 'off' || (datum['__dataset.10____highlightStatus'] == 'on' && isDefined(datum['__dataset.10____highlight']) && datum['__dataset.10____highlight'] !== datum['__dataset.10__'])))",
+            "value": 0.5
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "label_reference",
+      "transform": [
+        {
+          "filter": "datum['__dataset.6__'] == 'Original'"
+        },
+        {
+          "calculate": "length(format(datum['__dataset.3__'], ',.0f'))",
+          "as": "lenA"
+        },
+        {
+          "calculate": "length(format(datum['__dataset.5__'], ',.0f'))",
+          "as": "lenR"
+        },
+        {
+          "calculate": "max(datum.lenA, datum.lenR)",
+          "as": "maxLen"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "maxLen",
+              "as": "globalMaxLen"
+            },
+            {
+              "op": "count",
+              "field": "__dataset.5__",
+              "as": "n"
+            },
+            {
+              "op": "max",
+              "field": "__dataset.9__",
+              "as": "lastSort"
+            }
+          ]
+        },
+        {
+          "calculate": "max(1, ceil((datum.globalMaxLen * 10 * 0.62 + 14) / (width / datum.n)))",
+          "as": "labelStep"
+        },
+        {
+          "calculate": "(datum['__dataset.9__'] - 1) % datum.labelStep == 0 || datum['__dataset.9__'] == datum.lastSort",
+          "as": "showLabel"
+        },
+        {
+          "filter": "datum.showLabel"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": {
+          "expr": "datum['__dataset.3__'] >= datum['__dataset.5__'] ? 12 : -12"
+        },
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "color": "#B45309",
+        "tooltip": null
+      },
+      "encoding": {
+        "x": {
+          "field": "__dataset.4__",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "__dataset.5__",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "__dataset.5__",
+          "type": "quantitative",
+          "format": ",.0f"
+        },
+        "opacity": {
+          "condition": {
+            "test": "(isDefined(datum['__dataset.11____highlightStatus']) && (datum['__dataset.11____highlightStatus'] == 'off' || (datum['__dataset.11____highlightStatus'] == 'on' && isDefined(datum['__dataset.11____highlight']) && datum['__dataset.11____highlight'] !== datum['__dataset.11__'])))",
+            "value": 0.5
+          },
+          "value": 1
+        }
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "y": "shared",
+      "x": "shared"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domainColor": "#D1D5DB",
+      "gridColor": "#F3F4F6"
+    }
+  }
+}
