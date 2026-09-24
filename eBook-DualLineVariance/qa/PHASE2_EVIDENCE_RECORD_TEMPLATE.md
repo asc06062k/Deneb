@@ -193,29 +193,29 @@ Actual: [24 ก.ย. 2026] Signals: yRawMax = 600, yPad = 39.6, yDomainMin = 340
 Test ID: T36-B (รับ Filter จาก Visual อื่น — Edit interactions = Filter หรือ Slicer)
 ขั้นตอนทำซ้ำ: กรองให้เหลือบางเดือน
 Expected: แถวใน dataset ลดลง และ domain คำนวณใหม่จากเดือนที่เหลือ (±18% ของช่วงใหม่)
-Actual:
-หลักฐาน:
+Actual (24 ก.ย. 2026, ภาพ T36B): Column chart = Filter เลือก ก.ค. → Signals: yRawMax 530, yPad 5.4, yDomainMin 494.6, yDomainMax 535.4 — ตรงกับค่าที่คาดไว้ล่วงหน้า [494.6, 535.4] (extent 500–530 ของแถว Filter_Key = ก.ค.)
+หลักฐาน: qa/evidence/phase2-powerbi/T36B-filter-july-signals.png — PASS
 
 Test ID: T36-C (รับ Cross-highlight — Edit interactions = Highlight)
 Expected: แถวใน dataset ไม่ลดลง domain ไม่เปลี่ยนจาก T36-A (เว้นแต่ host ส่งข้อมูลแบบลดแถว — ถ้าเป็นเช่นนั้นให้บันทึก)
-Actual:
-หลักฐาน:
+Actual (24 ก.ย. 2026, ภาพ T36C): Highlight ก.ค. → preview แสดงจุด/ป้าย ก.ค. เข้ม เดือนอื่นจาง; Signals: yRawMax 600, yPad 39.6, yDomainMin 340.4, yDomainMax 639.6 = เท่ากับ T36-A
+หลักฐาน: qa/evidence/phase2-powerbi/T36C-highlight-july-signals.png — PASS
 
 Test ID: T36-D (คลิก Cross-filter จากกราฟนี้เอง — Simple mode)
 Expected: domain ของกราฟนี้ไม่เปลี่ยน (การคลิกกรอง Visual อื่น ไม่ได้กรอง dataset ของตัวเอง)
-Actual:
-หลักฐาน:
+Actual (24 ก.ย. 2026, ภาพ T36D): หลังคลิกจุดใน Dual-Line เอง → Signals: yDomainMin 340.4, yDomainMax 639.6 = เท่ากับ T36-A
+หลักฐาน: qa/evidence/phase2-powerbi/T36D-click-own-point-signals.png — PASS (ภาพไม่แสดง Column chart ขณะนั้น — อาศัยคำอธิบายขั้นตอนของผู้ใช้)
 
 Test ID: T36-E (Filter จนไม่เหลือข้อมูล)
 Expected: ไม่มี error, domain = [0, 1]
-Actual:
-หลักฐาน:
+Actual (24 ก.ย. 2026, ภาพ T36E): Filters pane ของ Visual ตั้ง Filter_Key = is blank → Dual-Line ว่าง ไม่มี error แกน Y แสดง 0.00–1.00 (= [0, 1])
+หลักฐาน: qa/evidence/phase2-powerbi/T36E-filter-blank-empty.png — PASS (ตรวจจากแกน ไม่ได้เปิด Signals)
 
 Power BI Desktop version:
 Deneb version:
 ผู้ทดสอบ:
 วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED (แยกราย T36-A ถึง E)
+ผลสรุป: T36-A PASS WITH LIMITATION (ถ่ายตอน 12 แถว — T36-C ยืนยันซ้ำค่าเดียวกันกับ 52 แถวแล้ว), T36-B PASS, T36-C PASS, T36-D PASS, T36-E PASS — สภาพแวดล้อม: Power BI Desktop 2.157.1354.0 / Deneb 2.0.0.0 / deneb demo.pbix
 ```
 
 ---
