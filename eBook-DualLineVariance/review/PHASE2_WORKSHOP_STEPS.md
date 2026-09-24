@@ -25,7 +25,7 @@
 | CH06-S03 | [`CH06-S03-connector-rule.vl.json`](../specs/steps/CH06-S03-connector-rule.vl.json) | + `connector_rule` | 6 | |
 | CH07-S01 | [`CH07-S01-tooltip.vl.json`](../specs/steps/CH07-S01-tooltip.vl.json) | `point_actual_hit_target` เพิ่ม `calculate` 3 ตัว + `tooltip` | 7 | |
 | CH07-S02 | [`CH07-S02-data-labels.vl.json`](../specs/steps/CH07-S02-data-labels.vl.json) | + `label_actual`, `label_reference` (thinning จาก signal `width`) | 7 | Group A "ลดการชน" ไม่รับประกัน |
-| CH08-S01 | [`CH08-S01-cross-highlight-opacity.vl.json`](../specs/steps/CH08-S01-cross-highlight-opacity.vl.json) | เพิ่ม `opacity` condition จาก `Actual__highlightStatus`/`Reference__highlightStatus` ใน 4 layer | 8 | **= final spec** ชื่อ field verified บน Deneb จริง (T19-01); พฤติกรรม highlight [POWERBI-NOT-TESTED] |
+| CH08-S01 | [`CH08-S01-cross-highlight-opacity.vl.json`](../specs/steps/CH08-S01-cross-highlight-opacity.vl.json) | เพิ่ม `opacity` condition จาก `Actual__highlightStatus`/`Reference__highlightStatus` ใน 4 layer | 8 | **= final spec** ชื่อ field verified บน Deneb จริง (T19-01); เงื่อนไขจางแก้เป็น rev 4 ตามค่าจริงที่ Deneb ส่ง (Design Plan 2.2.3) — รอทดสอบซ้ำบน Deneb |
 
 บทที่ไม่มี Step JSON จาก prototype นี้:
 
@@ -44,7 +44,7 @@ npm install --prefix <tmp> vega@6 vega-lite@6
 VEGA_NODE_MODULES=<tmp>/node_modules node qa/scripts/run-workshop-step-tests.mjs
 ```
 
-ผล: **338/338 ผ่าน** (ผลเต็มใน [`qa/evidence/phase2-workshop-steps/run-output.txt`](../qa/evidence/phase2-workshop-steps/run-output.txt)) — ต่อ Step ตรวจ:
+ผล: **364/364 ผ่าน** (รวม HL-* 26 ข้อ: 8 สถานการณ์ highlight บน final spec + regression 2 ข้อ) (ผลเต็มใน [`qa/evidence/phase2-workshop-steps/run-output.txt`](../qa/evidence/phase2-workshop-steps/run-output.txt)) — ต่อ Step ตรวจ:
 
 1. `data` ผูกกับ `{"name": "dataset"}` และไม่มี `values` ค้าง (กันผู้อ่านวางข้อมูลทดสอบลง Deneb)
 2. ลำดับ layer เป็น subsequence ของ final spec, เก็บ layer ของ Step ก่อนหน้าครบ (cumulative), ชุด layer ตรงกับแผนการสอนที่เขียนแยกจาก generator (`EXPECTED_LAYERS`), manifest ตรงกับไฟล์จริง, ทุก layer เป็น **structural subset** ของ layer ชื่อเดียวกันใน final spec (ทุก property ต้องมีใน final ด้วยค่าเดียวกัน array ต้องเป็น subsequence ตามลำดับ) และ top-level property อื่นเท่ากับ final spec — ยืนยันด้วย negative test แล้วว่าถ้าใส่ `mark.tooltip = null` กลับเข้าไป test จะ FAIL

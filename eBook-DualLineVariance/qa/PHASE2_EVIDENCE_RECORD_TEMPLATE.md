@@ -77,10 +77,13 @@ Actual ส่วนที่ 2 — ความพยายามครั้ง
   ปัญหาที่พบ (ใช้ประกอบบทที่ 8 "ปัญหาที่อาจพบ"): Column chart ตัวเดิมเปิดหน้า "Show data point as a table" ทุกครั้งที่คลิกซ้ายที่แท่ง (ภาพ T19-00) — แก้ได้โดยลบแล้วสร้าง Clustered column chart ใหม่ (สาเหตุของ Visual ตัวเดิมยังไม่ทราบ)
 Actual ส่วนที่ 2 — ความพยายามครั้งที่ 2 (24 ก.ย. 2026): Column chart ใหม่ คลิกแท่ง ก.ค. → แท่ง ก.ค. ถูกเลือก (แท่งอื่นจาง) แต่ Dual-Line chart **ไม่จางลงเลย** (ภาพ T19-04) — ยังไม่ทราบว่า Edit interactions ของ Column chart ใหม่ → Dual-Line ตั้งเป็น Highlight แล้วหรือไม่ และ Deneb ได้รับค่า __highlightStatus = off หรือไม่ (ถ้าเป็น Filter กราฟควรเหลือเฉพาะ ก.ค. — ไม่เป็นเช่นนั้น) → FAIL/INCONCLUSIVE รอตรวจ interaction mode + Data pane
 Actual ส่วนที่ 2 — ความพยายามครั้งที่ 3 (24 ก.ย. 2026, ภาพ T19-05): อยู่ในโหมด Edit interactions (ไอคอน Filter/Highlight/None ใต้ Dual-Line) ผู้ใช้ระบุว่าตั้ง Highlight — เลือกแท่ง ก.ค. แล้ว Dual-Line **ไม่จางเลย** และแสดงครบทุกเดือน (ภาพไม่ชัดพอจะยืนยันว่าไอคอนใดถูกเลือก) — ยังไม่ทราบค่า __highlightStatus ขณะนั้น
+Actual ส่วนที่ 2 — ข้อมูลที่ Deneb ได้รับขณะ highlight (24 ก.ย. 2026, ภาพ T19-06, Column chart ใหม่ = Highlight, เลือก ก.ค., 1-52 of 52): แถว Original ก.ค. (Sort_Order 7) Actual__highlight = 510 (= Actual); แถว Original อื่น (380, 520) Actual__highlight = null; **Actual__highlightStatus = "on" ทุกแถว** รวมแถวที่ไม่ถูก highlight และแถว Boundary/Crossing (ภาพไม่ได้แสดงคอลัมน์ Reference__highlight/Reference__highlightStatus — พฤติกรรมฝั่ง Reference ยังไม่มีหลักฐาน) — **ต่างจากเอกสาร deneb.guide** ที่ระบุว่า "off" = มี highlight แต่ measure ไม่ถูก highlight; spec rev 3 ทำให้จางเฉพาะ "off" จึงไม่จางเลย → FAIL ของ spec rev 3 (สาเหตุยืนยันแล้ว)
+  การแก้ (spec rev 4, ปรับตาม Codex R12 M-25): แต่ละ point layer จางตาม measure ของตัวเองเท่านั้น — จุด Actual ดู Actual__*, จุด Reference ดู Reference__* — เมื่อ status = "off" หรือ (status = "on" และ __highlight !== ค่าจริง); เส้นจางทั้งเส้นเมื่อ status ≠ "neutral"; ไม่จางถ้าไม่มี field — ทดสอบ headless 8 สถานการณ์ (absent/neutral/observed/documented/actualOnly/referenceOnly/actualFieldsOnly/zeroValue) + regression 2 ข้อ (เงื่อนไข rev 3 และเงื่อนไข OR สอง measure ต้องถูกจับได้) ผ่านทั้งหมด (HL-* ใน qa/evidence/phase2-workshop-steps/run-output.txt, ภาพตัวอย่าง HL-observed-july-preview.png) — **ยังต้องทดสอบซ้ำบน Deneb จริงด้วย spec rev 4**
+  row preservation ระหว่าง highlight: 1-52 of 52 ✅ (ปิดส่วน (ข) ของ T23)
 หลักฐาน (ภาพ/วิดีโอ): qa/evidence/phase2-powerbi/T19-01-highlightstatus-fields.png
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
-ผลสรุป: PARTIAL — ชื่อ field PASS, พฤติกรรม highlight NOT TESTED
+ผลสรุป: PARTIAL — ชื่อ field PASS; พฤติกรรม highlight: **FAIL สำหรับ spec rev 3** (ยืนยันสาเหตุจาก T19-06); spec rev 4 ผ่านเฉพาะ headless tests (HL-*) และรอทดสอบซ้ำบน Deneb จริง
 ```
 
 ---
@@ -159,7 +162,7 @@ Actual: [รอบที่ 1 — 24 ก.ย. 2026] ผูกครบ 12 field 
 ผลสรุป: FAIL (รอบที่ 1)
 Actual รอบที่ 2 (24 ก.ย. 2026): ผลทดสอบวินิจฉัยยืนยันสมมติฐาน — (1) เอา Actual/Reference ออก → 1-50 of 52 และพื้นที่สีแสดง (2) ใส่กลับ + measure DualLine Row Count → 1-50 of 52 (รวม 52 แถว) พื้นที่สี Good/Bad แสดงครบบน Deneb จริง, Category = null และ Filter_Key มีค่าในแถว Boundary/Crossing ตาม Field contract
 หลักฐาน รอบที่ 2: qa/evidence/phase2-powerbi/T23-02-diagnostic-no-measures-52-rows.png, T23-03-row-count-measure-52-rows.png
-ผลสรุป รอบที่ 2: PARTIAL — (ก) base configuration PASS: 52 แถวรวม (เห็นยอดรวม 1-50 of 52 และตัวอย่างแถว Boundary/Crossing แต่ภาพไม่ได้แสดงการนับแยก Original 12 / Boundary 22 / Crossing 18 โดยตรง) และพื้นที่สีครบ โดยมี DualLine Row Count ใน Values (Lock ใน PHASE1_DESIGN_PLAN.md หัวข้อ 2.1.1) (ข) row preservation ระหว่างรับ Cross-highlight: NOT TESTED — ต้องทดสอบร่วมกับ T19
+ผลสรุป รอบที่ 2: PARTIAL — (ก) base configuration PASS: 52 แถวรวม (เห็นยอดรวม 1-50 of 52 และตัวอย่างแถว Boundary/Crossing แต่ภาพไม่ได้แสดงการนับแยก Original 12 / Boundary 22 / Crossing 18 โดยตรง) และพื้นที่สีครบ โดยมี DualLine Row Count ใน Values (Lock ใน PHASE1_DESIGN_PLAN.md หัวข้อ 2.1.1) (ข) row preservation ระหว่างรับ Cross-highlight: PASS — 1-52 of 52 ขณะ highlight ก.ค. (ภาพ T19-06)
 ```
 
 ---

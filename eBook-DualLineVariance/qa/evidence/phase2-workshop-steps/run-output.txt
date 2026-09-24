@@ -335,6 +335,32 @@ PASS CH08-S01 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH08-S01 monotone introduced only from CH05-S04
 PASS CH08-S01 Y-domain params + scale introduced only from CH05-S05
 PASS CH08-S01 rendered Y domain :: got [340.4,639.6], expected [340.4,639.6]
+PASS HL-absent point_actual_hit_target opacity per Actual measure :: 0 wrong of 12
+PASS HL-absent point_reference opacity per Reference measure :: 0 wrong of 12
+PASS HL-absent lines opacity 1 :: actual 1, reference 1
+PASS HL-neutral point_actual_hit_target opacity per Actual measure :: 0 wrong of 12
+PASS HL-neutral point_reference opacity per Reference measure :: 0 wrong of 12
+PASS HL-neutral lines opacity 1 :: actual 1, reference 1
+PASS HL-observed point_actual_hit_target opacity per Actual measure :: 0 wrong of 12
+PASS HL-observed point_reference opacity per Reference measure :: 0 wrong of 12
+PASS HL-observed lines opacity 0.25 :: actual 0.25, reference 0.25
+PASS HL-documented point_actual_hit_target opacity per Actual measure :: 0 wrong of 12
+PASS HL-documented point_reference opacity per Reference measure :: 0 wrong of 12
+PASS HL-documented lines opacity 0.25 :: actual 0.25, reference 0.25
+PASS HL-actualOnly point_actual_hit_target opacity per Actual measure :: 0 wrong of 12
+PASS HL-actualOnly point_reference opacity per Reference measure :: 0 wrong of 12
+PASS HL-actualOnly lines opacity 0.25 :: actual 0.25, reference 0.25
+PASS HL-referenceOnly point_actual_hit_target opacity per Actual measure :: 0 wrong of 12
+PASS HL-referenceOnly point_reference opacity per Reference measure :: 0 wrong of 12
+PASS HL-referenceOnly lines opacity 0.25 :: actual 0.25, reference 0.25
+PASS HL-actualFieldsOnly point_actual_hit_target opacity per Actual measure :: 0 wrong of 12
+PASS HL-actualFieldsOnly point_reference opacity per Reference measure :: 0 wrong of 12
+PASS HL-actualFieldsOnly lines opacity 0.25 :: actual 0.25, reference 0.25
+PASS HL-zeroValue point_actual_hit_target opacity per Actual measure :: 0 wrong of 12
+PASS HL-zeroValue point_reference opacity per Reference measure :: 0 wrong of 12
+PASS HL-zeroValue lines opacity 0.25 :: actual 0.25, reference 0.25
+PASS HL-regression rev-3 condition fails HL-observed expectations (test has teeth) :: rev-3 wrong points 11, line 1
+PASS HL-regression OR-of-both point condition fails HL-actualOnly (test has teeth) :: wrong actual points 1
 PASS FINAL last step equals final spec (except description)
 
-338 passed, 0 failed
+364 passed, 0 failed
