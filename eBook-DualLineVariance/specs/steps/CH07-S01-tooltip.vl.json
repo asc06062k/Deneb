@@ -11,6 +11,28 @@
   "data": {
     "name": "dataset"
   },
+  "params": [
+    {
+      "name": "yRawMin",
+      "expr": "min(extent(pluck(data('dataset'), 'Plot_Actual'))[0], extent(pluck(data('dataset'), 'Plot_Reference'))[0])"
+    },
+    {
+      "name": "yRawMax",
+      "expr": "max(extent(pluck(data('dataset'), 'Plot_Actual'))[1], extent(pluck(data('dataset'), 'Plot_Reference'))[1])"
+    },
+    {
+      "name": "yPad",
+      "expr": "(yRawMax - yRawMin) * 0.18 || abs(yRawMax) * 0.1 || 1"
+    },
+    {
+      "name": "yDomainMin",
+      "expr": "isFinite(yRawMin) ? yRawMin - yPad : 0"
+    },
+    {
+      "name": "yDomainMax",
+      "expr": "isFinite(yRawMax) ? max(yRawMax + yPad, yDomainMin + 1) : 1"
+    }
+  ],
   "layer": [
     {
       "name": "variance_area",
@@ -237,7 +259,19 @@
         "y": {
           "field": "Plot_Actual",
           "type": "quantitative",
-          "title": "ยอดขาย (พันบาท)"
+          "title": "ยอดขาย (พันบาท)",
+          "scale": {
+            "domain": [
+              {
+                "expr": "yDomainMin"
+              },
+              {
+                "expr": "yDomainMax"
+              }
+            ],
+            "zero": false,
+            "nice": false
+          }
         }
       }
     },

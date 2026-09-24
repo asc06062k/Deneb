@@ -134,6 +134,46 @@ Actual:
 
 ---
 
+## T36 — แกน Y อัตโนมัติ ±18% แบบต้นแบบ (เพิ่ม 24 ก.ย. 2026 ตามคำตัดสินผู้ใช้ + Codex R6)
+
+spec คำนวณ domain จาก `data('dataset')` ทุกแถว ดู `params` ใน `specs/dual-line-variance-final.vl.json` — ทุกกรณีดูค่าต่ำสุด/สูงสุดของแกน Y ที่แสดง (หรือ signal `yDomainMin`/`yDomainMax` ใน Signal viewer ของ Deneb)
+
+```text
+Test ID: T36-A (ข้อมูลเต็ม ไม่มี filter)
+Expected: Signal yDomainMin = 340.4, yDomainMax = 639.6 (ข้อมูล 380–600); แกน Y ไม่เริ่มที่ 0; ยืนยันด้วยว่า Deneb ใช้ชื่อ data source "dataset" จริง (ถ้าไม่ใช่ แกนจะเป็น [0, 1] หรือ error)
+Actual:
+หลักฐาน (screenshot กราฟ + Signal viewer):
+
+Test ID: T36-B (รับ Filter จาก Visual อื่น — Edit interactions = Filter หรือ Slicer)
+ขั้นตอนทำซ้ำ: กรองให้เหลือบางเดือน
+Expected: แถวใน dataset ลดลง และ domain คำนวณใหม่จากเดือนที่เหลือ (±18% ของช่วงใหม่)
+Actual:
+หลักฐาน:
+
+Test ID: T36-C (รับ Cross-highlight — Edit interactions = Highlight)
+Expected: แถวใน dataset ไม่ลดลง domain ไม่เปลี่ยนจาก T36-A (เว้นแต่ host ส่งข้อมูลแบบลดแถว — ถ้าเป็นเช่นนั้นให้บันทึก)
+Actual:
+หลักฐาน:
+
+Test ID: T36-D (คลิก Cross-filter จากกราฟนี้เอง — Simple mode)
+Expected: domain ของกราฟนี้ไม่เปลี่ยน (การคลิกกรอง Visual อื่น ไม่ได้กรอง dataset ของตัวเอง)
+Actual:
+หลักฐาน:
+
+Test ID: T36-E (Filter จนไม่เหลือข้อมูล)
+Expected: ไม่มี error, domain = [0, 1]
+Actual:
+หลักฐาน:
+
+Power BI Desktop version:
+Deneb version:
+ผู้ทดสอบ:
+วันที่:
+ผลสรุป: PASS / FAIL / NOT TESTED (แยกราย T36-A ถึง E)
+```
+
+---
+
 ## T14–T17, T34, T35 — Responsive ต่อขนาด viewport (Category axis label = Group B, Actual/Reference data label thinning = Group A)
 
 หมายเหตุ: T25 คือผลรวม (ต้องผ่านทุกขนาดด้านล่างจึงตัดสิน T25 = PASS) และ T26 คือผลรวมของ Group A ในทำนองเดียวกัน — กรอกทีละขนาดก่อน แล้วค่อยสรุป T25/T26 ที่ท้ายหัวข้อนี้ ร่วมกับข้อมูล: Baseline (12 เดือน) + T09 (ชื่อยาว) + T10 (24 categories)

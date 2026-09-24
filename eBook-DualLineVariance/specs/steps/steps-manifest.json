@@ -39,6 +39,17 @@
     ]
   },
   {
+    "id": "CH05-S05",
+    "file": "CH05-S05-y-domain.vl.json",
+    "title": "Y domain = data extent +/- 18% padding like the prototype (params + scale.domain expr)",
+    "layers": [
+      "line_reference",
+      "line_actual",
+      "point_reference",
+      "point_actual_hit_target"
+    ]
+  },
+  {
     "id": "CH06-S01",
     "file": "CH06-S01-variance-area.vl.json",
     "title": "variance area between lines, Good/Bad color from Business_Type",

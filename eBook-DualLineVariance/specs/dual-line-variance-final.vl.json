@@ -1,10 +1,17 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 2 after Codex round 1). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
+  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
   "width": "container",
   "height": "container",
   "autosize": { "type": "fit", "contains": "padding", "resize": true },
   "data": { "name": "dataset" },
+  "params": [
+    { "name": "yRawMin", "expr": "min(extent(pluck(data('dataset'), 'Plot_Actual'))[0], extent(pluck(data('dataset'), 'Plot_Reference'))[0])" },
+    { "name": "yRawMax", "expr": "max(extent(pluck(data('dataset'), 'Plot_Actual'))[1], extent(pluck(data('dataset'), 'Plot_Reference'))[1])" },
+    { "name": "yPad", "expr": "(yRawMax - yRawMin) * 0.18 || abs(yRawMax) * 0.1 || 1" },
+    { "name": "yDomainMin", "expr": "isFinite(yRawMin) ? yRawMin - yPad : 0" },
+    { "name": "yDomainMax", "expr": "isFinite(yRawMax) ? max(yRawMax + yPad, yDomainMin + 1) : 1" }
+  ],
   "layer": [
     {
       "name": "variance_area",
@@ -111,7 +118,12 @@
             "labelAngle": 0
           }
         },
-        "y": { "field": "Plot_Actual", "type": "quantitative", "title": "ยอดขาย (พันบาท)" },
+        "y": {
+          "field": "Plot_Actual",
+          "type": "quantitative",
+          "title": "ยอดขาย (พันบาท)",
+          "scale": { "domain": [{ "expr": "yDomainMin" }, { "expr": "yDomainMax" }], "zero": false, "nice": false }
+        },
         "opacity": {
           "condition": { "test": "datum.Actual__highlightStatus == 'off' || datum.Reference__highlightStatus == 'off'", "value": 0.25 },
           "value": 1

@@ -53,6 +53,7 @@ const EXPECTED_LAYERS = {
   "CH05-S02": ["line_reference", "line_actual"],
   "CH05-S03": L05,
   "CH05-S04": L05,
+  "CH05-S05": L05,
   "CH06-S01": ["variance_area", ...L05],
   "CH06-S02": ["variance_area", "bad_area_border_actual", "bad_area_border_reference", ...L05],
   "CH06-S03": L06,
@@ -152,6 +153,11 @@ for (const step of manifest) {
   const lineActual = spec.layer.find((l) => l.name === "line_actual");
   const wantsMonotone = !["CH05-S01", "CH05-S02", "CH05-S03"].includes(step.id);
   check(step.id, "monotone introduced only from CH05-S04", (lineActual.mark.interpolate === "monotone") === wantsMonotone);
+  const wantsYDomain = !["CH05-S01", "CH05-S02", "CH05-S03", "CH05-S04"].includes(step.id);
+  check(step.id, "Y-domain params + scale introduced only from CH05-S05", (!!spec.params && !!lineActual.encoding.y.scale) === wantsYDomain && (!!spec.params) === (!!lineActual.encoding.y.scale));
+  const yDom = view.scale("y").domain();
+  const expDom = wantsYDomain ? [340.4, 639.6] : [0, 600];
+  check(step.id, "rendered Y domain", Math.abs(yDom[0] - expDom[0]) < 1e-9 && Math.abs(yDom[1] - expDom[1]) < 1e-9, `got [${yDom}], expected [${expDom}]`);
   view.finalize();
 }
 

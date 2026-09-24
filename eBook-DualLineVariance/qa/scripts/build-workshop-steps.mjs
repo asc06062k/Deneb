@@ -22,6 +22,7 @@ const layer = (name) => {
 // Intermediate forms: strip features that a later step introduces.
 const noOpacity = (l) => { delete l.encoding.opacity; return l; };
 const noInterpolate = (l) => { delete l.mark.interpolate; return l; };
+const noYDomain = (l) => { delete l.encoding.y.scale; return l; };
 const noTooltip = (l) => {
   delete l.encoding.tooltip;
   l.transform = l.transform.filter((t) => !("calculate" in t));
@@ -39,8 +40,10 @@ function makeSpec(stepId, title, layers) {
     height: finalSpec.height,
     autosize: clone(finalSpec.autosize),
     data: clone(finalSpec.data),
-    layer: sorted,
   };
+  // Y-domain params only once a layer references them (from CH05-S05).
+  if (sorted.some((l) => l.encoding.y && l.encoding.y.scale)) spec.params = clone(finalSpec.params);
+  spec.layer = sorted;
   if (sorted.length > 1) spec.resolve = clone(finalSpec.resolve);
   spec.config = clone(finalSpec.config);
   return spec;
@@ -50,7 +53,7 @@ function makeSpec(stepId, title, layers) {
 const steps = [];
 const add = (id, file, title, layers) => steps.push({ id, file, title, layers });
 
-const s05_1 = [noOpacity(noInterpolate(layer("line_actual")))];
+const s05_1 = [noYDomain(noOpacity(noInterpolate(layer("line_actual"))))];
 add("CH05-S01", "CH05-S01-line-actual.vl.json", "first line: Actual only, Row_Type = Original filter, Thai month axis", s05_1);
 
 const s05_2 = [...s05_1, noOpacity(noInterpolate(layer("line_reference")))];
@@ -59,10 +62,13 @@ add("CH05-S02", "CH05-S02-line-reference.vl.json", "add Reference line as second
 const s05_3 = [...s05_2, noOpacity(layer("point_reference")), noOpacity(noTooltip(layer("point_actual_hit_target")))];
 add("CH05-S03", "CH05-S03-points.vl.json", "add point marks for Actual and Reference", s05_3);
 
-const s05_4 = [noOpacity(layer("line_actual")), noOpacity(layer("line_reference")), ...s05_3.slice(2)];
+const s05_4 = [noYDomain(noOpacity(layer("line_actual"))), noOpacity(layer("line_reference")), ...s05_3.slice(2)];
 add("CH05-S04", "CH05-S04-monotone.vl.json", "curve both lines with interpolate: monotone (known limitation M-11)", s05_4);
 
-const s06_1 = [...s05_4, layer("variance_area")];
+const s05_5 = [noOpacity(layer("line_actual")), ...s05_4.slice(1)];
+add("CH05-S05", "CH05-S05-y-domain.vl.json", "Y domain = data extent +/- 18% padding like the prototype (params + scale.domain expr)", s05_5);
+
+const s06_1 = [...s05_5, layer("variance_area")];
 add("CH06-S01", "CH06-S01-variance-area.vl.json", "variance area between lines, Good/Bad color from Business_Type", s06_1);
 
 const s06_2 = [...s06_1, layer("bad_area_border_actual"), layer("bad_area_border_reference")];
