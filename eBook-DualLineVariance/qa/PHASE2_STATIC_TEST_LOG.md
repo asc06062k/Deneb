@@ -87,6 +87,8 @@
 
 ตรงกับการคำนวณมือ (20/400=5.0%, -30/410=-7.3%) — ยืนยัน `calculate` transform ทั้งสามตัว (`Variance`, `VarianceLabel`, `VariancePercentLabel`) ทำงานถูกต้องที่ระดับ spec จริง ไม่ใช่แค่ที่ระดับ JS reference
 
+**ยืนยันบน Power BI + Deneb จริง (24 ก.ย. 2026, ภาพ `qa/evidence/phase2-powerbi/TOOLTIP-01-may-real-deneb.png`)**: hover จุด Actual ของ พ.ค. → tooltip แสดง เดือน พ.ค. / ยอดขายจริง 500 / เป้าหมาย 470 / ผลต่าง +30 / ผลต่าง % +6.4% — ตรงกับการคำนวณมือ (30/470 = 6.38%) และชื่อ field ภาษาไทยแสดงถูกต้อง (spec rev 5)
+
 **guard Reference=0 (`'N/A (เป้าหมาย = 0)'`)**: ทดสอบโดยตั้ง Reference ของ มิ.ย. = 0 แล้ว re-render — เส้น Connector และจุด Reference เลื่อนไปที่ 0 จริงตามที่คาดหวัง (ยืนยันว่า transform pipeline ใช้ค่าที่ตั้งใหม่จริง) แต่ **ไม่สามารถอ่านค่า string `VariancePercentLabel` ที่แม่นยำผ่าน `VEGA_DEBUG` ได้ในรอบทดสอบนี้เพราะ reference เครื่องมือ debug ค้างค่าเก่า (เป็นข้อจำกัดของเครื่องมือ ไม่ใช่ของ spec)** — สูตร ternary เดียวกันได้พิสูจน์ถูกต้องแล้วที่ชั้นที่ 1 (T07) ระดับ JS logic ล้วน จึงถือว่าตรรกะถูก แต่การยืนยันที่ระดับ DOM string โดยตรงยังไม่สมบูรณ์ 100%
 
 ### บั๊กใหม่ที่พบระหว่าง re-render รอบที่ 2 และแก้ไขแล้ว
