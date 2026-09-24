@@ -105,6 +105,8 @@
 
 ## M code (`specs/DualLine_PlotData_PowerQuery.pq`) [M-NOT-COMPILED]
 
+**อัปเดต 24 ก.ย. 2026 — compile จริงแล้ว (ผู้ใช้รายงาน)**: วางใน Power Query Advanced Editor แล้ว compile ผ่าน ได้ **52 แถว** ตรงกับ WORKSHOP ในชั้นที่ 1 (12 Original + 18 Crossing + 22 Boundary) และคอลัมน์ที่เห็นใน Data pane ตรงกับ schema (Actual, Business_Type, Category, Filter_Key, Plot_Actual, Plot_Position, Plot_Reference, Reference, Row_Type, Run_Sign, Segment_ID, Sort_Order) — **แต่ query ยังชื่อ `Query`** ต้องเปลี่ยนเป็น `DualLine_PlotData` ตาม Design Plan หัวข้อ 2.1 สถานะด้านล่างนี้คือบันทึกก่อน compile
+
 ตรวจได้เฉพาะการอ่านโค้ดด้วยตา (code review) — **ยังไม่ได้รันจริงใน Power Query Editor** เพราะ Claude/Codex ไม่มีสิทธิ์เข้าถึง Power BI Desktop:
 
 - แก้ M-06 แล้ว: เพิ่ม guard `Table.RowCount(DualLineVariance_Settings) = 1` ก่อนอ่าน `Business_Type_Source` — throw `error Error.Record("DualLine.SettingsRowCountInvalid", ...)` ถ้าไม่ใช่ 1 แถวพอดี

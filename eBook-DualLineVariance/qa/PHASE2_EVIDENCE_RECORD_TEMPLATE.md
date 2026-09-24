@@ -10,6 +10,13 @@ Claude/Codex ไม่มีสิทธิ์เข้าถึง Power BI Des
 - DAX: `dax/workshop-measures.dax`
 - Vega-Lite spec: `specs/dual-line-variance-final.vl.json` (วางใน Deneb Editor ผูก `data.name = "dataset"` เข้ากับ `DualLine_PlotData`)
 
+**วิธีผูก Values ของ Deneb (เพิ่ม 24 ก.ย. 2026 หลังเห็นภาพ T30-01 ที่ผูกไว้เพียง 4 field จาก query ชื่อ `Query` จนได้ dataset 12 แถวและกราฟว่าง)** — ต้องผูกจากตาราง `DualLine_PlotData` (เปลี่ยนชื่อ query จาก `Query` ใน Power Query ก่อน):
+- ตั้งเป็น **Don't summarize** (คลิกลูกศรที่ field ในช่อง Values): `Plot_Position`, `Plot_Actual`, `Plot_Reference`, `Run_Sign`, `Sort_Order` — ถ้าปล่อยเป็น Sum จะเหลือไม่ถึง 52 แถว (คอลัมน์ข้อความอย่างเดียวแยกแถวได้แค่ 50 แถว ตรวจจาก `qa/scripts/workshop-plotdata.json`)
+- คอลัมน์ข้อความ: `Row_Type`, `Category`, `Segment_ID`, `Business_Type`, `Filter_Key`
+- **คง Sum ไว้** (เป็น measure): `Actual`, `Reference` — เพื่อให้ Deneb สร้าง `Actual__highlight`/`Actual__highlightStatus`/`Reference__highlight`/`Reference__highlightStatus` ที่ spec ใช้ (แถว Boundary/Crossing มีค่า null อยู่แล้ว ผลรวมจึงไม่เปลี่ยนค่า)
+- ชื่อใน Values ต้องเป็นชื่อ field ตรงตัว (เช่น `Actual` ไม่ใช่ `Sum of Actual`) — ถ้า Power BI เติม "Sum of" ให้ rename ในช่อง Values
+- หลังผูกแล้ว Data pane ของ Deneb ต้องแสดง **1-52 of 52**
+
 แบบฟอร์มด้านล่างมีทุกช่องพร้อม Test ID และ Expected ที่ Lock ไว้แล้ว — กรอกเฉพาะส่วนที่เหลือ (Actual, หลักฐาน, ผู้ทดสอบ, วันที่, ผลสรุป)
 
 ---
@@ -326,11 +333,19 @@ Test ID: T30
   - Supporting Fields: dataset (Highlight value / Highlight status / Highlight comparator)
   - section Context menu (Show context menu on right-click / Attempt to resolve data point-specific actions)
 Expected: ชื่อ/ตำแหน่งตรงกับที่อ้างจากเอกสาร deneb.guide
-Actual (ระบุความต่างถ้ามี):
-หลักฐาน (screenshot แต่ละหน้าตั้งค่า):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+Actual (ระบุความต่างถ้ามี): [กรอกบางส่วนจากภาพที่ 1 — 24 ก.ย. 2026]
+  - Editor มีแท็บ Specification / Config / Project setup — ตรง ("Project setup" คือแท็บ ไม่ใช่ pane แยก)
+  - Cross-filtering: "Expose cross-filtering values for dataset rows" (เปิดอยู่) — ตรง
+  - "Cross-filtering management": Simple ("Let Deneb attempt to resolve cross-filtering for me") / Advanced ("available for Vega only") — ตรง; มีการตั้งค่าเพิ่ม "Data point limit" = 50 (default) ที่เอกสารของเราไม่ได้อ้างถึง
+  - Cross-highlighting: "Expose cross-highlight values for measures" (เปิดอยู่) — ตรง
+  - Supporting Fields: dataset (Highlight value/status/comparator) — ยังไม่เห็นในภาพ
+  - Context menu — section มีอยู่จริง (ยุบไว้) ยังไม่เห็นชื่อการตั้งค่าข้างใน
+  - Footer แสดง "Vega-Lite 6.4.3" — ตรงกับเวอร์ชันที่ใช้ทดสอบ headless
+  - Data pane แสดงคอลัมน์ __row__, __selected__ (neutral), Actual__highlight... — ชื่อ highlight field ใช้ชื่อที่แสดงของ field ("Actual") สอดคล้องกับ spec (T19 ต้องยืนยัน Actual__highlightStatus ต่อ)
+หลักฐาน (screenshot แต่ละหน้าตั้งค่า): qa/evidence/phase2-powerbi/T30-01-project-setup-crossfilter-highlight.png
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PARTIAL — รอภาพ section Context menu (ขยาย) และ Supporting Fields: dataset
 ```
 
 ---
