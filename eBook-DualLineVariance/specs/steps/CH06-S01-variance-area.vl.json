@@ -13,6 +13,22 @@
   },
   "params": [
     {
+      "name": "xAxisSortOrders",
+      "expr": "pluck(data('dataset'), 'Sort_Order')"
+    },
+    {
+      "name": "xAxisCategories",
+      "expr": "pluck(data('dataset'), 'Category')"
+    },
+    {
+      "name": "xAxisSortExtent",
+      "expr": "extent(xAxisSortOrders)"
+    },
+    {
+      "name": "xAxisValues",
+      "expr": "isValid(xAxisSortExtent[0]) ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []"
+    },
+    {
       "name": "yRawMin",
       "expr": "min(extent(pluck(data('dataset'), 'Plot_Actual'))[0], extent(pluck(data('dataset'), 'Plot_Reference'))[0])"
     },
@@ -132,21 +148,11 @@
           "type": "quantitative",
           "title": "เดือน",
           "axis": {
-            "values": [
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-              7,
-              8,
-              9,
-              10,
-              11,
-              12
-            ],
-            "labelExpr": "['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][datum.value - 1]",
+            "values": {
+              "expr": "xAxisValues"
+            },
+            "labelExpr": "indexof(xAxisSortOrders, datum.value) >= 0 ? xAxisCategories[indexof(xAxisSortOrders, datum.value)] : ''",
+            "labelLimit": 120,
             "labelOverlap": "greedy",
             "labelAngle": 0
           }

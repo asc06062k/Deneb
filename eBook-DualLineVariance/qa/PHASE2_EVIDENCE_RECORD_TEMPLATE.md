@@ -320,7 +320,7 @@ Actual รอบที่ 1 (24 ก.ย. 2026, สภาพแวดล้อม
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง) + วิเคราะห์ไฟล์แบบ headless
 วันที่: 24 ก.ย. 2026
 Actual รอบที่ 2 (24 ก.ย. 2026, ภาพ T27-03): Import T27-template-fixed.json บน Deneb จริง → กราฟ render ครบ (เส้น, พื้นที่สี, connector, ป้าย, แกน), dataset 1-50 of 52, ไม่มี error
-ผลสรุป: PASS WITH LIMITATION — template ที่ Deneb 2.0.0.0 export ตรงๆ ใช้ไม่ได้ (บั๊ก escaping) แต่หลังแทนที่ `\'` → `'` import ได้ถูกต้องบน Deneb จริง; ทดสอบเฉพาะการ import กับข้อมูลชุดเดิม — ข้อจำกัดตอนนำไปใช้กับข้อมูลใหม่ (ต้องทำ Power Query step เอง, labelExpr ชื่อเดือน 12 ค่าตายตัว) ยังเป็นไปตาม Design Plan 2.5/4.1 และไม่ได้ทดสอบกับข้อมูลใหม่; บทที่ 9 ต้องแจก template ที่แก้แล้ว + สอนวิธีแก้ไฟล์ export เอง
+ผลสรุป: PASS WITH LIMITATION — template ที่ Deneb 2.0.0.0 export ตรงๆ ใช้ไม่ได้ (บั๊ก escaping) แต่หลังแทนที่ `\'` → `'` import ได้ถูกต้องบน Deneb จริง; ทดสอบเฉพาะการ import กับข้อมูลชุดเดิม — ข้อจำกัดตอนนำไปใช้กับข้อมูลใหม่: ต้องทำ Power Query step เอง (Design Plan 2.5) — ส่วน labelExpr ชื่อเดือนตายตัวถูกแทนด้วยแกน dynamic ใน spec rev 6 แล้ว (template นี้ export จาก rev 5 ต้อง export ใหม่จาก rev 6); ยังไม่ได้ทดสอบกับข้อมูลใหม่; บทที่ 9 ต้องแจก template ที่แก้แล้ว + สอนวิธีแก้ไฟล์ export เอง
 ```
 
 ---

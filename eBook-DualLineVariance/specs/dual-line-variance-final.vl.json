@@ -1,11 +1,15 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 5: highlight dims points, connector and data labels of non-highlighted months to 0.5, lines never dim (user request); rev 4: highlight rule per real Deneb evidence T19 (status on + __highlight null for non-highlighted rows); rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
+  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 6: x-axis labels read Category from the dataset via Sort_Order lookup (T09/T10, user decision); rev 5: highlight dims points, connector and data labels of non-highlighted months to 0.5, lines never dim (user request); rev 4: highlight rule per real Deneb evidence T19 (status on + __highlight null for non-highlighted rows); rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
   "width": "container",
   "height": "container",
   "autosize": { "type": "fit", "contains": "padding", "resize": true },
   "data": { "name": "dataset" },
   "params": [
+    { "name": "xAxisSortOrders", "expr": "pluck(data('dataset'), 'Sort_Order')" },
+    { "name": "xAxisCategories", "expr": "pluck(data('dataset'), 'Category')" },
+    { "name": "xAxisSortExtent", "expr": "extent(xAxisSortOrders)" },
+    { "name": "xAxisValues", "expr": "isValid(xAxisSortExtent[0]) ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []" },
     { "name": "yRawMin", "expr": "min(extent(pluck(data('dataset'), 'Plot_Actual'))[0], extent(pluck(data('dataset'), 'Plot_Reference'))[0])" },
     { "name": "yRawMax", "expr": "max(extent(pluck(data('dataset'), 'Plot_Actual'))[1], extent(pluck(data('dataset'), 'Plot_Reference'))[1])" },
     { "name": "yPad", "expr": "(yRawMax - yRawMin) * 0.18 || abs(yRawMax) * 0.1 || 1" },
@@ -112,8 +116,9 @@
           "type": "quantitative",
           "title": "เดือน",
           "axis": {
-            "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-            "labelExpr": "['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][datum.value - 1]",
+            "values": { "expr": "xAxisValues" },
+            "labelExpr": "indexof(xAxisSortOrders, datum.value) >= 0 ? xAxisCategories[indexof(xAxisSortOrders, datum.value)] : ''",
+            "labelLimit": 120,
             "labelOverlap": "greedy",
             "labelAngle": 0
           }

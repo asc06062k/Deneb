@@ -101,7 +101,8 @@ for (const step of manifest) {
     check(step.id, `layer ${l.name} is a structural subset of final spec`, !diff, diff || "");
   }
   for (const k of Object.keys(spec).filter((k) => !["description", "layer"].includes(k))) {
-    check(step.id, `top-level ${k} equals final spec`, same(spec[k], finalSpec[k]));
+    const d = k === "params" ? isSubset(spec[k], finalSpec[k], "params") : same(spec[k], finalSpec[k]) ? null : "differs";
+    check(step.id, `top-level ${k} ${k === "params" ? "is an in-order subset of" : "equals"} final spec`, !d, d || "");
   }
 
   check(step.id, "data binds to Deneb dataset", spec.data && spec.data.name === "dataset" && !spec.data.values);
@@ -154,7 +155,9 @@ for (const step of manifest) {
   const wantsMonotone = !["CH05-S01", "CH05-S02", "CH05-S03"].includes(step.id);
   check(step.id, "monotone introduced only from CH05-S04", (lineActual.mark.interpolate === "monotone") === wantsMonotone);
   const wantsYDomain = !["CH05-S01", "CH05-S02", "CH05-S03", "CH05-S04"].includes(step.id);
-  check(step.id, "Y-domain params + scale introduced only from CH05-S05", (!!spec.params && !!lineActual.encoding.y.scale) === wantsYDomain && (!!spec.params) === (!!lineActual.encoding.y.scale));
+  const hasYParams = (spec.params || []).some((p) => p.name === "yDomainMin");
+  check(step.id, "Y-domain params + scale introduced only from CH05-S05", hasYParams === wantsYDomain && hasYParams === !!lineActual.encoding.y.scale);
+  check(step.id, "x-axis label params present (dynamic Category axis)", (spec.params || []).some((p) => p.name === "xAxisCategories"));
   const yDom = view.scale("y").domain();
   const expDom = wantsYDomain ? [340.4, 639.6] : [0, 600];
   check(step.id, "rendered Y domain", Math.abs(yDom[0] - expDom[0]) < 1e-9 && Math.abs(yDom[1] - expDom[1]) < 1e-9, `got [${yDom}], expected [${expDom}]`);
@@ -231,6 +234,50 @@ for (const step of manifest) {
   for (const n of ["point_actual_hit_target", "point_reference"]) rev4a.layer.find((l) => l.name === n).encoding.opacity.condition.test = both;
   const o4 = await render(rev4a, scen.actualOnly);
   check("HL-regression", "OR-of-both point condition fails HL-actualOnly (test has teeth)", wrong(o4.pa, scen.actualOnly.pa) > 0, `wrong actual points ${wrong(o4.pa, scen.actualOnly.pa)}`);
+}
+
+// Dynamic Category axis (rev 6, T09/T10): x-axis labels are looked up from the dataset
+// (Sort_Order -> Category), thinned by labelOverlap "greedy" and truncated by labelLimit.
+// Label overlap is NOT asserted here: headless Vega has no canvas to measure text and
+// over-estimates Thai glyph widths (combining vowels/tones count as characters), so its
+// bounds disagree with the rendered text. Group B "no overlap" is judged on Power BI (T25).
+{
+  const sets = [
+    ["baseline", "workshop-plotdata.json"],
+    ["T09-long", "T09_LongCategory-plotdata.json"],
+    ["T10-24", "T10_24Categories-plotdata.json"],
+  ];
+  const sizes = [[280, 180], [480, 270], [800, 450], [1200, 675], [1200, 220], [320, 700]];
+  for (const [label, file] of sets) {
+    const rows = JSON.parse(readFileSync(join(root, "qa", "scripts", file), "utf8"));
+    const lineAxis = finalSpec.layer.find((l) => l.name === "line_actual").encoding.x.axis;
+    check("AXIS-" + label, "axis uses greedy overlap removal + labelLimit", lineAxis.labelOverlap === "greedy" && lineAxis.labelLimit > 0);
+    const names = rows.filter((r) => r.Row_Type === "Original").sort((a, b) => a.Sort_Order - b.Sort_Order).map((r) => r.Category);
+    for (const [w, h] of sizes) {
+      const s = JSON.parse(JSON.stringify(finalSpec));
+      s.data = { name: "dataset", values: rows };
+      s.width = w;
+      s.height = h;
+      const view = new vega.View(vega.parse(vl.compile(s).spec), { renderer: "none" });
+      await view.runAsync();
+      await view.runAsync(); // second pass after autosize fit
+      // collect label items per axis; the x axis is the one whose labels are not numbers
+      const axes = [];
+      const walk = (m) => {
+        if (m.role === "axis-label") axes.push(m.items.filter((it) => it.text !== "" && it.opacity !== 0));
+        for (const it of m.items || []) for (const c of it.items || []) walk(c);
+      };
+      for (const m of view.scenegraph().root.items[0].items) walk(m);
+      const xl = axes.find((a) => a.length && a.some((it) => isNaN(Number(String(it.text).replace(/,/g, ""))))) || [];
+      const texts = xl.map((it) => String(it.text));
+      const fromData = texts.every((tx) => names.some((n) => n === tx || (tx.endsWith("…") && n.startsWith(tx.slice(0, -1)))));
+      const id = `AXIS-${label}-${w}x${h}`;
+      check(id, "x-axis shows at least 2 labels", texts.length >= 2, texts.join(" | "));
+      check(id, "every x-axis label comes from the Category field (or its truncation)", fromData, texts.join(" | "));
+      check(id, "first label = first Category", texts[0] === names[0] || (texts[0].endsWith("…") && names[0].startsWith(texts[0].slice(0, -1))), texts[0]);
+      view.finalize();
+    }
+  }
 }
 
 const last = JSON.parse(readFileSync(join(root, "specs", "steps", manifest[manifest.length - 1].file), "utf8"));

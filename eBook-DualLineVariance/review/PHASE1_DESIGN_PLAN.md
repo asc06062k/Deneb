@@ -274,6 +274,14 @@ Prototype รอบนี้ใช้ array คงที่ (`['Jan','Feb',...]`
 
 **Design Lock (ยอมรับข้อจำกัด)**: บทที่ 5 จะสอนให้ผู้อ่านสร้าง `labelExpr` เป็น array ที่ต้องปรับด้วยตัวเองให้ตรงกับ Category ของ Workshop dataset (สร้างจาก Sort_Order → Category mapping ครั้งเดียวตอนเขียน spec) **ระบุเป็นข้อจำกัดของ Template ร่วมกับข้อจำกัดเรื่อง Crossing-case ในหัวข้อ 2.5**: ถ้าผู้อ่านเปลี่ยนจำนวนหรือชื่อ Category ต้องแก้ `labelExpr` array ด้วยตนเอง ไม่ใช่แค่เปลี่ยนข้อมูล — Phase 2 ต้องพิสูจน์ว่ามีทางเลือกที่ dynamic กว่านี้หรือไม่ (เช่น Vega [ไม่ใช่ Vega-Lite] ที่มี `lookup` transform ที่ทรงพลังกว่า) ถ้าไม่มีให้คงข้อจำกัดนี้ไว้
 
+**Amendment Phase 2 (24 ก.ย. 2026, ผู้ใช้เลือกทำแกน dynamic ตามคำแนะนำ Codex R16 M-27) — แทนที่ Design Lock ข้างบน**: spec rev 6 ไม่ใช้ array คงที่แล้ว — อ่านชื่อ Category จาก `dataset` ด้วย params:
+- `xAxisSortOrders = pluck(data('dataset'), 'Sort_Order')`, `xAxisCategories = pluck(data('dataset'), 'Category')` (สอง array เรียงตามแถวเดียวกัน; แถว Fill มี Sort_Order เป็น null จึงไม่ถูกเลือก)
+- `axis.values = xAxisValues` = `sequence(min, max+1)` ของ Sort_Order (อาศัย `Plot_Position = Sort_Order` ของแถว Original ตาม M code บรรทัด 74)
+- `labelExpr` = `xAxisCategories[indexof(xAxisSortOrders, datum.value)]` (ว่างถ้าเดือนนั้นถูกกรองออก)
+- `labelOverlap: "greedy"` (Group B) + `labelLimit: 120` ตัดชื่อยาวด้วย "…"
+- หลักฐาน headless: ชื่อบนแกนมาจาก Category ครบทั้ง baseline/T09 (ชื่อยาว 38 ตัวอักษร)/T10 (24 categories) ทุก 6 viewport (AXIS-* ใน run-output.txt) — **การไม่ทับซ้อน (Group B) ตัดสินบน Power BI จริงเท่านั้น** เพราะ headless วัดความกว้างอักษรไทยไม่ได้
+- ข้อจำกัดเดิม "ต้องแก้ labelExpr เองเมื่อเปลี่ยนข้อมูล" ถูกถอนออก; ข้อจำกัดที่ยังเหลือ: `Sort_Order` ต้องเป็นเลขจำนวนเต็มเรียงกัน และเดือนที่ถูกกรองออกจะไม่มีชื่อบนแกน
+
 ### 4.2 กลไก Responsive (Lock เบื้องต้น รอ Phase 2 ยืนยัน)
 
 - Category axis: `"width": "container"` ร่วมกับ `axis.labelOverlap: "greedy"` และ `labelAngle: 0` — ถ้า `width: "container"` ไม่ทำงานตรงตามที่ Deneb ต้องการให้ทดสอบ `autosize: {"type": "fit", "resize": true}` เป็นทางเลือกสำรอง (ทั้งสองทางยังไม่พิสูจน์ใน Power BI จริง)

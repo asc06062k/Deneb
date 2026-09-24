@@ -6,6 +6,7 @@ PASS CH05-S01 top-level width equals final spec
 PASS CH05-S01 top-level height equals final spec
 PASS CH05-S01 top-level autosize equals final spec
 PASS CH05-S01 top-level data equals final spec
+PASS CH05-S01 top-level params is an in-order subset of final spec
 PASS CH05-S01 top-level config equals final spec
 PASS CH05-S01 data binds to Deneb dataset
 PASS CH05-S01 layer order is a subsequence of final spec order
@@ -17,6 +18,7 @@ PASS CH05-S01 renders to SVG
 PASS CH05-S01 mark count line_actual :: got 1, expected 1
 PASS CH05-S01 monotone introduced only from CH05-S04
 PASS CH05-S01 Y-domain params + scale introduced only from CH05-S05
+PASS CH05-S01 x-axis label params present (dynamic Category axis)
 PASS CH05-S01 rendered Y domain :: got [0,600], expected [0,600]
 PASS CH05-S02 manifest layers match file layers :: manifest=line_reference,line_actual
 PASS CH05-S02 layer set matches the expected lesson plan :: got line_reference,line_actual
@@ -27,6 +29,7 @@ PASS CH05-S02 top-level width equals final spec
 PASS CH05-S02 top-level height equals final spec
 PASS CH05-S02 top-level autosize equals final spec
 PASS CH05-S02 top-level data equals final spec
+PASS CH05-S02 top-level params is an in-order subset of final spec
 PASS CH05-S02 top-level resolve equals final spec
 PASS CH05-S02 top-level config equals final spec
 PASS CH05-S02 data binds to Deneb dataset
@@ -40,6 +43,7 @@ PASS CH05-S02 mark count line_reference :: got 1, expected 1
 PASS CH05-S02 mark count line_actual :: got 1, expected 1
 PASS CH05-S02 monotone introduced only from CH05-S04
 PASS CH05-S02 Y-domain params + scale introduced only from CH05-S05
+PASS CH05-S02 x-axis label params present (dynamic Category axis)
 PASS CH05-S02 rendered Y domain :: got [0,600], expected [0,600]
 PASS CH05-S03 manifest layers match file layers :: manifest=line_reference,line_actual,point_reference,point_actual_hit_target
 PASS CH05-S03 layer set matches the expected lesson plan :: got line_reference,line_actual,point_reference,point_actual_hit_target
@@ -52,6 +56,7 @@ PASS CH05-S03 top-level width equals final spec
 PASS CH05-S03 top-level height equals final spec
 PASS CH05-S03 top-level autosize equals final spec
 PASS CH05-S03 top-level data equals final spec
+PASS CH05-S03 top-level params is an in-order subset of final spec
 PASS CH05-S03 top-level resolve equals final spec
 PASS CH05-S03 top-level config equals final spec
 PASS CH05-S03 data binds to Deneb dataset
@@ -67,6 +72,7 @@ PASS CH05-S03 mark count point_reference :: got 12, expected 12
 PASS CH05-S03 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH05-S03 monotone introduced only from CH05-S04
 PASS CH05-S03 Y-domain params + scale introduced only from CH05-S05
+PASS CH05-S03 x-axis label params present (dynamic Category axis)
 PASS CH05-S03 rendered Y domain :: got [0,600], expected [0,600]
 PASS CH05-S04 manifest layers match file layers :: manifest=line_reference,line_actual,point_reference,point_actual_hit_target
 PASS CH05-S04 layer set matches the expected lesson plan :: got line_reference,line_actual,point_reference,point_actual_hit_target
@@ -79,6 +85,7 @@ PASS CH05-S04 top-level width equals final spec
 PASS CH05-S04 top-level height equals final spec
 PASS CH05-S04 top-level autosize equals final spec
 PASS CH05-S04 top-level data equals final spec
+PASS CH05-S04 top-level params is an in-order subset of final spec
 PASS CH05-S04 top-level resolve equals final spec
 PASS CH05-S04 top-level config equals final spec
 PASS CH05-S04 data binds to Deneb dataset
@@ -94,6 +101,7 @@ PASS CH05-S04 mark count point_reference :: got 12, expected 12
 PASS CH05-S04 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH05-S04 monotone introduced only from CH05-S04
 PASS CH05-S04 Y-domain params + scale introduced only from CH05-S05
+PASS CH05-S04 x-axis label params present (dynamic Category axis)
 PASS CH05-S04 rendered Y domain :: got [0,600], expected [0,600]
 PASS CH05-S05 manifest layers match file layers :: manifest=line_reference,line_actual,point_reference,point_actual_hit_target
 PASS CH05-S05 layer set matches the expected lesson plan :: got line_reference,line_actual,point_reference,point_actual_hit_target
@@ -106,7 +114,7 @@ PASS CH05-S05 top-level width equals final spec
 PASS CH05-S05 top-level height equals final spec
 PASS CH05-S05 top-level autosize equals final spec
 PASS CH05-S05 top-level data equals final spec
-PASS CH05-S05 top-level params equals final spec
+PASS CH05-S05 top-level params is an in-order subset of final spec
 PASS CH05-S05 top-level resolve equals final spec
 PASS CH05-S05 top-level config equals final spec
 PASS CH05-S05 data binds to Deneb dataset
@@ -122,6 +130,7 @@ PASS CH05-S05 mark count point_reference :: got 12, expected 12
 PASS CH05-S05 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH05-S05 monotone introduced only from CH05-S04
 PASS CH05-S05 Y-domain params + scale introduced only from CH05-S05
+PASS CH05-S05 x-axis label params present (dynamic Category axis)
 PASS CH05-S05 rendered Y domain :: got [340.4,639.6], expected [340.4,639.6]
 PASS CH06-S01 manifest layers match file layers :: manifest=variance_area,line_reference,line_actual,point_reference,point_actual_hit_target
 PASS CH06-S01 layer set matches the expected lesson plan :: got variance_area,line_reference,line_actual,point_reference,point_actual_hit_target
@@ -135,7 +144,7 @@ PASS CH06-S01 top-level width equals final spec
 PASS CH06-S01 top-level height equals final spec
 PASS CH06-S01 top-level autosize equals final spec
 PASS CH06-S01 top-level data equals final spec
-PASS CH06-S01 top-level params equals final spec
+PASS CH06-S01 top-level params is an in-order subset of final spec
 PASS CH06-S01 top-level resolve equals final spec
 PASS CH06-S01 top-level config equals final spec
 PASS CH06-S01 data binds to Deneb dataset
@@ -152,6 +161,7 @@ PASS CH06-S01 mark count point_reference :: got 12, expected 12
 PASS CH06-S01 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH06-S01 monotone introduced only from CH05-S04
 PASS CH06-S01 Y-domain params + scale introduced only from CH05-S05
+PASS CH06-S01 x-axis label params present (dynamic Category axis)
 PASS CH06-S01 rendered Y domain :: got [340.4,639.6], expected [340.4,639.6]
 PASS CH06-S02 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,line_reference,line_actual,point_reference,point_actual_hit_target
 PASS CH06-S02 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,line_reference,line_actual,point_reference,point_actual_hit_target
@@ -167,7 +177,7 @@ PASS CH06-S02 top-level width equals final spec
 PASS CH06-S02 top-level height equals final spec
 PASS CH06-S02 top-level autosize equals final spec
 PASS CH06-S02 top-level data equals final spec
-PASS CH06-S02 top-level params equals final spec
+PASS CH06-S02 top-level params is an in-order subset of final spec
 PASS CH06-S02 top-level resolve equals final spec
 PASS CH06-S02 top-level config equals final spec
 PASS CH06-S02 data binds to Deneb dataset
@@ -186,6 +196,7 @@ PASS CH06-S02 mark count point_reference :: got 12, expected 12
 PASS CH06-S02 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH06-S02 monotone introduced only from CH05-S04
 PASS CH06-S02 Y-domain params + scale introduced only from CH05-S05
+PASS CH06-S02 x-axis label params present (dynamic Category axis)
 PASS CH06-S02 rendered Y domain :: got [340.4,639.6], expected [340.4,639.6]
 PASS CH06-S03 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
 PASS CH06-S03 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
@@ -202,7 +213,7 @@ PASS CH06-S03 top-level width equals final spec
 PASS CH06-S03 top-level height equals final spec
 PASS CH06-S03 top-level autosize equals final spec
 PASS CH06-S03 top-level data equals final spec
-PASS CH06-S03 top-level params equals final spec
+PASS CH06-S03 top-level params is an in-order subset of final spec
 PASS CH06-S03 top-level resolve equals final spec
 PASS CH06-S03 top-level config equals final spec
 PASS CH06-S03 data binds to Deneb dataset
@@ -222,6 +233,7 @@ PASS CH06-S03 mark count point_reference :: got 12, expected 12
 PASS CH06-S03 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH06-S03 monotone introduced only from CH05-S04
 PASS CH06-S03 Y-domain params + scale introduced only from CH05-S05
+PASS CH06-S03 x-axis label params present (dynamic Category axis)
 PASS CH06-S03 rendered Y domain :: got [340.4,639.6], expected [340.4,639.6]
 PASS CH07-S01 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
 PASS CH07-S01 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target
@@ -238,7 +250,7 @@ PASS CH07-S01 top-level width equals final spec
 PASS CH07-S01 top-level height equals final spec
 PASS CH07-S01 top-level autosize equals final spec
 PASS CH07-S01 top-level data equals final spec
-PASS CH07-S01 top-level params equals final spec
+PASS CH07-S01 top-level params is an in-order subset of final spec
 PASS CH07-S01 top-level resolve equals final spec
 PASS CH07-S01 top-level config equals final spec
 PASS CH07-S01 data binds to Deneb dataset
@@ -258,6 +270,7 @@ PASS CH07-S01 mark count point_reference :: got 12, expected 12
 PASS CH07-S01 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH07-S01 monotone introduced only from CH05-S04
 PASS CH07-S01 Y-domain params + scale introduced only from CH05-S05
+PASS CH07-S01 x-axis label params present (dynamic Category axis)
 PASS CH07-S01 rendered Y domain :: got [340.4,639.6], expected [340.4,639.6]
 PASS CH07-S02 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target,label_actual,label_reference
 PASS CH07-S02 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target,label_actual,label_reference
@@ -276,7 +289,7 @@ PASS CH07-S02 top-level width equals final spec
 PASS CH07-S02 top-level height equals final spec
 PASS CH07-S02 top-level autosize equals final spec
 PASS CH07-S02 top-level data equals final spec
-PASS CH07-S02 top-level params equals final spec
+PASS CH07-S02 top-level params is an in-order subset of final spec
 PASS CH07-S02 top-level resolve equals final spec
 PASS CH07-S02 top-level config equals final spec
 PASS CH07-S02 data binds to Deneb dataset
@@ -296,6 +309,7 @@ PASS CH07-S02 mark count point_reference :: got 12, expected 12
 PASS CH07-S02 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH07-S02 monotone introduced only from CH05-S04
 PASS CH07-S02 Y-domain params + scale introduced only from CH05-S05
+PASS CH07-S02 x-axis label params present (dynamic Category axis)
 PASS CH07-S02 rendered Y domain :: got [340.4,639.6], expected [340.4,639.6]
 PASS CH08-S01 manifest layers match file layers :: manifest=variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target,label_actual,label_reference
 PASS CH08-S01 layer set matches the expected lesson plan :: got variance_area,bad_area_border_actual,bad_area_border_reference,connector_rule,line_reference,line_actual,point_reference,point_actual_hit_target,label_actual,label_reference
@@ -314,7 +328,7 @@ PASS CH08-S01 top-level width equals final spec
 PASS CH08-S01 top-level height equals final spec
 PASS CH08-S01 top-level autosize equals final spec
 PASS CH08-S01 top-level data equals final spec
-PASS CH08-S01 top-level params equals final spec
+PASS CH08-S01 top-level params is an in-order subset of final spec
 PASS CH08-S01 top-level resolve equals final spec
 PASS CH08-S01 top-level config equals final spec
 PASS CH08-S01 data binds to Deneb dataset
@@ -334,6 +348,7 @@ PASS CH08-S01 mark count point_reference :: got 12, expected 12
 PASS CH08-S01 mark count point_actual_hit_target :: got 12, expected 12
 PASS CH08-S01 monotone introduced only from CH05-S04
 PASS CH08-S01 Y-domain params + scale introduced only from CH05-S05
+PASS CH08-S01 x-axis label params present (dynamic Category axis)
 PASS CH08-S01 rendered Y domain :: got [340.4,639.6], expected [340.4,639.6]
 PASS HL-absent point_actual_hit_target opacity per Actual measure :: 0 wrong of 12
 PASS HL-absent point_reference opacity per Reference measure :: 0 wrong of 12
@@ -385,6 +400,63 @@ PASS HL-zeroValue label_reference opacity per Reference measure :: 0 wrong of 12
 PASS HL-zeroValue lines never dim :: actual 1, reference 1
 PASS HL-regression rev-3 condition fails HL-observed expectations (test has teeth) :: rev-3 wrong points 11
 PASS HL-regression OR-of-both point condition fails HL-actualOnly (test has teeth) :: wrong actual points 1
+PASS AXIS-baseline axis uses greedy overlap removal + labelLimit
+PASS AXIS-baseline-280x180 x-axis shows at least 2 labels :: ม.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline-280x180 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline-280x180 first label = first Category :: ม.ค.
+PASS AXIS-baseline-480x270 x-axis shows at least 2 labels :: ม.ค. | มี.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline-480x270 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | มี.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline-480x270 first label = first Category :: ม.ค.
+PASS AXIS-baseline-800x450 x-axis shows at least 2 labels :: ม.ค. | ก.พ. | มี.ค. | เม.ย. | พ.ค. | มิ.ย. | ก.ค. | ส.ค. | ก.ย. | ต.ค. | พ.ย. | ธ.ค.
+PASS AXIS-baseline-800x450 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | ก.พ. | มี.ค. | เม.ย. | พ.ค. | มิ.ย. | ก.ค. | ส.ค. | ก.ย. | ต.ค. | พ.ย. | ธ.ค.
+PASS AXIS-baseline-800x450 first label = first Category :: ม.ค.
+PASS AXIS-baseline-1200x675 x-axis shows at least 2 labels :: ม.ค. | ก.พ. | มี.ค. | เม.ย. | พ.ค. | มิ.ย. | ก.ค. | ส.ค. | ก.ย. | ต.ค. | พ.ย. | ธ.ค.
+PASS AXIS-baseline-1200x675 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | ก.พ. | มี.ค. | เม.ย. | พ.ค. | มิ.ย. | ก.ค. | ส.ค. | ก.ย. | ต.ค. | พ.ย. | ธ.ค.
+PASS AXIS-baseline-1200x675 first label = first Category :: ม.ค.
+PASS AXIS-baseline-1200x220 x-axis shows at least 2 labels :: ม.ค. | ก.พ. | มี.ค. | เม.ย. | พ.ค. | มิ.ย. | ก.ค. | ส.ค. | ก.ย. | ต.ค. | พ.ย. | ธ.ค.
+PASS AXIS-baseline-1200x220 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | ก.พ. | มี.ค. | เม.ย. | พ.ค. | มิ.ย. | ก.ค. | ส.ค. | ก.ย. | ต.ค. | พ.ย. | ธ.ค.
+PASS AXIS-baseline-1200x220 first label = first Category :: ม.ค.
+PASS AXIS-baseline-320x700 x-axis shows at least 2 labels :: ม.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. | พ.ค. | ก.ค. | ก.ย. | พ.ย.
+PASS AXIS-baseline-320x700 first label = first Category :: ม.ค.
+PASS AXIS-T09-long axis uses greedy overlap removal + labelLimit
+PASS AXIS-T09-long-280x180 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-280x180 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-280x180 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
+PASS AXIS-T09-long-480x270 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-480x270 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-480x270 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
+PASS AXIS-T09-long-800x450 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | เม.ย. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | มิ.ย. สาขาเชียงใหม่ภาคเหนือตอนบน | ส.ค. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | ต.ค. สาขาเชียงใหม่ภาคเหนือตอนบน
+PASS AXIS-T09-long-800x450 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | เม.ย. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | มิ.ย. สาขาเชียงใหม่ภาคเหนือตอนบน | ส.ค. สาขาภูเก็ตภาคใต้ฝั่งอันดามัน | ต.ค. สาขาเชียงใหม่ภาคเหนือตอนบน
+PASS AXIS-T09-long-800x450 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
+PASS AXIS-T09-long-1200x675 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | มี.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-1200x675 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | มี.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-1200x675 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
+PASS AXIS-T09-long-1200x220 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | มี.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-1200x220 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | มี.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | พ.ค. สำนักงานใหญ่กรุงเทพมหานคร | ก.ค. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ | ก.ย. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-1200x220 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
+PASS AXIS-T09-long-320x700 x-axis shows at least 2 labels :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร | พ.ย. สาขาขอนแก่นภาคตะวันออกเฉียงเหนือ
+PASS AXIS-T09-long-320x700 first label = first Category :: ม.ค. สำนักงานใหญ่กรุงเทพมหานคร
+PASS AXIS-T10-24 axis uses greedy overlap removal + labelLimit
+PASS AXIS-T10-24-280x180 x-axis shows at least 2 labels :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
+PASS AXIS-T10-24-280x180 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
+PASS AXIS-T10-24-280x180 first label = first Category :: ม.ค. 68
+PASS AXIS-T10-24-480x270 x-axis shows at least 2 labels :: ม.ค. 68 | พ.ค. 68 | ก.ย. 68 | ม.ค. 69 | พ.ค. 69 | ก.ย. 69
+PASS AXIS-T10-24-480x270 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | พ.ค. 68 | ก.ย. 68 | ม.ค. 69 | พ.ค. 69 | ก.ย. 69
+PASS AXIS-T10-24-480x270 first label = first Category :: ม.ค. 68
+PASS AXIS-T10-24-800x450 x-axis shows at least 2 labels :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
+PASS AXIS-T10-24-800x450 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
+PASS AXIS-T10-24-800x450 first label = first Category :: ม.ค. 68
+PASS AXIS-T10-24-1200x675 x-axis shows at least 2 labels :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
+PASS AXIS-T10-24-1200x675 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
+PASS AXIS-T10-24-1200x675 first label = first Category :: ม.ค. 68
+PASS AXIS-T10-24-1200x220 x-axis shows at least 2 labels :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
+PASS AXIS-T10-24-1200x220 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | มี.ค. 68 | พ.ค. 68 | ก.ค. 68 | ก.ย. 68 | พ.ย. 68 | ม.ค. 69 | มี.ค. 69 | พ.ค. 69 | ก.ค. 69 | ก.ย. 69 | พ.ย. 69
+PASS AXIS-T10-24-1200x220 first label = first Category :: ม.ค. 68
+PASS AXIS-T10-24-320x700 x-axis shows at least 2 labels :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
+PASS AXIS-T10-24-320x700 every x-axis label comes from the Category field (or its truncation) :: ม.ค. 68 | ก.ย. 68 | พ.ค. 69
+PASS AXIS-T10-24-320x700 first label = first Category :: ม.ค. 68
 PASS FINAL last step equals final spec (except description)
 
-388 passed, 0 failed
+460 passed, 0 failed

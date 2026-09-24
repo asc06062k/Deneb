@@ -41,8 +41,10 @@ function makeSpec(stepId, title, layers) {
     autosize: clone(finalSpec.autosize),
     data: clone(finalSpec.data),
   };
+  // x-axis label params (xAxis*) from CH05-S01 because line_actual carries the axis;
   // Y-domain params only once a layer references them (from CH05-S05).
-  if (sorted.some((l) => l.encoding.y && l.encoding.y.scale)) spec.params = clone(finalSpec.params);
+  const hasYDomain = sorted.some((l) => l.encoding.y && l.encoding.y.scale);
+  spec.params = clone(finalSpec.params).filter((p) => p.name.startsWith("xAxis") || hasYDomain);
   spec.layer = sorted;
   if (sorted.length > 1) spec.resolve = clone(finalSpec.resolve);
   spec.config = clone(finalSpec.config);

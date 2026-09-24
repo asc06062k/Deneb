@@ -15,7 +15,7 @@
 
 | Step | ไฟล์ | Layer ที่เพิ่ม/เปลี่ยน | บทที่สอน | หมายเหตุ |
 | --- | --- | --- | --- | --- |
-| CH05-S01 | [`CH05-S01-line-actual.vl.json`](../specs/steps/CH05-S01-line-actual.vl.json) | `line_actual` (เส้นตรง, filter `Row_Type == 'Original'`, แกนเดือนไทย `labelExpr`) | 5 | สอน `width/height: "container"` + `autosize` ตั้งแต่ Step แรก เพราะ Deneb ต้องใช้ |
+| CH05-S01 | [`CH05-S01-line-actual.vl.json`](../specs/steps/CH05-S01-line-actual.vl.json) | `line_actual` (เส้นตรง, filter `Row_Type == 'Original'`, แกน X อ่านชื่อจาก Category ด้วย params `xAxis*` + `labelExpr` lookup — rev 6) | 5 | สอน `width/height: "container"` + `autosize` ตั้งแต่ Step แรก เพราะ Deneb ต้องใช้ |
 | CH05-S02 | [`CH05-S02-line-reference.vl.json`](../specs/steps/CH05-S02-line-reference.vl.json) | + `line_reference` (เส้นประสีอำพัน), `resolve.scale` shared | 5 | จุดแนะนำ `layer` ครั้งแรก |
 | CH05-S03 | [`CH05-S03-points.vl.json`](../specs/steps/CH05-S03-points.vl.json) | + `point_reference`, `point_actual_hit_target` (ยังไม่มี tooltip) | 5 | |
 | CH05-S04 | [`CH05-S04-monotone.vl.json`](../specs/steps/CH05-S04-monotone.vl.json) | `line_actual`/`line_reference` เพิ่ม `interpolate: "monotone"` | 5 | **ต้องมีกล่อง Known limitation M-11** (เส้นโค้งกับพื้นที่สีเส้นตรงไม่ sync) ตาม `PROJECT_PLAN.md` หัวข้อ 9 |
@@ -44,7 +44,7 @@ npm install --prefix <tmp> vega@6 vega-lite@6
 VEGA_NODE_MODULES=<tmp>/node_modules node qa/scripts/run-workshop-step-tests.mjs
 ```
 
-ผล: **388/388 ผ่าน** (รวม HL-* 50 ข้อ: 8 สถานการณ์ highlight บน final spec ตรวจจุด/connector/label/เส้น + regression 2 ข้อ) (ผลเต็มใน [`qa/evidence/phase2-workshop-steps/run-output.txt`](../qa/evidence/phase2-workshop-steps/run-output.txt)) — ต่อ Step ตรวจ:
+ผล: **460/460 ผ่าน** (รวม HL-* 50 ข้อ และ AXIS-* 57 ข้อ: แกน X dynamic กับ baseline/T09/T10 × 6 viewport) (ผลเต็มใน [`qa/evidence/phase2-workshop-steps/run-output.txt`](../qa/evidence/phase2-workshop-steps/run-output.txt)) — ต่อ Step ตรวจ:
 
 1. `data` ผูกกับ `{"name": "dataset"}` และไม่มี `values` ค้าง (กันผู้อ่านวางข้อมูลทดสอบลง Deneb)
 2. ลำดับ layer เป็น subsequence ของ final spec, เก็บ layer ของ Step ก่อนหน้าครบ (cumulative), ชุด layer ตรงกับแผนการสอนที่เขียนแยกจาก generator (`EXPECTED_LAYERS`), manifest ตรงกับไฟล์จริง, ทุก layer เป็น **structural subset** ของ layer ชื่อเดียวกันใน final spec (ทุก property ต้องมีใน final ด้วยค่าเดียวกัน array ต้องเป็น subsequence ตามลำดับ) และ top-level property อื่นเท่ากับ final spec — ยืนยันด้วย negative test แล้วว่าถ้าใส่ `mark.tooltip = null` กลับเข้าไป test จะ FAIL
