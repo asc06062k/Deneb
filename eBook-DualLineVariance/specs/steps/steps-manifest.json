@@ -125,7 +125,7 @@
   {
     "id": "CH08-S01",
     "file": "CH08-S01-cross-highlight-opacity.vl.json",
-    "title": "dim lines/points when __highlightStatus is off (= final spec)",
+    "title": "cross-highlight: dim points, connector and labels of non-highlighted months (= final spec)",
     "layers": [
       "variance_area",
       "bad_area_border_actual",

@@ -74,17 +74,17 @@ add("CH06-S01", "CH06-S01-variance-area.vl.json", "variance area between lines, 
 const s06_2 = [...s06_1, layer("bad_area_border_actual"), layer("bad_area_border_reference")];
 add("CH06-S02", "CH06-S02-bad-area-border.vl.json", "dashed border on Bad segments (non-color cue)", s06_2);
 
-const s06_3 = [...s06_2, layer("connector_rule")];
+const s06_3 = [...s06_2, noOpacity(layer("connector_rule"))];
 add("CH06-S03", "CH06-S03-connector-rule.vl.json", "connector rule between Actual and Reference per category", s06_3);
 
 const s07_1 = s06_3.map((l) => (l.name === "point_actual_hit_target" ? noOpacity(layer("point_actual_hit_target")) : l));
 add("CH07-S01", "CH07-S01-tooltip.vl.json", "variance tooltip on Actual point (Variance, VarianceLabel, VariancePercentLabel)", s07_1);
 
-const s07_2 = [...s07_1, layer("label_actual"), layer("label_reference")];
+const s07_2 = [...s07_1, noOpacity(layer("label_actual")), noOpacity(layer("label_reference"))];
 add("CH07-S02", "CH07-S02-data-labels.vl.json", "Actual/Reference data labels with width-based thinning", s07_2);
 
 const s08_1 = finalSpec.layer.map(clone);
-add("CH08-S01", "CH08-S01-cross-highlight-opacity.vl.json", "dim lines/points when __highlightStatus is off (= final spec)", s08_1);
+add("CH08-S01", "CH08-S01-cross-highlight-opacity.vl.json", "cross-highlight: dim points, connector and labels of non-highlighted months (= final spec)", s08_1);
 
 for (const s of steps) {
   const spec = makeSpec(s.id, s.title, s.layers);

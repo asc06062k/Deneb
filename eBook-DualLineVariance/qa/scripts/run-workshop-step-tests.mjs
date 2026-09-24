@@ -164,7 +164,8 @@ for (const step of manifest) {
 // Cross-highlight dimming on the final spec (T19 evidence, 24 Sep 2026): real Deneb 2.0
 // sent __highlightStatus = "on" on EVERY row while a highlight was active, with
 // __highlight = value only on the highlighted row and null elsewhere (the docs say "off").
-// Each point layer dims on its own measure only; lines dim while any highlight is active.
+// rev 5 (user request): points and data labels dim on their own measure, the connector dims
+// unless either measure is highlighted on that month, all to 0.5; lines and the area never dim.
 {
   const HL = 7; // ก.ค.
   const orig = (r) => r.Row_Type === "Original";
@@ -174,21 +175,21 @@ for (const step of manifest) {
   const documented = (m) => (r) => fields(r, m, hit(r) ? "on" : "off", hit(r) ? r[m] : null);
   const neutral = (m) => (r) => fields(r, m, "neutral", r[m]);
   const onNull = (m) => (r) => fields(r, m, "on", null); // measure not highlighted anywhere
-  const DIM = 0.25;
+  const DIM = 0.5;
   // per scenario: a/r = Actual/Reference supporting-field generators (null = fields absent),
-  // pa/pr = expected opacity per point datum, line = expected opacity of both lines
+  // pa/pr/cn = expected opacity per point/connector datum; lines are always 1
   const scen = {
-    absent: { a: null, r: null, pa: () => 1, pr: () => 1, line: 1 },
-    neutral: { a: neutral("Actual"), r: neutral("Reference"), pa: () => 1, pr: () => 1, line: 1 },
-    observed: { a: observed("Actual"), r: observed("Reference"), pa: (x) => (hit(x) ? 1 : DIM), pr: (x) => (hit(x) ? 1 : DIM), line: DIM },
-    documented: { a: documented("Actual"), r: documented("Reference"), pa: (x) => (hit(x) ? 1 : DIM), pr: (x) => (hit(x) ? 1 : DIM), line: DIM },
+    absent: { a: null, r: null, pa: () => 1, pr: () => 1, cn: () => 1 },
+    neutral: { a: neutral("Actual"), r: neutral("Reference"), pa: () => 1, pr: () => 1, cn: () => 1 },
+    observed: { a: observed("Actual"), r: observed("Reference"), pa: (x) => (hit(x) ? 1 : DIM), pr: (x) => (hit(x) ? 1 : DIM), cn: (x) => (hit(x) ? 1 : DIM) },
+    documented: { a: documented("Actual"), r: documented("Reference"), pa: (x) => (hit(x) ? 1 : DIM), pr: (x) => (hit(x) ? 1 : DIM), cn: (x) => (hit(x) ? 1 : DIM) },
     // M-26: only one measure highlighted -> the other measure must not dim this point layer
-    actualOnly: { a: observed("Actual"), r: onNull("Reference"), pa: (x) => (hit(x) ? 1 : DIM), pr: () => DIM, line: DIM },
-    referenceOnly: { a: onNull("Actual"), r: observed("Reference"), pa: () => DIM, pr: (x) => (hit(x) ? 1 : DIM), line: DIM },
+    actualOnly: { a: observed("Actual"), r: onNull("Reference"), pa: (x) => (hit(x) ? 1 : DIM), pr: () => DIM, cn: (x) => (hit(x) ? 1 : DIM) },
+    referenceOnly: { a: onNull("Actual"), r: observed("Reference"), pa: () => DIM, pr: (x) => (hit(x) ? 1 : DIM), cn: (x) => (hit(x) ? 1 : DIM) },
     // M-26: Reference supporting fields not enabled at all
-    actualFieldsOnly: { a: observed("Actual"), r: null, pa: (x) => (hit(x) ? 1 : DIM), pr: () => 1, line: DIM },
+    actualFieldsOnly: { a: observed("Actual"), r: null, pa: (x) => (hit(x) ? 1 : DIM), pr: () => 1, cn: (x) => (hit(x) ? 1 : DIM) },
     // M-26: highlighted value 0 must not dim (0 !== 0 is false)
-    zeroValue: { zero: true, a: observed("Actual"), r: observed("Reference"), pa: (x) => (hit(x) ? 1 : DIM), pr: (x) => (hit(x) ? 1 : DIM), line: DIM },
+    zeroValue: { zero: true, a: observed("Actual"), r: observed("Reference"), pa: (x) => (hit(x) ? 1 : DIM), pr: (x) => (hit(x) ? 1 : DIM), cn: (x) => (hit(x) ? 1 : DIM) },
   };
   const render = async (spec, sc) => {
     const s = JSON.parse(JSON.stringify(spec));
@@ -205,7 +206,7 @@ for (const step of manifest) {
     await view.runAsync();
     const top = view.scenegraph().root.items[0].items;
     const items = (n) => (top.find((it) => it.name === n + "_marks") || { items: [] }).items;
-    const out = { pa: items("point_actual_hit_target"), pr: items("point_reference"), la: items("line_actual")[0], lr: items("line_reference")[0] };
+    const out = { pa: items("point_actual_hit_target"), pr: items("point_reference"), cn: items("connector_rule"), la2: items("label_actual"), lr2: items("label_reference"), la: items("line_actual")[0], lr: items("line_reference")[0] };
     view.finalize();
     return out;
   };
@@ -214,13 +215,16 @@ for (const step of manifest) {
     const o = await render(finalSpec, sc);
     check("HL-" + name, "point_actual_hit_target opacity per Actual measure", o.pa.length === 12 && wrong(o.pa, sc.pa) === 0, `${wrong(o.pa, sc.pa)} wrong of ${o.pa.length}`);
     check("HL-" + name, "point_reference opacity per Reference measure", o.pr.length === 12 && wrong(o.pr, sc.pr) === 0, `${wrong(o.pr, sc.pr)} wrong of ${o.pr.length}`);
-    check("HL-" + name, `lines opacity ${sc.line}`, (o.la.opacity ?? 1) === sc.line && (o.lr.opacity ?? 1) === sc.line, `actual ${o.la.opacity ?? 1}, reference ${o.lr.opacity ?? 1}`);
+    check("HL-" + name, "connector_rule opacity: dim unless either measure highlighted", o.cn.length === 12 && wrong(o.cn, sc.cn) === 0, `${wrong(o.cn, sc.cn)} wrong of ${o.cn.length}`);
+    check("HL-" + name, "label_actual opacity per Actual measure", o.la2.length > 0 && wrong(o.la2, sc.pa) === 0, `${wrong(o.la2, sc.pa)} wrong of ${o.la2.length}`);
+    check("HL-" + name, "label_reference opacity per Reference measure", o.lr2.length > 0 && wrong(o.lr2, sc.pr) === 0, `${wrong(o.lr2, sc.pr)} wrong of ${o.lr2.length}`);
+    check("HL-" + name, "lines never dim", (o.la.opacity ?? 1) === 1 && (o.lr.opacity ?? 1) === 1, `actual ${o.la.opacity ?? 1}, reference ${o.lr.opacity ?? 1}`);
   }
   // Regression (M-26): the rev-3 "off"-only condition must be caught by HL-observed.
   const rev3 = JSON.parse(JSON.stringify(finalSpec));
   for (const l of rev3.layer) if (l.encoding.opacity) l.encoding.opacity.condition.test = "datum.Actual__highlightStatus == 'off' || datum.Reference__highlightStatus == 'off'";
   const o3 = await render(rev3, scen.observed);
-  check("HL-regression", "rev-3 condition fails HL-observed expectations (test has teeth)", wrong(o3.pa, scen.observed.pa) > 0 && (o3.la.opacity ?? 1) !== DIM, `rev-3 wrong points ${wrong(o3.pa, scen.observed.pa)}, line ${o3.la.opacity ?? 1}`);
+  check("HL-regression", "rev-3 condition fails HL-observed expectations (test has teeth)", wrong(o3.pa, scen.observed.pa) > 0, `rev-3 wrong points ${wrong(o3.pa, scen.observed.pa)}`);
   // Regression (M-25): the rev-4a OR-of-both-measures point condition must be caught by HL-actualOnly.
   const rev4a = JSON.parse(JSON.stringify(finalSpec));
   const both = rev4a.layer.find((l) => l.name === "point_actual_hit_target").encoding.opacity.condition.test + " || " + rev4a.layer.find((l) => l.name === "point_reference").encoding.opacity.condition.test;

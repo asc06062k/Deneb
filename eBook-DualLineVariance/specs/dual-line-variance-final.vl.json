@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 4: highlight dimming per real Deneb evidence T19 (status on + __highlight null for non-highlighted rows); rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
+  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 5: highlight dims points, connector and data labels of non-highlighted months to 0.5, lines never dim (user request); rev 4: highlight rule per real Deneb evidence T19 (status on + __highlight null for non-highlighted rows); rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
   "width": "container",
   "height": "container",
   "autosize": { "type": "fit", "contains": "padding", "resize": true },
@@ -86,6 +86,10 @@
             "value": 3
           },
           "value": 2
+        },
+        "opacity": {
+          "condition": { "test": "((isDefined(datum.Actual__highlightStatus) && datum.Actual__highlightStatus != 'neutral') || (isDefined(datum.Reference__highlightStatus) && datum.Reference__highlightStatus != 'neutral')) && !((isDefined(datum.Actual__highlightStatus) && datum.Actual__highlightStatus == 'on' && isDefined(datum.Actual__highlight) && datum.Actual__highlight === datum.Actual) || (isDefined(datum.Reference__highlightStatus) && datum.Reference__highlightStatus == 'on' && isDefined(datum.Reference__highlight) && datum.Reference__highlight === datum.Reference))", "value": 0.5 },
+          "value": 1
         }
       }
     },
@@ -95,11 +99,7 @@
       "mark": { "type": "line", "interpolate": "monotone", "color": "#F59E0B", "strokeWidth": 2, "strokeDash": [5, 3], "point": false, "tooltip": null },
       "encoding": {
         "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Reference", "type": "quantitative" },
-        "opacity": {
-          "condition": { "test": "(isDefined(datum.Actual__highlightStatus) && datum.Actual__highlightStatus != 'neutral') || (isDefined(datum.Reference__highlightStatus) && datum.Reference__highlightStatus != 'neutral')", "value": 0.25 },
-          "value": 1
-        }
+        "y": { "field": "Plot_Reference", "type": "quantitative" }
       }
     },
     {
@@ -123,10 +123,6 @@
           "type": "quantitative",
           "title": "ยอดขาย (พันบาท)",
           "scale": { "domain": [{ "expr": "yDomainMin" }, { "expr": "yDomainMax" }], "zero": false, "nice": false }
-        },
-        "opacity": {
-          "condition": { "test": "(isDefined(datum.Actual__highlightStatus) && datum.Actual__highlightStatus != 'neutral') || (isDefined(datum.Reference__highlightStatus) && datum.Reference__highlightStatus != 'neutral')", "value": 0.25 },
-          "value": 1
         }
       }
     },
@@ -138,7 +134,7 @@
         "x": { "field": "Plot_Position", "type": "quantitative" },
         "y": { "field": "Plot_Reference", "type": "quantitative" },
         "opacity": {
-          "condition": { "test": "(isDefined(datum.Reference__highlightStatus) && (datum.Reference__highlightStatus == 'off' || (datum.Reference__highlightStatus == 'on' && isDefined(datum.Reference__highlight) && datum.Reference__highlight !== datum.Reference)))", "value": 0.25 },
+          "condition": { "test": "(isDefined(datum.Reference__highlightStatus) && (datum.Reference__highlightStatus == 'off' || (datum.Reference__highlightStatus == 'on' && isDefined(datum.Reference__highlight) && datum.Reference__highlight !== datum.Reference)))", "value": 0.5 },
           "value": 1
         }
       }
@@ -156,7 +152,7 @@
         "x": { "field": "Plot_Position", "type": "quantitative" },
         "y": { "field": "Plot_Actual", "type": "quantitative" },
         "opacity": {
-          "condition": { "test": "(isDefined(datum.Actual__highlightStatus) && (datum.Actual__highlightStatus == 'off' || (datum.Actual__highlightStatus == 'on' && isDefined(datum.Actual__highlight) && datum.Actual__highlight !== datum.Actual)))", "value": 0.25 },
+          "condition": { "test": "(isDefined(datum.Actual__highlightStatus) && (datum.Actual__highlightStatus == 'off' || (datum.Actual__highlightStatus == 'on' && isDefined(datum.Actual__highlight) && datum.Actual__highlight !== datum.Actual)))", "value": 0.5 },
           "value": 1
         },
         "tooltip": [
@@ -197,7 +193,11 @@
       "encoding": {
         "x": { "field": "Plot_Position", "type": "quantitative" },
         "y": { "field": "Plot_Actual", "type": "quantitative" },
-        "text": { "field": "Plot_Actual", "type": "quantitative", "format": ",.0f" }
+        "text": { "field": "Plot_Actual", "type": "quantitative", "format": ",.0f" },
+        "opacity": {
+          "condition": { "test": "(isDefined(datum.Actual__highlightStatus) && (datum.Actual__highlightStatus == 'off' || (datum.Actual__highlightStatus == 'on' && isDefined(datum.Actual__highlight) && datum.Actual__highlight !== datum.Actual)))", "value": 0.5 },
+          "value": 1
+        }
       }
     },
     {
@@ -229,7 +229,11 @@
       "encoding": {
         "x": { "field": "Plot_Position", "type": "quantitative" },
         "y": { "field": "Plot_Reference", "type": "quantitative" },
-        "text": { "field": "Plot_Reference", "type": "quantitative", "format": ",.0f" }
+        "text": { "field": "Plot_Reference", "type": "quantitative", "format": ",.0f" },
+        "opacity": {
+          "condition": { "test": "(isDefined(datum.Reference__highlightStatus) && (datum.Reference__highlightStatus == 'off' || (datum.Reference__highlightStatus == 'on' && isDefined(datum.Reference__highlight) && datum.Reference__highlight !== datum.Reference)))", "value": 0.5 },
+          "value": 1
+        }
       }
     }
   ],

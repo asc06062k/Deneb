@@ -85,7 +85,10 @@ Actual ส่วนที่ 2 — ข้อมูลที่ Deneb ได้�
 วันที่: 24 ก.ย. 2026
 Actual ส่วนที่ 2 — spec rev 4 บน Deneb จริง (24 ก.ย. 2026, ภาพ T19-07 + ภาพขยาย T19-08): ขณะ highlight ก.ค. จาก Column chart, preview ใน Deneb editor แสดงเส้น Actual/Reference จางทั้งเส้น, จุด Actual/Reference ของเดือนอื่นจาง, จุด ก.ค. ทั้ง 510 (Actual) และ 520 (Reference) แสดงเข้ม — ตรงกับ HL-observed; dataset 1-52 of 52; พื้นที่สี/connector/label ไม่จางตาม Design — ข้อจำกัด: เห็นผลใน preview ของ Deneb editor ขณะมี highlight (ไม่ใช่ภาพหน้ารายงาน), ภาพไม่แสดงคอลัมน์ Reference__highlight* แต่จุด Reference ของ ก.ค. เข้มและเดือนอื่นจางสอดคล้องกับ rev 4, ยืนยันไม่ได้จากภาพว่าเป็น spec rev 4 ล่าสุด (หลัง M-25) — ผู้ใช้ได้รับแจ้งให้ copy ใหม่ก่อนทดสอบ
 หน้ารายงาน (24 ก.ย. 2026, ภาพในแชท (ไม่มีไฟล์บนเครื่อง)): Column chart เลือก ก.ค. (Highlight) → Dual-Line บนหน้ารายงาน เส้นจาง จุดเดือนอื่นจาง จุด ก.ค. เข้ม — ตรงกับ preview
-ผลสรุป: PASS WITH LIMITATION — ชื่อ field PASS; rev 3 FAIL (สาเหตุยืนยันแล้ว T19-06); rev 4 แสดงผลจางถูกต้องบน Deneb จริงทั้ง preview และหน้ารายงาน — ยังขาด Evidence record fields (Power BI/Deneb version, PBIX)
+ผลสรุป: PASS WITH LIMITATION สำหรับ rev 4 — ชื่อ field PASS; rev 3 FAIL (สาเหตุยืนยันแล้ว T19-06); rev 4 แสดงผลจางถูกต้องบน Deneb จริงทั้ง preview และหน้ารายงาน — ยังขาด Evidence record fields (Power BI/Deneb version, PBIX)
+หลังจากนั้นผู้ใช้ขอเปลี่ยนรูปแบบการจางเป็น **spec rev 5** (เส้นไม่จาง; จุด/connector/label เดือนอื่นจาง 0.5 — Design Plan 2.2.3) ผ่าน headless tests (HL-*) แล้ว
+Actual rev 5 บน Deneb จริง (24 ก.ย. 2026, หน้ารายงาน — ภาพที่ผู้ใช้วางในแชท ไม่มีไฟล์บนเครื่อง): เลือกหลายแท่งพร้อมกัน (พ.ค., ก.ค., ส.ค.) ใน Column chart โหมด Highlight → เส้น Actual/Reference และพื้นที่สีไม่จาง; จุด, connector และป้ายตัวเลขของ พ.ค./ก.ค./ส.ค. เข้ม ส่วนเดือนอื่นจาง — ตรงตามคำขอผู้ใช้และ HL-observed; ยังพิสูจน์ด้วยว่ารองรับ multi-select ของ Visual ต้นทาง
+ผลสรุป rev 5: PASS WITH LIMITATION — พฤติกรรมถูกต้องบน Deneb จริง; ยังขาดไฟล์ภาพหลักฐานและ Evidence record fields (Power BI/Deneb version, PBIX)
 ```
 
 ---
