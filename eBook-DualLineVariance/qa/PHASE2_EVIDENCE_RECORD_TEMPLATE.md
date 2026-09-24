@@ -302,13 +302,21 @@ Group B: 480×270, 800×450, 1200×675, 1200×220 — ชื่อถูกต�
 รอบที่ 2 ด้วย spec rev 7 (24 ก.ย. 2026): 280×180 — แสดง 3 ชื่อ (ม.ค./พ.ค./ก.ย. ตัดด้วย "…") ไม่ทับซ้อน ✅ (ภาพ T09-rev7-280x180.png); 320×700 — แสดง 3 ชื่อ ไม่ทับซ้อน ✅ (ภาพ T09-rev7-320x700.png); 480×270 — 3 ชื่อ (ม.ค./พ.ค./ก.ย. ตัด "…") ✅; 800×450 — 4 ชื่อเต็ม (ม.ค./เม.ย./ก.ค./ต.ค.) ✅; 1200×675 — 6 ชื่อเต็ม ✅; 1200×220 — 6 ชื่อเต็ม ✅ (ภาพ T09-rev7-<ขนาด>.png — 4 ขนาดหลังเป็นภาพเต็มจอที่ Claude จับด้วย PowerShell CopyFromScreen ตามที่ผู้ใช้สั่ง "ถ่าย" หลังผู้ใช้ตั้งขนาดเอง ช่อง Height/Width ใน Format pane ในภาพยืนยันขนาด)
 ผลสรุป T09 rev 7: **PASS ครบ 6 viewport** (Group B ไม่ทับซ้อน) — Group A: ป้ายตัวเลขไม่พบชนกันเอง
 
+Test ID: T10 × 6 viewport (24 categories, data/test/DualLineVariance_T10_24Categories.csv) — spec rev 7 (24 ก.ย. 2026)
+การเปลี่ยน Source: Claude แก้ path ใน partition M ของ DualLineVariance_Workshop_Data จาก T09 เป็น T10 ผ่าน Power BI modeling MCP ตามคำขอผู้ใช้ แล้ว refresh DualLineVariance_Workshop_Data + DualLine_PlotData; DAX ยืนยัน 24 แถว (ม.ค. 68–ธ.ค. 69) และ DualLine_PlotData 108 แถว (ตรงกับ headless)
+Group B (ชื่อบนแกน X): 1200×220 — 24 ชื่อ ✅; 1200×675 — 24 ชื่อ ✅; 800×450 — 12 ชื่อ (ทุก 2 เดือน) ✅; 480×270 — 6 ชื่อ (ทุก 4 เดือน) ✅; 280×180 — 3 ชื่อ ✅; 320×700 — 6 ชื่อ ✅ — ไม่ทับซ้อนทุกขนาด
+Group A (ป้ายตัวเลข): จำนวนป้ายลดลงตามความกว้าง (ครบที่ 1200 px, เหลือบางเดือนที่ 800/480/280) — ยืนยันว่า thinning ประเมินตามขนาดจริง; ที่ 280×180 ป้ายแน่นและชิดกันบางจุด (เกณฑ์ "ลดการชน")
+หลักฐาน: qa/evidence/phase2-powerbi/T10-rev7-<ขนาด>.png (6 ไฟล์ — ภาพเต็มจอที่ Claude จับด้วย PowerShell หลังผู้ใช้ตั้งขนาดและสั่ง "ถ่าย"; ช่อง Height/Width ใน Format pane ยืนยันขนาด)
+ข้อจำกัด: ไม่ได้บันทึกการลาก resize ต่อเนื่อง (ใช้การกรอกขนาดทีละค่า)
+ผลสรุป T10 rev 7: **PASS ครบ 6 viewport**
+
 Test ID: T25 (สรุป Group B — Category axis label ไม่ทับซ้อน ทุกขนาด)
 Expected: T14–T17, T34, T35 ทั้งหมด Group B ต้อง PASS (ใช้ labelOverlap:"greedy" + width:"container")
-ผลสรุป: PARTIAL — Baseline 12 เดือน PASS ครบทั้ง 6 ขนาด (24 ก.ย. 2026); ยังไม่ได้ทดสอบ T09 (ชื่อ Category ยาว) และ T10 (24 categories) ที่หัวข้อนี้กำหนดให้รวมด้วย
+ผลสรุป: PASS — Baseline 12 เดือน (spec rev 5, 6 ขนาด), T09 ชื่อยาว (spec rev 7, 6 ขนาด), T10 24 categories (spec rev 7, 6 ขนาด) ไม่ทับซ้อนทุกกรณี — ข้อสังเกต: baseline ทดสอบก่อนเปลี่ยนเป็นแกน dynamic (rev 6/7); rev 7 ใช้ labelExpr lookup แทน array คงที่ ผลต่อ baseline ประเมินด้วย axis-overlap-sim เท่านั้น
 
 Test ID: T26 (สรุป Group A — Actual/Reference data label ลดการชน ทุกขนาด, ไม่รับประกัน 100%)
 Expected: label re-evaluate ทุกครั้งที่ resize (container width signal), ลดการชนแต่ไม่ต้องไม่ชนเลย
-ผลสรุป: PARTIAL — Baseline 12 เดือน: จำนวนป้ายเปลี่ยนตามความกว้างจริงบน Power BI (T14 ทุก 3 เดือน, T15/T35 ทุก 2 เดือน, T16/T17/T34 ครบ) จึงยืนยันว่า thinning ประเมินใหม่ตามขนาด Visual; ไม่พบป้ายชนป้ายทั้ง 6 ขนาด (มีป้ายทับเส้นบ้างที่ T35); ยังไม่ได้ทดสอบ T09/T10 และไม่ได้บันทึกว่าเป็นการลาก resize ต่อเนื่องหรือกรอกขนาดทีละค่า
+ผลสรุป: PASS WITH LIMITATION — จำนวนป้ายเปลี่ยนตามขนาดจริงบน Power BI ทั้ง baseline และ T10 (ครบที่ 1200 px, ลดลงที่ขนาดเล็ก) จึงยืนยันว่า thinning ประเมินใหม่ตามขนาด Visual; เกณฑ์ "ลดการชน" — มีป้ายชิด/ทับเส้นบ้างที่ 280×180 และ 320×700; ข้อจำกัด: ทดสอบด้วยการกรอกขนาดทีละค่า ไม่ได้บันทึกการลาก resize ต่อเนื่อง
 ```
 
 ---
