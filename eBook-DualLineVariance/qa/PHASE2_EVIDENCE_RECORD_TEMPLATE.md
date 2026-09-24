@@ -50,6 +50,7 @@ Actual (ข) ครั้งที่ 2 (24 ก.ย. 2026, ผู้ใช้ท
   - T18-04: คลิกซ้ายกลางสามเหลี่ยมน้ำตาลของ segment ก.พ.–มี.ค. (ส่วน i-a ก่อนจุดตัด ชิดฝั่ง ก.พ.) → highlight **ก.พ.** เพียงแท่งเดียว
   สรุป: ใน crossing segment สองกรณีที่ทดสอบ Area-click resolve เป็น Filter_Key = Category ฝั่งซ้ายของ segment และเลือก Category เดียว ไม่พบการเลือกหลาย Category ในสองกรณีนี้ (ยังไม่ครอบคลุม Case C และ T22) — **และ** พื้นที่สีที่อยู่ติดเดือนใดเดือนหนึ่งทางด้านซ้าย (เช่น สามเหลี่ยมก่อน ก.พ.) จะเลือกเดือนก่อนหน้า (ม.ค.) ซึ่งอาจไม่ตรงกับที่ผู้ใช้คาด — ผู้ใช้ตัดสินแล้ว 24 ก.ย. 2026 ให้ยอมรับและบันทึกเป็นพฤติกรรมในหนังสือ (Design Plan หัวข้อ 2.2.2) ไม่แก้ architecture
 หลักฐาน (ข) ครั้งที่ 2: qa/evidence/phase2-powerbi/T18-03-click-area-jan-feb-near-feb.png, T18-04-click-area-feb-mar-near-feb.png
+Actual (ข) Case C ครั้งที่ 1 (24 ก.ย. 2026, ภาพ T18-05): ผู้ใช้คลิกซ้ายกลางพื้นที่เขียวของ segment พ.ค.–มิ.ย. ชิด พ.ค. (ลูกศรในภาพ) → Column chart ยังแสดงแท่ง ก.ค. เข้ม (เหมือนสถานะจาก T21 ที่เลือก ก.ค. ใน Column chart ไว้) — **INCONCLUSIVE**: ไม่ได้ Clear selections ก่อน จึงแยกไม่ได้ว่าคลิกบน Area ไม่ถูก resolve (selection เดิมค้าง) หรือเกิดอย่างอื่น; ต้องทดสอบซ้ำหลังล้าง selection (ทุกแท่งสีเข้มเท่ากัน)
 หลักฐาน (ภาพ/วิดีโอ): ภาพ 2 ภาพที่ผู้ใช้ส่งในแชท 24 ก.ย. 2026 (ยังไม่ได้บันทึกเป็นไฟล์ใน qa/evidence — ต้องขอไฟล์ภาพ)
 ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
 วันที่: 24 ก.ย. 2026
@@ -219,78 +220,78 @@ Deneb version:
 
 ```text
 Test ID: T14 (280×180 px — แคบสุด)
-จำนวน Category / test scenario ที่ใช้:
-Group B — Category axis label ทับซ้อนหรือไม่ (Expected: ไม่ทับซ้อนเลย):
-Group A — Actual/Reference data label ชนกันหรือไม่ (Expected: ลดการชน ไม่รับประกัน 100%):
-หลักฐาน (screenshot):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+จำนวน Category / test scenario ที่ใช้: 12 (Baseline Workshop), spec rev 5, ปรับขนาดผ่าน Format > General > Size and position ของ Visual เดียวกัน
+Group B — Category axis label ทับซ้อนหรือไม่: แสดง 3 label: ม.ค., พ.ค., ก.ย. (ข้ามทีละ 4) — ไม่ทับซ้อน
+Group A — Actual/Reference data label ชนกันหรือไม่: แสดงป้ายเดือน ม.ค., เม.ย., ก.ค., ต.ค. + ธ.ค. (thinning step 3 + เดือนสุดท้าย) ไม่พบป้ายชนป้าย; จุด/เส้นแน่นมากจนพื้นที่สีแทบมองไม่เห็นที่ขนาดนี้
+หลักฐาน (screenshot): qa/evidence/phase2-powerbi/T14-280x180.png (ช่อง Height/Width ในภาพยืนยันขนาด)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS (Baseline 12 เดือนเท่านั้น)
 ```
 
 ```text
 Test ID: T15 (480×270 px)
-จำนวน Category / test scenario ที่ใช้:
-Group B — Category axis label ทับซ้อนหรือไม่:
-Group A — Actual/Reference data label ชนกันหรือไม่:
-หลักฐาน (screenshot):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+จำนวน Category / test scenario ที่ใช้: 12 (Baseline Workshop), spec rev 5, ปรับขนาดผ่าน Format > General > Size and position ของ Visual เดียวกัน
+Group B — Category axis label ทับซ้อนหรือไม่: แสดง 6 label: ม.ค., มี.ค., พ.ค., ก.ค., ก.ย., พ.ย. — ไม่ทับซ้อน
+Group A — Actual/Reference data label ชนกันหรือไม่: แสดงป้ายทุก 2 เดือน + ธ.ค. ไม่พบป้ายชนป้าย
+หลักฐาน (screenshot): qa/evidence/phase2-powerbi/T15-480x270.png (ช่อง Height/Width ในภาพยืนยันขนาด)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS (Baseline 12 เดือนเท่านั้น)
 ```
 
 ```text
 Test ID: T16 (800×450 px)
-จำนวน Category / test scenario ที่ใช้:
-Group B — Category axis label ทับซ้อนหรือไม่:
-Group A — Actual/Reference data label ชนกันหรือไม่:
-หลักฐาน (screenshot):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+จำนวน Category / test scenario ที่ใช้: 12 (Baseline Workshop), spec rev 5, ปรับขนาดผ่าน Format > General > Size and position ของ Visual เดียวกัน
+Group B — Category axis label ทับซ้อนหรือไม่: แสดงครบ 12 label — ไม่ทับซ้อน
+Group A — Actual/Reference data label ชนกันหรือไม่: แสดงป้ายครบ 24 ป้าย ไม่พบป้ายชนป้าย
+หลักฐาน (screenshot): qa/evidence/phase2-powerbi/T16-800x450.png (ช่อง Height/Width ในภาพยืนยันขนาด)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS (Baseline 12 เดือนเท่านั้น)
 ```
 
 ```text
 Test ID: T17 (1200×675 px — กว้างสุด)
-จำนวน Category / test scenario ที่ใช้:
-Group B — Category axis label ทับซ้อนหรือไม่:
-Group A — Actual/Reference data label ชนกันหรือไม่:
-หลักฐาน (screenshot):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+จำนวน Category / test scenario ที่ใช้: 12 (Baseline Workshop), spec rev 5, ปรับขนาดผ่าน Format > General > Size and position ของ Visual เดียวกัน
+Group B — Category axis label ทับซ้อนหรือไม่: แสดงครบ 12 label — ไม่ทับซ้อน
+Group A — Actual/Reference data label ชนกันหรือไม่: แสดงป้ายครบ 24 ป้าย ไม่พบป้ายชนป้าย
+หลักฐาน (screenshot): qa/evidence/phase2-powerbi/T17-1200x675.png (ช่อง Height/Width ในภาพยืนยันขนาด)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS (Baseline 12 เดือนเท่านั้น)
 ```
 
 ```text
 Test ID: T34 (1200×220 px — กว้าง-เตี้ย)
-จำนวน Category / test scenario ที่ใช้:
-Group B — Category axis label ทับซ้อนหรือไม่:
-Group A — Actual/Reference data label ชนกันหรือไม่:
-หลักฐาน (screenshot):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+จำนวน Category / test scenario ที่ใช้: 12 (Baseline Workshop), spec rev 5, ปรับขนาดผ่าน Format > General > Size and position ของ Visual เดียวกัน
+Group B — Category axis label ทับซ้อนหรือไม่: แสดงครบ 12 label — ไม่ทับซ้อน (แกน Y เหลือ 3 tick: 400/500/600)
+Group A — Actual/Reference data label ชนกันหรือไม่: แสดงป้ายครบ 24 ป้าย ไม่พบป้ายชนป้าย แม้ความสูงน้อย (ป้ายชิดเส้นมากขึ้น)
+หลักฐาน (screenshot): qa/evidence/phase2-powerbi/T34-1200x220.png (ช่อง Height/Width ในภาพยืนยันขนาด)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS (Baseline 12 เดือนเท่านั้น)
 ```
 
 ```text
 Test ID: T35 (320×700 px — แคบ-สูง)
-จำนวน Category / test scenario ที่ใช้:
-Group B — Category axis label ทับซ้อนหรือไม่:
-Group A — Actual/Reference data label ชนกันหรือไม่:
-หลักฐาน (screenshot):
-ผู้ทดสอบ:
-วันที่:
-ผลสรุป: PASS / FAIL / NOT TESTED
+จำนวน Category / test scenario ที่ใช้: 12 (Baseline Workshop), spec rev 5, ปรับขนาดผ่าน Format > General > Size and position ของ Visual เดียวกัน
+Group B — Category axis label ทับซ้อนหรือไม่: แสดง 6 label: ม.ค., มี.ค., พ.ค., ก.ค., ก.ย., พ.ย. — ไม่ทับซ้อน
+Group A — Actual/Reference data label ชนกันหรือไม่: แสดงป้ายทุก 2 เดือน + ธ.ค.; ไม่พบป้ายชนป้าย แต่บางป้ายทับเส้น/จุด (เช่น 510 ที่ ก.ค., 520 ทับเส้นประ) — อยู่ในเกณฑ์ "ลดการชน"
+หลักฐาน (screenshot): qa/evidence/phase2-powerbi/T35-320x700.png (ช่อง Height/Width ในภาพยืนยันขนาด)
+ผู้ทดสอบ: ผู้ใช้ (เครื่องจริง)
+วันที่: 24 ก.ย. 2026
+ผลสรุป: PASS (Baseline 12 เดือนเท่านั้น)
 ```
 
 ```text
 Test ID: T25 (สรุป Group B — Category axis label ไม่ทับซ้อน ทุกขนาด)
 Expected: T14–T17, T34, T35 ทั้งหมด Group B ต้อง PASS (ใช้ labelOverlap:"greedy" + width:"container")
-ผลสรุป: PASS / FAIL / NOT TESTED (PASS ได้เฉพาะเมื่อ T14–T17, T34, T35 ทั้งหมด Group B = PASS)
+ผลสรุป: PARTIAL — Baseline 12 เดือน PASS ครบทั้ง 6 ขนาด (24 ก.ย. 2026); ยังไม่ได้ทดสอบ T09 (ชื่อ Category ยาว) และ T10 (24 categories) ที่หัวข้อนี้กำหนดให้รวมด้วย
 
 Test ID: T26 (สรุป Group A — Actual/Reference data label ลดการชน ทุกขนาด, ไม่รับประกัน 100%)
 Expected: label re-evaluate ทุกครั้งที่ resize (container width signal), ลดการชนแต่ไม่ต้องไม่ชนเลย
-ผลสรุป: PASS / FAIL / NOT TESTED (พิจารณาจากผลรวม T14–T17, T34, T35 Group A — เกณฑ์ "ลดการชน" ไม่ใช่ collision-free)
+ผลสรุป: PARTIAL — Baseline 12 เดือน: จำนวนป้ายเปลี่ยนตามความกว้างจริงบน Power BI (T14 ทุก 3 เดือน, T15/T35 ทุก 2 เดือน, T16/T17/T34 ครบ) จึงยืนยันว่า thinning ประเมินใหม่ตามขนาด Visual; ไม่พบป้ายชนป้ายทั้ง 6 ขนาด (มีป้ายทับเส้นบ้างที่ T35); ยังไม่ได้ทดสอบ T09/T10 และไม่ได้บันทึกว่าเป็นการลาก resize ต่อเนื่องหรือกรอกขนาดทีละค่า
 ```
 
 ---
