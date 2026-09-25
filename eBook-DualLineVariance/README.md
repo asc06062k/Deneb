@@ -81,7 +81,7 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 | บท | สถานะ | Review |
 | --- | --- | --- |
 | 1 รู้จัก Deneb | **PASS** (24 ก.ย. 2026) | `review/chapters/CH01_CODEX_VERDICT.md` (REVISE) → `..._R2.md` (PASS) |
-| 2 เตรียม Power BI และ Deneb | **กำลังเก็บภาพหน้าจอจริง** (ยังไม่เขียนต้นฉบับ) | – |
+| 2 เตรียม Power BI และ Deneb | **PASS** (25 ก.ย. 2026) ภาพจริง 2-1 ถึง 2-20 ใน images/chapter-02 ใช้ Workshop_Data 12 แถว | `review/chapters/CH02_CODEX_VERDICT.md` (REVISE, M-01 ถึง M-07) → `..._R2.md` (PASS) |
 | 3–10 | ยังไม่เริ่ม | – |
 
 **งานค้างก่อน Phase 4 (จาก review บทที่ 1)**: ถ่ายภาพ 1-1 ใหม่จาก spec rev 7 ความละเอียดสูง (ปัจจุบันเป็นภาพ rev 5 crop 556×318 พร้อม disclosure ใน caption); พิจารณาเก็บภาพหน้าต่าง About ที่ปิดบัง User ID/Session ID/ชื่อบัญชี
