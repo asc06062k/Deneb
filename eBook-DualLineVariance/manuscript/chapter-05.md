@@ -227,7 +227,7 @@ Step แรก ไฟล์เต็มมี 3 ส่วนที่ต้อ�
 
 ![กราฟสองเส้น Actual ทึบน้ำเงิน Reference ประส้ม](../images/chapter-05/CH05-S02-editor-line-reference.png)
 
-*ภาพ 5-3 Step 2: เส้น Actual (ทึบสีน้ำเงิน) และเส้น Reference (ประสีส้ม) แกน Y ยังเป็น 0 ถึง 600 มี tooltip "Customize theme" ค้างที่มุมขวาบนของ Editor จากเมาส์ ไม่เกี่ยวกับกราฟ*
+*ภาพ 5-3 Step 2: เส้น Actual (ทึบสีน้ำเงิน) และเส้น Reference (ประสีส้ม) แกน Y ยังเป็น 0 ถึง 600 ภาพนี้เปิดแผง Format ค้างไว้ทางขวา (Size and position ของ Visual: Height 450, Width 800) ทำให้พื้นที่ Editor แคบกว่าภาพ 5-1 ไม่เกี่ยวกับ spec*
 
 ### 5) JSON ที่เพิ่มหรือแก้เฉพาะ Step
 
