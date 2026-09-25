@@ -82,7 +82,11 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 | --- | --- | --- |
 | 1 รู้จัก Deneb | **PASS** (24 ก.ย. 2026) | `review/chapters/CH01_CODEX_VERDICT.md` (REVISE) → `..._R2.md` (PASS) |
 | 2 เตรียม Power BI และ Deneb | **PASS** (25 ก.ย. 2026) ภาพจริง 2-1 ถึง 2-20 ใน images/chapter-02 ใช้ Workshop_Data 12 แถว | `review/chapters/CH02_CODEX_VERDICT.md` (REVISE, M-01 ถึง M-07) → `..._R2.md` (PASS) |
-| 3–10 | ยังไม่เริ่ม | – |
+| 3 โครงสร้างภาษา Vega-Lite | **PASS** (25 ก.ย. 2026) ตัวอย่าง 9 ชิ้นทดสอบด้วย `qa/scripts/run-ch03-example-tests.mjs` (65 ผ่าน) ภาพ 3-1 ถึง 3-9 เป็น render headless ไม่ใช่ภาพหน้าจอ Power BI | `review/chapters/CH03_CODEX_VERDICT.md` (REVISE) → `..._R2.md` (PASS) |
+| 4 ชุดข้อมูล Workshop | **รอภาพหน้าจอจริง** (ดูรายการด้านล่าง) ยังไม่เขียนต้นฉบับ | – |
+| 5–10 | ยังไม่เริ่ม | – |
+
+**งานค้างก่อนบทที่ 4 (ตัดสินเมื่อ 25 ก.ย. 2026)**: ผู้ใช้ต้องตั้งหน้าจอ Power BI แล้วพิมพ์ "ถ่าย" (หรือวางภาพขนาดเต็ม 1920×1020) ตามรายการ (1) Get data > Text/CSV ของ `DualLineVariance_Settings.csv` (2) Power Query Editor เห็น query `DualLineVariance_Workshop_Data` และ `DualLineVariance_Settings` (3) New Blank Query แล้ว Advanced Editor วาง `specs/DualLine_PlotData_PowerQuery.pq` (4) ตัวอย่างผลของ `DualLine_PlotData` ใน Power Query (52 แถว, คอลัมน์ Row_Type/Segment_ID/Plot_Position ฯลฯ) (5) Close & Apply (6) New measure `DualLine Row Count` (7) ช่อง Values ของ Deneb ผูก field ครบพร้อม Don't summarize / Sum ตามตาราง field ของบทที่ 4 (8) Model view เห็น Relationship `Filter_Key` (ถ้าใช้ภาพ T18-00 จาก qa/evidence ต้องตรวจก่อนว่าไม่มีชื่อบัญชี) ภาพทั้งหมดใช้ตาราง Workshop 12 แถว และต้องบอกชัดว่าตารางไหนใช้กับภาพไหน (บทเรียนจากบทที่ 2)
 
 **งานค้างก่อน Phase 4 (จาก review บทที่ 1)**: ถ่ายภาพ 1-1 ใหม่จาก spec rev 7 ความละเอียดสูง (ปัจจุบันเป็นภาพ rev 5 crop 556×318 พร้อม disclosure ใน caption); พิจารณาเก็บภาพหน้าต่าง About ที่ปิดบัง User ID/Session ID/ชื่อบัญชี
 
