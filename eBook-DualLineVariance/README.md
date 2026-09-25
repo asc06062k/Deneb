@@ -84,7 +84,7 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 | 2 เตรียม Power BI และ Deneb | **PASS** (25 ก.ย. 2026) ภาพจริง 2-1 ถึง 2-20 ใน images/chapter-02 ใช้ Workshop_Data 12 แถว | `review/chapters/CH02_CODEX_VERDICT.md` (REVISE, M-01 ถึง M-07) → `..._R2.md` (PASS) |
 | 3 โครงสร้างภาษา Vega-Lite | **PASS** (25 ก.ย. 2026) ตัวอย่าง 9 ชิ้นทดสอบด้วย `qa/scripts/run-ch03-example-tests.mjs` (65 ผ่าน) ภาพ 3-1 ถึง 3-9 เป็น render headless ไม่ใช่ภาพหน้าจอ Power BI | `review/chapters/CH03_CODEX_VERDICT.md` (REVISE) → `..._R2.md` (PASS) |
 | 4 ชุดข้อมูล Workshop | **PASS** (25 ก.ย. 2026, Codex รอบแรก ไม่มี Mandatory) ภาพจริง 4-1 ถึง 4-10, ตัวเลขตรวจด้วย `qa/scripts/run-ch04-claims-check.mjs` (8 ผ่าน) กรณีข้อมูลผิดปกติของ query ยังไม่ทดสอบบน Power Query จริง (บท 4.7, ไปทดสอบในบท 9) | `review/chapters/CH04_CODEX_VERDICT.md` (PASS) |
-| 5 กราฟสองเส้นแรก | **PASS** (25 ก.ย. 2026, Codex รอบแรก ไม่มี Mandatory) ภาพจริง 5-1 ถึง 5-7 (ภาพ 5-3 มี tooltip ค้าง ถ่ายใหม่ได้ ไม่บังคับ), JSON excerpt ตรวจกับ specs/steps ด้วย  (26 ผ่าน) คงบรรทัด  ตามคำตัดสินผู้ใช้ | `review/chapters/CH05_CODEX_VERDICT.md` (PASS) |
+| 5 กราฟสองเส้นแรก | **PASS** (25 ก.ย. 2026, Codex รอบแรก ไม่มี Mandatory) ภาพจริง 5-1 ถึง 5-7 (ภาพ 5-3 มี tooltip ค้าง ถ่ายใหม่ได้ ไม่บังคับ), JSON excerpt ตรวจกับ specs/steps ด้วย `qa/scripts/run-ch05-claims-check.mjs` (26 ผ่าน) คงบรรทัด `$schema` ตามคำตัดสินผู้ใช้ | `review/chapters/CH05_CODEX_VERDICT.md` (PASS) |
 | 6 พื้นที่ Variance และ Connector | **รอภาพหน้าจอจริง** ยังไม่เขียนต้นฉบับ | – |
 | 7–10 | ยังไม่เริ่ม | – |
 
