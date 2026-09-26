@@ -22,7 +22,7 @@
       "transform": [
         { "filter": "datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing'" }
       ],
-      "mark": { "type": "area", "opacity": 0.35, "tooltip": null },
+      "mark": { "type": "area", "opacity": 0.15, "tooltip": null },
       "encoding": {
         "x": { "field": "Plot_Position", "type": "quantitative" },
         "y": { "field": "Plot_Actual", "type": "quantitative" },

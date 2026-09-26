@@ -292,29 +292,29 @@ measure `DualLine Row Count` อยู่ในตาราง `DualLine_PlotDat
 
 | กลุ่ม | field | วิธีสรุปค่าในช่อง Values |
 | --- | --- | --- |
-| ค่าที่เป็นตัวเลขและใช้กับ Cross-highlight | `Actual`, `Reference` | **Sum** (ปล่อยตามค่าเริ่มต้น แถบแสดง `Sum of Actual`, `Sum of Reference`) |
+| ค่าที่เป็นตัวเลขและใช้กับ Cross-highlight | `Actual`, `Reference` | **Sum** (ค่าเริ่มต้น) แล้ว**เปลี่ยนชื่อแถบ**จาก `Sum of Actual`, `Sum of Reference` เป็น `Actual`, `Reference` |
 | ค่าที่ใช้วาด (ตัวเลข) | `Plot_Actual`, `Plot_Position`, `Plot_Reference`, `Run_Sign`, `Sort_Order` | **Don't summarize** |
 | ข้อความ | `Category`, `Business_Type`, `Filter_Key`, `Row_Type`, `Segment_ID` | ไม่มีการสรุป (ไม่ต้องตั้ง) |
 | measure | `DualLine Row Count` | ไม่ต้องตั้ง |
 
-เหตุผลที่ `Actual` และ `Reference` เป็น Sum: การผูกเป็น measure ทำให้ Deneb สร้างคอลัมน์ `<ชื่อ>__highlight` สำหรับ Cross-highlight ในบทที่ 8 ได้ (ตาม Design Plan และหลักฐาน Phase 2) ส่วนค่าที่ใช้วาดต้องส่งเข้ามาทีละแถวตรงตามตาราง จึงต้องเป็น Don't summarize มิฉะนั้น Power BI จะรวมค่าของแถวที่ `Category` เดียวกันเข้าด้วยกัน
+เหตุผลที่ `Actual` และ `Reference` เป็น Sum: การผูกเป็น measure ทำให้ Deneb สร้างคอลัมน์ `<ชื่อ>__highlight` สำหรับ Cross-highlight ในบทที่ 8 ได้ (ตาม Design Plan และหลักฐาน Phase 2) `<ชื่อ>` คือชื่อของแถบในช่อง Values ดังนั้นแถบต้องชื่อ `Actual` และ `Reference` (ไม่ใช่ `Sum of Actual`) คอลัมน์จึงชื่อ `Actual__highlight` ตามที่ spec อ้าง ส่วนค่าที่ใช้วาดต้องส่งเข้ามาทีละแถวตรงตามตาราง จึงต้องเป็น Don't summarize มิฉะนั้น Power BI จะรวมค่าของแถวที่ `Category` เดียวกันเข้าด้วยกัน
 
 ### 4) ขั้นตอนใน Power BI
 
 1. เพิ่มหน้าใหม่ คลิกไอคอน **Deneb** ในช่อง Build เพื่อวาง Visual
 2. ให้ Visual Deneb ถูกเลือกอยู่ แล้วติ๊ก field ทั้ง 13 ตัวในช่อง Data (ตาราง `DualLine_PlotData`) Power BI จะใส่เข้าช่อง Values เอง
 3. ในช่อง Values คลิกขวาที่แถบ `Sum of Plot_Actual`, `Sum of Plot_Position`, `Sum of Plot_Reference`, `Sum of Run_Sign`, `Sum of Sort_Order` แล้วเลือก **Don't summarize** ทีละตัว แถบจะเปลี่ยนชื่อเป็นชื่อเปล่า (`Plot_Actual` ฯลฯ) ตามภาพ 4-7 และ 4-8
-4. ปล่อย `Sum of Actual` และ `Sum of Reference` เป็น Sum ตามเดิม **ไม่ต้องเปลี่ยนชื่อ** (ต่างจากบทที่ 2 เพราะ spec ของเล่มนี้ไม่ได้อ่านสองค่านี้ตรงๆ)
-5. ตรวจตามภาพ 4-7 (ช่อง Values ส่วนบน) และ 4-8 (ส่วนล่างถึงปุ่ม +Add data) ต้องเห็นแถบครบ 13 ตัว ลำดับในช่อง Values ของคุณอาจต่างจากภาพ ไม่กระทบผล
+4. ปล่อย `Sum of Actual` และ `Sum of Reference` เป็น Sum ตามเดิม แต่**เปลี่ยนชื่อแถบ**: คลิกขวาที่แถบ `Sum of Actual` เลือก **Rename for this visual** พิมพ์ `Actual` แล้ว Enter จากนั้นทำเช่นเดียวกับ `Sum of Reference` ให้เป็น `Reference` (เหมือนบทที่ 2 ที่ใช้ชื่อเปล่า) ต้องทำ เพราะ spec ของบทที่ 8 อ่านค่า `Actual`, `Reference` และคอลัมน์ `Actual__highlight` ฯลฯ ที่ Deneb ตั้งชื่อตามชื่อแถบ ถ้าปล่อยเป็น `Sum of Actual` Deneb จะสร้างคอลัมน์ชื่อ `Sum of Actual__highlight` ซึ่ง spec หาไม่เจอ และ Cross-highlight ในบทที่ 8 จะไม่จางเลย (พบจริงตอนทดสอบบทที่ 8)
+5. ตรวจตามภาพ 4-7 (เต็มหน้าจอ) และ 4-8 (ขยายช่อง Values ถึงปุ่ม +Add data) ต้องเห็นแถบครบ 13 ตัว โดย `Actual` และ `Reference` เปลี่ยนชื่อแล้ว ลำดับในช่อง Values ของคุณอาจต่างจากภาพ ไม่กระทบผล
 6. ถ้าจะตรวจการตั้งค่าของแถบใด คลิกขวาที่แถบนั้น จะเห็นเครื่องหมายถูกหน้าตัวเลือกที่ใช้อยู่ ในภาพ 4-9 ตัวเลือก **Don't summarize** มีเครื่องหมายถูก
 
-![ช่อง Values ของ Deneb ส่วนบน](../images/chapter-04/CH04-S04-deneb-values-top.png)
+![Visual Deneb ที่ยังเป็นหน้าจอเปล่าและช่อง Values ทางขวา](../images/chapter-04/CH04-S04-deneb-values-top.png)
 
-*ภาพ 4-7 Visual Deneb ที่ผูก field จาก `DualLine_PlotData` ช่อง Values ส่วนบน เห็นแถบ `Sum of Actual`, `Business_Type`, `Category`, `DualLine Row …`, `Filter_Key`, `Plot_Actual`, `Plot_Position`, `Plot_Reference` และ `Sum of Refere…` ช่อง Data ทางขวาติ๊กครบ*
+*ภาพ 4-7 เต็มหน้าจอ (Report view ซูม 75%): Visual Deneb ที่ผูก field จาก `DualLine_PlotData` แล้วยังแสดงหน้าจอเปล่าของ Deneb (ยังไม่มี spec) ทางขวาคือ Build pane ช่อง Values มี 13 แถบ ที่ `Actual` และ `Reference` เปลี่ยนชื่อจาก `Sum of Actual`, `Sum of Reference` แล้ว*
 
 ![ช่อง Values ของ Deneb ครบ 13 แถบ](../images/chapter-04/CH04-S04-deneb-values-bottom.png)
 
-*ภาพ 4-8 ช่อง Values ครบ 13 แถบจนถึงปุ่ม +Add data: `Sum of Actual`, `Business_Type`, `Category`, `DualLine Row …`, `Filter_Key`, `Plot_Actual`, `Plot_Position`, `Plot_Reference`, `Sum of Refere…`, `Row_Type`, `Run_Sign`, `Segment_ID`, `Sort_Order` (ริบบิ้นด้านบนเป็นของ field `Segment_ID` ที่เลือกค้างอยู่ในช่อง Data ไม่เกี่ยวกับขั้นตอน)*
+*ภาพ 4-8 ภาพที่ผู้เขียนตัดและขยายจากภาพ 4-7 (ไม่ใช่ภาพหน้าจอใหม่) เฉพาะช่อง Values ครบ 13 แถบจนถึงปุ่ม +Add data: `Actual`, `Reference`, `Business_Type`, `Category`, `DualLine Row …`, `Filter_Key`, `Plot_Actual`, `Plot_Position`, `Plot_Reference`, `Row_Type`, `Run_Sign`, `Segment_ID`, `Sort_Order` ไม่มีแถบ `Sum of …` เหลืออยู่*
 
 ![เมนูคลิกขวาของแถบใน Values ที่ติ๊ก Don't summarize](../images/chapter-04/CH04-S04-values-well-dont-summarize.png)
 
@@ -326,7 +326,7 @@ measure `DualLine Row Count` อยู่ในตาราง `DualLine_PlotDat
 
 ### 6) คำอธิบายโค้ด
 
-ไม่มี ข้อควรเข้าใจคือชื่อในช่อง Values คือชื่อ field ที่ spec เห็น (บทที่ 2 Step 3 และบทที่ 3 หัวข้อ 3.1) spec ของบทที่ 5 ถึง 8 อ้าง `Plot_Position`, `Plot_Actual`, `Plot_Reference`, `Segment_ID`, `Sort_Order`, `Category` ตามชื่อเปล่า จึงต้องตั้ง Don't summarize ให้แถบแสดงชื่อเปล่าตามนี้
+ไม่มี ข้อควรเข้าใจคือชื่อในช่อง Values คือชื่อ field ที่ spec เห็น (บทที่ 2 Step 3 และบทที่ 3 หัวข้อ 3.1) spec ของบทที่ 5 ถึง 8 อ้าง `Plot_Position`, `Plot_Actual`, `Plot_Reference`, `Segment_ID`, `Sort_Order`, `Category` ตามชื่อเปล่า จึงต้องตั้ง Don't summarize ให้แถบแสดงชื่อเปล่าตามนี้ และ spec ของบทที่ 8 อ้าง `Actual` กับ `Reference` ด้วย จึงต้องเปลี่ยนชื่อแถบสองตัวนั้นด้วย
 
 ### 7) ภาพระหว่างทำ
 
@@ -334,24 +334,25 @@ measure `DualLine Row Count` อยู่ในตาราง `DualLine_PlotDat
 
 ### 8) ผลลัพธ์ที่ควรได้
 
-ช่อง Values ของ Deneb มี 13 แถบ แถบ 5 ตัวเป็นชื่อเปล่าตาม Don't summarize และ `Sum of Actual` กับ `Sum of Refere…` เป็น Sum
+ช่อง Values ของ Deneb มี 13 แถบ แถบ 5 ตัวเป็นชื่อเปล่าตาม Don't summarize และ `Actual` กับ `Reference` เป็น Sum ที่เปลี่ยนชื่อแล้ว
 
 ### 9) วิธีตรวจสอบผล
 
-ตามภาพ 4-8 ต้องไม่มีแถบ `Sum of Plot_…`, `Sum of Run_Sign` หรือ `Sum of Sort_Order` เหลืออยู่ ถ้ามี แปลว่ายังไม่ได้ตั้ง Don't summarize ตรวจ 52 แถวในบทที่ 5 (แท็บ Source ของ Debug pane) หลังสร้าง spec
+ตามภาพ 4-8 ต้องไม่มีแถบ `Sum of …` เหลืออยู่เลย (ทั้ง `Sum of Plot_…`, `Sum of Run_Sign`, `Sum of Sort_Order` และ `Sum of Actual`/`Sum of Reference`) ถ้ามี แปลว่ายังไม่ได้ตั้ง Don't summarize หรือยังไม่ได้เปลี่ยนชื่อ ตรวจ 52 แถวในบทที่ 5 (แท็บ Source ของ Debug pane) หลังสร้าง spec
 
 ### 10) ปัญหาที่อาจพบและวิธีแก้
 
 | อาการ | สาเหตุที่เป็นไปได้ | วิธีแก้ |
 | --- | --- | --- |
 | แถบเป็น `Sum of Plot_Position` ฯลฯ | ยังไม่ได้ตั้ง Don't summarize | คลิกขวาที่แถบ เลือก Don't summarize |
+| แถบเป็น `Sum of Actual` หรือ `Sum of Reference` | ยังไม่ได้เปลี่ยนชื่อ | คลิกขวาที่แถบ เลือก Rename for this visual แล้วพิมพ์ `Actual` หรือ `Reference` (ถ้าข้าม Cross-highlight ในบทที่ 8 จะไม่จาง) |
 | ติ๊ก field แล้วไม่เข้าช่อง Values | Visual ที่เลือกอยู่ไม่ใช่ Deneb | คลิกที่ Visual Deneb ให้ถูกเลือกก่อน |
 | หน้าต่าง Suggest a visual เปิดค้าง | Power BI เสนอ Visual ให้หลังติ๊ก field | กดกากบาทปิด แล้วคลิกที่ Visual Deneb |
 | แถบ Values ไม่ครบ 13 | ติ๊ก field ไม่ครบ | ติ๊กที่ขาด (รวม `DualLine Row Count`) |
 
 ### 11) แบบฝึกหัดสั้น
 
-จากภาพ 4-8 บอกว่าแถบไหนเป็น Sum และแถบไหนเป็น Don't summarize ในกลุ่มตัวเลข 7 ตัว
+ในกลุ่มตัวเลข 7 ตัวของภาพ 4-8 แถบใดเป็น Sum ที่ต้องเปลี่ยนชื่อ และแถบใดตั้ง Don't summarize ทำไมสองกลุ่มจึงทำต่างกัน (เฉลยท้ายบท ข้อ 4)
 
 ### 12) จุดตรวจผ่านก่อนทำ Step ถัดไป
 
@@ -492,7 +493,7 @@ measure `DualLine Row Count` อยู่ในตาราง `DualLine_PlotDat
 1. จุดตัดไม่อยู่ในข้อมูลดิบ ต้องมีแถวข้อมูลจริงให้ spec วาดพื้นที่ได้ตรงจุด และบทที่ 1 แจ้งไว้ว่าต้องเตรียมตอน Refresh
 2. กรณี C ได้ 2 แถว (`Boundary` ต้นช่วงและท้ายช่วง) เพราะไม่มีการเปลี่ยนเครื่องหมาย
 3. 12 แถว (เหลือแต่ `Original`) ตามผลทดสอบ Phase 2 ที่บันทึกไว้ในหัวข้อ 2.1.1 ของ Design Plan
-4. เพื่อให้ Power BI ส่งค่าของทุกแถวตามตาราง ไม่รวมแถวที่ `Category` เดียวกัน และแถบมีชื่อเปล่าที่ spec อ้างได้
+4. เพื่อให้ Power BI ส่งค่าของทุกแถวตามตาราง ไม่รวมแถวที่ `Category` เดียวกัน และแถบมีชื่อเปล่าที่ spec อ้างได้ (`Actual` กับ `Reference` ที่เป็น Sum ต้องเปลี่ยนชื่อแถบ ไม่ใช่ตั้ง Don't summarize)
 5. แถว Fill มี `Category` ว่าง ถ้าเชื่อมด้วย `Category` Relationship จะตัดแถว Fill ทิ้งทั้งหมด
 
 </details>
@@ -501,5 +502,5 @@ measure `DualLine Row Count` อยู่ในตาราง `DualLine_PlotDat
 
 - [ ] มีตาราง `DualLine_PlotData` 52 แถว 12 คอลัมน์
 - [ ] มี measure `DualLine Row Count` และ Relationship `Filter_Key` (Both)
-- [ ] Deneb ผูก field ครบ 13 ตัวตามภาพ 4-8
+- [ ] Deneb ผูก field ครบ 13 ตัวตามภาพ 4-8 และแถบ `Actual`, `Reference` เปลี่ยนชื่อแล้ว
 - [ ] รู้ที่มาและหน้าที่ของแถว `Original`, `Boundary` และ `Crossing`
