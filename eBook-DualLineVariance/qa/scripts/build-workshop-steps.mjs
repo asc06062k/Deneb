@@ -26,12 +26,20 @@ const noYDomain = (l) => { delete l.encoding.y.scale; return l; };
 const noTooltip = (l) => {
   delete l.encoding.tooltip;
   l.transform = l.transform.filter((t) => !("calculate" in t));
+  if (!l.transform.length) delete l.transform;
   return l;
 };
 
 const FINAL_ORDER = finalSpec.layer.map((l) => l.name);
 
-function makeSpec(stepId, title, layers) {
+// Top-level transform indices in the final spec (rev 8, 4-field architecture):
+//   0,1 blank -> 0 for Actual/Reference   2 window row_number (Position)   3 window lead (NextActual/NextReference)
+//   4..9 Diff, NextDiff, RunSign, CrossT, CrossY, Vertices (only the area layers flatten Vertices)
+const T_POSITION = [2];
+const T_POSITION_CLEAN = [0, 1, 2];
+const T_ALL = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+function makeSpec(stepId, title, layers, transformIdx) {
   const sorted = [...layers].sort((a, b) => FINAL_ORDER.indexOf(a.name) - FINAL_ORDER.indexOf(b.name));
   const spec = {
     $schema: finalSpec.$schema,
@@ -45,6 +53,7 @@ function makeSpec(stepId, title, layers) {
   // Y-domain params only once a layer references them (from CH05-S05).
   const hasYDomain = sorted.some((l) => l.encoding.y && l.encoding.y.scale);
   spec.params = clone(finalSpec.params).filter((p) => p.name.startsWith("xAxis") || hasYDomain);
+  spec.transform = transformIdx.map((i) => clone(finalSpec.transform[i]));
   spec.layer = sorted;
   if (sorted.length > 1) spec.resolve = clone(finalSpec.resolve);
   spec.config = clone(finalSpec.config);
@@ -53,22 +62,22 @@ function makeSpec(stepId, title, layers) {
 
 // Each step lists the full layer set of that step (cumulative).
 const steps = [];
-const add = (id, file, title, layers) => steps.push({ id, file, title, layers });
+const add = (id, file, title, layers, transformIdx = T_ALL) => steps.push({ id, file, title, layers, transformIdx });
 
 const s05_1 = [noYDomain(noOpacity(noInterpolate(layer("line_actual"))))];
-add("CH05-S01", "CH05-S01-line-actual.vl.json", "first line: Actual only, Row_Type = Original filter, Thai month axis", s05_1);
+add("CH05-S01", "CH05-S01-line-actual.vl.json", "first line: Actual only, x = Position from window row_number, Thai month axis from Category", s05_1, T_POSITION);
 
 const s05_2 = [...s05_1, noOpacity(noInterpolate(layer("line_reference")))];
-add("CH05-S02", "CH05-S02-line-reference.vl.json", "add Reference line as second layer (dashed amber)", s05_2);
+add("CH05-S02", "CH05-S02-line-reference.vl.json", "add Reference line as second layer (dashed amber)", s05_2, T_POSITION);
 
 const s05_3 = [...s05_2, noOpacity(layer("point_reference")), noOpacity(noTooltip(layer("point_actual_hit_target")))];
-add("CH05-S03", "CH05-S03-points.vl.json", "add point marks for Actual and Reference", s05_3);
+add("CH05-S03", "CH05-S03-points.vl.json", "add point marks for Actual and Reference", s05_3, T_POSITION);
 
 const s05_4 = [noYDomain(noOpacity(layer("line_actual"))), noOpacity(layer("line_reference")), ...s05_3.slice(2)];
-add("CH05-S04", "CH05-S04-monotone.vl.json", "curve both lines with interpolate: monotone (known limitation M-11)", s05_4);
+add("CH05-S04", "CH05-S04-monotone.vl.json", "curve both lines with interpolate: monotone (known limitation M-11)", s05_4, T_POSITION);
 
 const s05_5 = [noOpacity(layer("line_actual")), ...s05_4.slice(1)];
-add("CH05-S05", "CH05-S05-y-domain.vl.json", "Y domain = data extent +/- 18% padding like the prototype (params + scale.domain expr)", s05_5);
+add("CH05-S05", "CH05-S05-y-domain.vl.json", "Y domain = data extent +/- 18% padding like the prototype (params + scale.domain expr), blank Actual/Reference = 0", s05_5, T_POSITION_CLEAN);
 
 const s06_1 = [...s05_5, layer("variance_area")];
 add("CH06-S01", "CH06-S01-variance-area.vl.json", "variance area between lines, Good/Bad color from Business_Type", s06_1);
@@ -89,13 +98,13 @@ const s08_1 = finalSpec.layer.map(clone);
 add("CH08-S01", "CH08-S01-cross-highlight-opacity.vl.json", "cross-highlight: dim points, connector and labels of non-highlighted months (= final spec)", s08_1);
 
 for (const s of steps) {
-  const spec = makeSpec(s.id, s.title, s.layers);
+  const spec = makeSpec(s.id, s.title, s.layers, s.transformIdx);
   writeFileSync(join(outDir, s.file), JSON.stringify(spec, null, 2) + "\n", "utf8");
 }
 
 writeFileSync(
   join(outDir, "steps-manifest.json"),
-  JSON.stringify(steps.map((s) => ({ id: s.id, file: s.file, title: s.title, layers: [...s.layers].map((l) => l.name).sort((a, b) => FINAL_ORDER.indexOf(a) - FINAL_ORDER.indexOf(b)) })), null, 2) + "\n",
+  JSON.stringify(steps.map((s) => ({ id: s.id, file: s.file, title: s.title, topLevelTransforms: s.transformIdx.length, layers: [...s.layers].map((l) => l.name).sort((a, b) => FINAL_ORDER.indexOf(a) - FINAL_ORDER.indexOf(b)) })), null, 2) + "\n",
   "utf8"
 );
 console.log(`wrote ${steps.length} step specs to specs/steps/`);

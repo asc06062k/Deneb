@@ -2,7 +2,8 @@
   {
     "id": "CH05-S01",
     "file": "CH05-S01-line-actual.vl.json",
-    "title": "first line: Actual only, Row_Type = Original filter, Thai month axis",
+    "title": "first line: Actual only, x = Position from window row_number, Thai month axis from Category",
+    "topLevelTransforms": 1,
     "layers": [
       "line_actual"
     ]
@@ -11,6 +12,7 @@
     "id": "CH05-S02",
     "file": "CH05-S02-line-reference.vl.json",
     "title": "add Reference line as second layer (dashed amber)",
+    "topLevelTransforms": 1,
     "layers": [
       "line_reference",
       "line_actual"
@@ -20,6 +22,7 @@
     "id": "CH05-S03",
     "file": "CH05-S03-points.vl.json",
     "title": "add point marks for Actual and Reference",
+    "topLevelTransforms": 1,
     "layers": [
       "line_reference",
       "line_actual",
@@ -31,6 +34,7 @@
     "id": "CH05-S04",
     "file": "CH05-S04-monotone.vl.json",
     "title": "curve both lines with interpolate: monotone (known limitation M-11)",
+    "topLevelTransforms": 1,
     "layers": [
       "line_reference",
       "line_actual",
@@ -41,7 +45,8 @@
   {
     "id": "CH05-S05",
     "file": "CH05-S05-y-domain.vl.json",
-    "title": "Y domain = data extent +/- 18% padding like the prototype (params + scale.domain expr)",
+    "title": "Y domain = data extent +/- 18% padding like the prototype (params + scale.domain expr), blank Actual/Reference = 0",
+    "topLevelTransforms": 3,
     "layers": [
       "line_reference",
       "line_actual",
@@ -53,6 +58,7 @@
     "id": "CH06-S01",
     "file": "CH06-S01-variance-area.vl.json",
     "title": "variance area between lines, Good/Bad color from Business_Type",
+    "topLevelTransforms": 10,
     "layers": [
       "variance_area",
       "line_reference",
@@ -65,6 +71,7 @@
     "id": "CH06-S02",
     "file": "CH06-S02-bad-area-border.vl.json",
     "title": "dashed border on Bad segments (non-color cue)",
+    "topLevelTransforms": 10,
     "layers": [
       "variance_area",
       "bad_area_border_actual",
@@ -79,6 +86,7 @@
     "id": "CH06-S03",
     "file": "CH06-S03-connector-rule.vl.json",
     "title": "connector rule between Actual and Reference per category",
+    "topLevelTransforms": 10,
     "layers": [
       "variance_area",
       "bad_area_border_actual",
@@ -94,6 +102,7 @@
     "id": "CH07-S01",
     "file": "CH07-S01-tooltip.vl.json",
     "title": "variance tooltip on Actual point (Variance, VarianceLabel, VariancePercentLabel)",
+    "topLevelTransforms": 10,
     "layers": [
       "variance_area",
       "bad_area_border_actual",
@@ -109,6 +118,7 @@
     "id": "CH07-S02",
     "file": "CH07-S02-data-labels.vl.json",
     "title": "Actual/Reference data labels with width-based thinning",
+    "topLevelTransforms": 10,
     "layers": [
       "variance_area",
       "bad_area_border_actual",
@@ -126,6 +136,7 @@
     "id": "CH08-S01",
     "file": "CH08-S01-cross-highlight-opacity.vl.json",
     "title": "cross-highlight: dim points, connector and labels of non-highlighted months (= final spec)",
+    "topLevelTransforms": 10,
     "layers": [
       "variance_area",
       "bad_area_border_actual",

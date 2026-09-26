@@ -13,28 +13,32 @@
   },
   "params": [
     {
-      "name": "xAxisSortOrders",
-      "expr": "pluck(data('dataset'), 'Sort_Order')"
-    },
-    {
       "name": "xAxisCategories",
       "expr": "pluck(data('dataset'), 'Category')"
     },
     {
-      "name": "xAxisSortExtent",
-      "expr": "extent(xAxisSortOrders)"
+      "name": "xAxisValues",
+      "expr": "length(xAxisCategories) > 0 && length(xAxisCategories) <= 1000 ? sequence(1, length(xAxisCategories) + 1) : []"
     },
     {
-      "name": "xAxisValues",
-      "expr": "isValid(xAxisSortExtent[0]) && xAxisSortExtent[1] - xAxisSortExtent[0] <= 1000 ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []"
+      "name": "yActualValues",
+      "expr": "pluck(data('dataset'), 'Actual')"
+    },
+    {
+      "name": "yReferenceValues",
+      "expr": "pluck(data('dataset'), 'Reference')"
+    },
+    {
+      "name": "yHasBlank",
+      "expr": "indexof(yActualValues, null) >= 0 || indexof(yReferenceValues, null) >= 0"
     },
     {
       "name": "yRawMin",
-      "expr": "min(extent(pluck(data('dataset'), 'Plot_Actual'))[0], extent(pluck(data('dataset'), 'Plot_Reference'))[0])"
+      "expr": "min(extent(yActualValues)[0], extent(yReferenceValues)[0], yHasBlank ? 0 : MAX_VALUE)"
     },
     {
       "name": "yRawMax",
-      "expr": "max(extent(pluck(data('dataset'), 'Plot_Actual'))[1], extent(pluck(data('dataset'), 'Plot_Reference'))[1])"
+      "expr": "max(extent(yActualValues)[1], extent(yReferenceValues)[1], yHasBlank ? 0 : -MAX_VALUE)"
     },
     {
       "name": "yPad",
@@ -49,12 +53,80 @@
       "expr": "isFinite(yRawMax) ? max(yRawMax + yPad, yDomainMin + 1) : 1"
     }
   ],
+  "transform": [
+    {
+      "calculate": "isValid(datum.Actual) ? datum.Actual : 0",
+      "as": "Actual"
+    },
+    {
+      "calculate": "isValid(datum.Reference) ? datum.Reference : 0",
+      "as": "Reference"
+    },
+    {
+      "window": [
+        {
+          "op": "row_number",
+          "as": "Position"
+        }
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "lead",
+          "field": "Actual",
+          "as": "NextActual"
+        },
+        {
+          "op": "lead",
+          "field": "Reference",
+          "as": "NextReference"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.Actual - datum.Reference",
+      "as": "Diff"
+    },
+    {
+      "calculate": "datum.NextActual - datum.NextReference",
+      "as": "NextDiff"
+    },
+    {
+      "calculate": "datum.Diff != 0 ? (datum.Diff > 0 ? 1 : -1) : (datum.NextDiff > 0 ? 1 : datum.NextDiff < 0 ? -1 : 0)",
+      "as": "RunSign"
+    },
+    {
+      "calculate": "datum.Diff * datum.NextDiff < 0 ? datum.Diff / (datum.Diff - datum.NextDiff) : 0",
+      "as": "CrossT"
+    },
+    {
+      "calculate": "datum.Actual + datum.CrossT * (datum.NextActual - datum.Actual)",
+      "as": "CrossY"
+    },
+    {
+      "calculate": "datum.CrossT > 0 ? [ {x: datum.Position, actual: datum.Actual, reference: datum.Reference, part: 'a', sign: datum.RunSign}, {x: datum.Position + datum.CrossT, actual: datum.CrossY, reference: datum.CrossY, part: 'a', sign: datum.RunSign}, {x: datum.Position + datum.CrossT, actual: datum.CrossY, reference: datum.CrossY, part: 'b', sign: -datum.RunSign}, {x: datum.Position + 1, actual: datum.NextActual, reference: datum.NextReference, part: 'b', sign: -datum.RunSign} ] : [ {x: datum.Position, actual: datum.Actual, reference: datum.Reference, part: '', sign: datum.RunSign}, {x: datum.Position + 1, actual: datum.NextActual, reference: datum.NextReference, part: '', sign: datum.RunSign} ]",
+      "as": "Vertices"
+    }
+  ],
   "layer": [
     {
       "name": "variance_area",
       "transform": [
         {
-          "filter": "datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing'"
+          "filter": "isValid(datum.NextActual)"
+        },
+        {
+          "flatten": [
+            "Vertices"
+          ],
+          "as": [
+            "Vertex"
+          ]
+        },
+        {
+          "calculate": "datum.Position + '-' + datum.Vertex.part",
+          "as": "Segment"
         }
       ],
       "mark": {
@@ -64,30 +136,30 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Vertex.x",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Actual",
+          "field": "Vertex.actual",
           "type": "quantitative"
         },
         "y2": {
-          "field": "Plot_Reference"
+          "field": "Vertex.reference"
         },
         "detail": {
-          "field": "Segment_ID",
+          "field": "Segment",
           "type": "nominal"
         },
         "color": {
           "condition": {
-            "test": "(datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0)",
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Vertex.sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Vertex.sign < 0)",
             "value": "#0F766E"
           },
           "value": "#B45309"
         },
         "stroke": {
           "condition": {
-            "test": "(datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0)",
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Vertex.sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Vertex.sign < 0)",
             "value": "#0F766E"
           },
           "value": "#B45309"
@@ -101,7 +173,22 @@
       "name": "bad_area_border_actual",
       "transform": [
         {
-          "filter": "(datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing') && !((datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0))"
+          "filter": "isValid(datum.NextActual)"
+        },
+        {
+          "flatten": [
+            "Vertices"
+          ],
+          "as": [
+            "Vertex"
+          ]
+        },
+        {
+          "calculate": "datum.Position + '-' + datum.Vertex.part",
+          "as": "Segment"
+        },
+        {
+          "filter": "!((datum.Business_Type == 'Higher is Good' && datum.Vertex.sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Vertex.sign < 0))"
         }
       ],
       "mark": {
@@ -117,15 +204,15 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Vertex.x",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Actual",
+          "field": "Vertex.actual",
           "type": "quantitative"
         },
         "detail": {
-          "field": "Segment_ID",
+          "field": "Segment",
           "type": "nominal"
         }
       }
@@ -134,7 +221,22 @@
       "name": "bad_area_border_reference",
       "transform": [
         {
-          "filter": "(datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing') && !((datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0))"
+          "filter": "isValid(datum.NextActual)"
+        },
+        {
+          "flatten": [
+            "Vertices"
+          ],
+          "as": [
+            "Vertex"
+          ]
+        },
+        {
+          "calculate": "datum.Position + '-' + datum.Vertex.part",
+          "as": "Segment"
+        },
+        {
+          "filter": "!((datum.Business_Type == 'Higher is Good' && datum.Vertex.sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Vertex.sign < 0))"
         }
       ],
       "mark": {
@@ -150,52 +252,47 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Vertex.x",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Reference",
+          "field": "Vertex.reference",
           "type": "quantitative"
         },
         "detail": {
-          "field": "Segment_ID",
+          "field": "Segment",
           "type": "nominal"
         }
       }
     },
     {
       "name": "connector_rule",
-      "transform": [
-        {
-          "filter": "datum.Row_Type == 'Original'"
-        }
-      ],
       "mark": {
         "type": "rule",
         "tooltip": null
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Actual",
+          "field": "Actual",
           "type": "quantitative"
         },
         "y2": {
-          "field": "Plot_Reference"
+          "field": "Reference"
         },
         "color": {
           "condition": {
-            "test": "(datum.Business_Type == 'Higher is Good' && datum.Plot_Actual > datum.Plot_Reference) || (datum.Business_Type == 'Lower is Good' && datum.Plot_Actual < datum.Plot_Reference)",
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Actual > datum.Reference) || (datum.Business_Type == 'Lower is Good' && datum.Actual < datum.Reference)",
             "value": "#0F766E"
           },
           "value": "#B45309"
         },
         "strokeWidth": {
           "condition": {
-            "test": "(datum.Business_Type == 'Higher is Good' && datum.Plot_Actual > datum.Plot_Reference) || (datum.Business_Type == 'Lower is Good' && datum.Plot_Actual < datum.Plot_Reference)",
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Actual > datum.Reference) || (datum.Business_Type == 'Lower is Good' && datum.Actual < datum.Reference)",
             "value": 3
           },
           "value": 2
@@ -211,11 +308,6 @@
     },
     {
       "name": "line_reference",
-      "transform": [
-        {
-          "filter": "datum.Row_Type == 'Original'"
-        }
-      ],
       "mark": {
         "type": "line",
         "interpolate": "monotone",
@@ -230,22 +322,17 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Reference",
+          "field": "Reference",
           "type": "quantitative"
         }
       }
     },
     {
       "name": "line_actual",
-      "transform": [
-        {
-          "filter": "datum.Row_Type == 'Original'"
-        }
-      ],
       "mark": {
         "type": "line",
         "interpolate": "monotone",
@@ -256,14 +343,14 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative",
           "title": "เดือน",
           "axis": {
             "values": {
               "expr": "xAxisValues"
             },
-            "labelExpr": "indexof(xAxisSortOrders, datum.value) >= 0 ? xAxisCategories[indexof(xAxisSortOrders, datum.value)] : ''",
+            "labelExpr": "xAxisCategories[datum.value - 1]",
             "labelLimit": {
               "expr": "max(40, width / 3)"
             },
@@ -274,7 +361,7 @@
           }
         },
         "y": {
-          "field": "Plot_Actual",
+          "field": "Actual",
           "type": "quantitative",
           "title": "ยอดขาย (พันบาท)",
           "scale": {
@@ -294,11 +381,6 @@
     },
     {
       "name": "point_reference",
-      "transform": [
-        {
-          "filter": "datum.Row_Type == 'Original'"
-        }
-      ],
       "mark": {
         "type": "point",
         "filled": true,
@@ -308,11 +390,11 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Reference",
+          "field": "Reference",
           "type": "quantitative"
         },
         "opacity": {
@@ -328,18 +410,11 @@
       "name": "point_actual_hit_target",
       "transform": [
         {
-          "filter": "datum.Row_Type == 'Original'"
-        },
-        {
-          "calculate": "datum.Plot_Actual - datum.Plot_Reference",
-          "as": "Variance"
-        },
-        {
-          "calculate": "format(datum.Variance, '+,.0f')",
+          "calculate": "format(datum.Diff, '+,.0f')",
           "as": "VarianceLabel"
         },
         {
-          "calculate": "datum.Plot_Reference == 0 ? 'N/A (เป้าหมาย = 0)' : format(datum.Variance / datum.Plot_Reference, '+.1%')",
+          "calculate": "datum.Reference == 0 ? 'N/A (เป้าหมาย = 0)' : format(datum.Diff / datum.Reference, '+.1%')",
           "as": "VariancePercentLabel"
         }
       ],
@@ -351,11 +426,11 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Actual",
+          "field": "Actual",
           "type": "quantitative"
         },
         "opacity": {
@@ -372,13 +447,13 @@
             "title": "เดือน"
           },
           {
-            "field": "Plot_Actual",
+            "field": "Actual",
             "type": "quantitative",
             "title": "ยอดขายจริง",
             "format": ",.0f"
           },
           {
-            "field": "Plot_Reference",
+            "field": "Reference",
             "type": "quantitative",
             "title": "เป้าหมาย",
             "format": ",.0f"
@@ -400,14 +475,11 @@
       "name": "label_actual",
       "transform": [
         {
-          "filter": "datum.Row_Type == 'Original'"
-        },
-        {
-          "calculate": "length(format(datum.Plot_Actual, ',.0f'))",
+          "calculate": "length(format(datum.Actual, ',.0f'))",
           "as": "lenA"
         },
         {
-          "calculate": "length(format(datum.Plot_Reference, ',.0f'))",
+          "calculate": "length(format(datum.Reference, ',.0f'))",
           "as": "lenR"
         },
         {
@@ -423,13 +495,13 @@
             },
             {
               "op": "count",
-              "field": "Plot_Actual",
+              "field": "Actual",
               "as": "n"
             },
             {
               "op": "max",
-              "field": "Sort_Order",
-              "as": "lastSort"
+              "field": "Position",
+              "as": "lastPosition"
             }
           ]
         },
@@ -438,7 +510,7 @@
           "as": "labelStep"
         },
         {
-          "calculate": "(datum.Sort_Order - 1) % datum.labelStep == 0 || datum.Sort_Order == datum.lastSort",
+          "calculate": "(datum.Position - 1) % datum.labelStep == 0 || datum.Position == datum.lastPosition",
           "as": "showLabel"
         },
         {
@@ -448,7 +520,7 @@
       "mark": {
         "type": "text",
         "dy": {
-          "expr": "datum.Plot_Actual >= datum.Plot_Reference ? -12 : 12"
+          "expr": "datum.Actual >= datum.Reference ? -12 : 12"
         },
         "fontSize": 10,
         "fontWeight": "bold",
@@ -457,15 +529,15 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Actual",
+          "field": "Actual",
           "type": "quantitative"
         },
         "text": {
-          "field": "Plot_Actual",
+          "field": "Actual",
           "type": "quantitative",
           "format": ",.0f"
         },
@@ -482,14 +554,11 @@
       "name": "label_reference",
       "transform": [
         {
-          "filter": "datum.Row_Type == 'Original'"
-        },
-        {
-          "calculate": "length(format(datum.Plot_Actual, ',.0f'))",
+          "calculate": "length(format(datum.Actual, ',.0f'))",
           "as": "lenA"
         },
         {
-          "calculate": "length(format(datum.Plot_Reference, ',.0f'))",
+          "calculate": "length(format(datum.Reference, ',.0f'))",
           "as": "lenR"
         },
         {
@@ -505,13 +574,13 @@
             },
             {
               "op": "count",
-              "field": "Plot_Reference",
+              "field": "Reference",
               "as": "n"
             },
             {
               "op": "max",
-              "field": "Sort_Order",
-              "as": "lastSort"
+              "field": "Position",
+              "as": "lastPosition"
             }
           ]
         },
@@ -520,7 +589,7 @@
           "as": "labelStep"
         },
         {
-          "calculate": "(datum.Sort_Order - 1) % datum.labelStep == 0 || datum.Sort_Order == datum.lastSort",
+          "calculate": "(datum.Position - 1) % datum.labelStep == 0 || datum.Position == datum.lastPosition",
           "as": "showLabel"
         },
         {
@@ -530,7 +599,7 @@
       "mark": {
         "type": "text",
         "dy": {
-          "expr": "datum.Plot_Actual >= datum.Plot_Reference ? 12 : -12"
+          "expr": "datum.Actual >= datum.Reference ? 12 : -12"
         },
         "fontSize": 10,
         "fontWeight": "bold",
@@ -539,15 +608,15 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Reference",
+          "field": "Reference",
           "type": "quantitative"
         },
         "text": {
-          "field": "Plot_Reference",
+          "field": "Reference",
           "type": "quantitative",
           "format": ",.0f"
         },

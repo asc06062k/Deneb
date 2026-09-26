@@ -1,5 +1,7 @@
 // Compile + headless-render every Workshop step spec with the real Vega-Lite/Vega
-// libraries and the Workshop PlotData (qa/scripts/workshop-plotdata.json).
+// libraries. The spec receives ONLY four fields (Category, Actual, Reference, Business_Type);
+// qa/scripts/workshop-plotdata.json (Power Query reference algorithm output) is used purely as an
+// independent ORACLE for the variance-area vertices and for expected mark counts.
 // vega / vega-lite are NOT project dependencies; point VEGA_NODE_MODULES at a folder
 // that has them installed, e.g.:
 //   npm install --prefix <tmp> vega@6 vega-lite@6
@@ -21,6 +23,10 @@ const plotData = JSON.parse(readFileSync(join(root, "qa", "scripts", "workshop-p
 const finalSpec = JSON.parse(readFileSync(join(root, "specs", "dual-line-variance-final.vl.json"), "utf8"));
 const manifest = JSON.parse(readFileSync(join(root, "specs", "steps", "steps-manifest.json"), "utf8"));
 const svgOut = process.env.STEP_SVG_OUT; // optional: write rendered SVGs here
+
+// The four fields Deneb receives: original rows in Sort_Order (Sort by column on Category).
+const fourField = (rows) => rows.filter((r) => r.Row_Type === "Original").sort((a, b) => a.Sort_Order - b.Sort_Order).map((r) => ({ Category: r.Category, Actual: r.Actual, Reference: r.Reference, Business_Type: r.Business_Type }));
+const dataset = fourField(plotData);
 
 let pass = 0, fail = 0;
 const check = (id, desc, ok, detail = "") => {
@@ -101,17 +107,19 @@ for (const step of manifest) {
     check(step.id, `layer ${l.name} is a structural subset of final spec`, !diff, diff || "");
   }
   for (const k of Object.keys(spec).filter((k) => !["description", "layer"].includes(k))) {
-    const d = k === "params" ? isSubset(spec[k], finalSpec[k], "params") : same(spec[k], finalSpec[k]) ? null : "differs";
-    check(step.id, `top-level ${k} ${k === "params" ? "is an in-order subset of" : "equals"} final spec`, !d, d || "");
+    const d = k === "params" || k === "transform" ? isSubset(spec[k], finalSpec[k], k) : same(spec[k], finalSpec[k]) ? null : "differs";
+    check(step.id, `top-level ${k} ${k === "params" || k === "transform" ? "is an in-order subset of" : "equals"} final spec`, !d, d || "");
   }
 
+  const wantT = step.id === "CH05-S05" ? [0, 1, 2] : step.id.startsWith("CH05") ? [2] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  check(step.id, "top-level transform equals exactly the planned final-spec transforms", same(spec.transform, wantT.map((i) => finalSpec.transform[i])), `expected indices ${wantT.join(",")}`);
   check(step.id, "data binds to Deneb dataset", spec.data && spec.data.name === "dataset" && !spec.data.values);
   check(step.id, "layer order is a subsequence of final spec order", names.every((n, i) => i === 0 || finalSpec.layer.findIndex((l) => l.name === n) > finalSpec.layer.findIndex((l) => l.name === names[i - 1])));
   check(step.id, "cumulative: keeps every layer of previous step", prevLayers.every((n) => names.includes(n)), `prev=${prevLayers.join(",")}`);
   prevLayers = names;
 
   const testSpec = JSON.parse(JSON.stringify(spec));
-  testSpec.data = { name: "dataset", values: plotData };
+  testSpec.data = { name: "dataset", values: dataset };
   testSpec.width = 640;
   testSpec.height = 320;
   const warnings = [];
@@ -171,14 +179,13 @@ for (const step of manifest) {
 // unless either measure is highlighted on that month; lines and the area never dim.
 // rev 8 (user request 26 Sep 2026): dim levels differ per layer - points 0.5, connector 0.2, data labels 0.3.
 {
-  const HL = 7; // ก.ค.
-  const orig = (r) => r.Row_Type === "Original";
-  const hit = (r) => orig(r) && r.Sort_Order === HL;
-  const fields = (r, m, status, hl) => ({ [m + "__highlight"]: hl, [m + "__highlightStatus"]: status });
-  const observed = (m) => (r) => fields(r, m, "on", hit(r) ? r[m] : null);
-  const documented = (m) => (r) => fields(r, m, hit(r) ? "on" : "off", hit(r) ? r[m] : null);
-  const neutral = (m) => (r) => fields(r, m, "neutral", r[m]);
-  const onNull = (m) => (r) => fields(r, m, "on", null); // measure not highlighted anywhere
+  const HL = 7; // ก.ค. = 7th row (Position 7)
+  const hit = (d) => d.Position === HL;
+  const fields = (m, status, hl) => ({ [m + "__highlight"]: hl, [m + "__highlightStatus"]: status });
+  const observed = (m) => (r, h) => fields(m, "on", h ? r[m] : null);
+  const documented = (m) => (r, h) => fields(m, h ? "on" : "off", h ? r[m] : null);
+  const neutral = (m) => (r) => fields(m, "neutral", r[m]);
+  const onNull = (m) => () => fields(m, "on", null); // measure not highlighted anywhere
   const DIM = 0.5; // point dim level; connector and label levels are mapped below
   const DIM_CONNECTOR = 0.2, DIM_LABEL = 0.3;
   const level = (fn, dim) => (x) => (fn(x) === 1 ? 1 : dim);
@@ -201,9 +208,10 @@ for (const step of manifest) {
     const s = JSON.parse(JSON.stringify(spec));
     s.data = {
       name: "dataset",
-      values: plotData.map((r0) => {
-        const r = sc.zero && hit(r0) ? { ...r0, Actual: 0, Reference: 0, Plot_Actual: 0, Plot_Reference: 0 } : { ...r0 };
-        return { ...r, ...(sc.a ? sc.a(r) : {}), ...(sc.r ? sc.r(r) : {}) };
+      values: dataset.map((r0, i) => {
+        const h = i + 1 === HL;
+        const r = sc.zero && h ? { ...r0, Actual: 0, Reference: 0 } : { ...r0 };
+        return { ...r, ...(sc.a ? sc.a(r, h) : {}), ...(sc.r ? sc.r(r, h) : {}) };
       }),
     };
     s.width = 640;
@@ -255,10 +263,10 @@ for (const step of manifest) {
     const rows = JSON.parse(readFileSync(join(root, "qa", "scripts", file), "utf8"));
     const lineAxis = finalSpec.layer.find((l) => l.name === "line_actual").encoding.x.axis;
     check("AXIS-" + label, "axis uses greedy overlap + width-based labelLimit + no flush + separation", lineAxis.labelOverlap === "greedy" && !!lineAxis.labelLimit.expr && lineAxis.labelFlush === false && lineAxis.labelSeparation > 0);
-    const names = rows.filter((r) => r.Row_Type === "Original").sort((a, b) => a.Sort_Order - b.Sort_Order).map((r) => r.Category);
+    const names = fourField(rows).map((r) => r.Category);
     for (const [w, h] of sizes) {
       const s = JSON.parse(JSON.stringify(finalSpec));
-      s.data = { name: "dataset", values: rows };
+      s.data = { name: "dataset", values: fourField(rows) };
       s.width = w;
       s.height = h;
       const view = new vega.View(vega.parse(vl.compile(s).spec), { renderer: "none" });
@@ -283,40 +291,136 @@ for (const step of manifest) {
   }
 }
 
-// Regression (Codex R17 M-27): Sort_Order edge cases must not crash and must bound the tick array.
+// Variance-area vertices derived inside the spec must equal the Power Query reference algorithm
+// (Boundary/Crossing rows of the oracle) for the Workshop data and both stress datasets,
+// INCLUDING which segment (index + a/b part) every vertex belongs to.
 {
-  const base = JSON.parse(readFileSync(join(root, "qa", "scripts", "workshop-plotdata.json"), "utf8"));
-  const orig = base.filter((r) => r.Row_Type === "Original");
-  const cases = {
-    // Original rows only with gaps: Sort_Order 1,2,5,6,... (positions follow Sort_Order per M code)
-    gaps: orig.map((r, i) => ({ ...r, Sort_Order: i < 2 ? i + 1 : i + 3, Plot_Position: i < 2 ? i + 1 : i + 3 })),
-    // one Original row with a huge Sort_Order: range > 1000 -> no explicit ticks (bounded)
-    hugeGap: orig.map((r, i) => (i === orig.length - 1 ? { ...r, Sort_Order: 100000, Plot_Position: 100000 } : r)),
-    // some Original rows with null Sort_Order (bad source data)
-    nullSome: orig.map((r, i) => (i % 5 === 0 ? { ...r, Sort_Order: null } : r)),
-    empty: [],
+  const vertexRows = async (rows, spec = finalSpec) => {
+    const s = JSON.parse(JSON.stringify(spec));
+    s.data = { name: "dataset", values: rows };
+    s.width = 640; s.height = 320;
+    const compiled = vl.compile(s).spec;
+    const view = new vega.View(vega.parse(compiled), { renderer: "none" });
+    await view.runAsync();
+    let out = [];
+    for (const d of compiled.data) { try { const dv = view.data(d.name); if (dv.length && dv[0].Vertex) { out = dv; break; } } catch { /* not a runtime dataset */ } }
+    view.finalize();
+    // Segment is "<1-based Position>-<part>"; oracle Segment_ID is "<0-based index>-<part>" or "<index>" (no split)
+    return out.map((r) => `${+r.Vertex.x.toFixed(6)}|${+r.Vertex.actual.toFixed(6)}|${+r.Vertex.reference.toFixed(6)}|${r.Vertex.sign}|${r.Position - 1}|${r.Vertex.part}`).sort();
   };
-  for (const [name, rows] of Object.entries(cases)) {
+  const oracleKeys = (oracle) => oracle.filter((r) => r.Row_Type !== "Original").map((r) => {
+    const [idx, part = ""] = String(r.Segment_ID).split("-");
+    return `${+(+r.Plot_Position).toFixed(6)}|${+(+r.Plot_Actual).toFixed(6)}|${+(+r.Plot_Reference).toFixed(6)}|${r.Run_Sign}|${idx}|${part}`;
+  }).sort();
+  for (const [label, file] of [["baseline", "workshop-plotdata.json"], ["T09-long", "T09_LongCategory-plotdata.json"], ["T10-24", "T10_24Categories-plotdata.json"]]) {
+    const oracle = JSON.parse(readFileSync(join(root, "qa", "scripts", file), "utf8"));
+    const exp = oracleKeys(oracle);
+    const got = await vertexRows(fourField(oracle));
+    check("VERT-" + label, "spec-derived vertices (position, values, sign, segment, part) equal the reference algorithm", JSON.stringify(got) === JSON.stringify(exp), `got ${got.length}, expected ${exp.length}`);
+  }
+  // mutation tests: the VERT check must FAIL when the crossing logic is broken
+  const oracle0 = JSON.parse(readFileSync(join(root, "qa", "scripts", "workshop-plotdata.json"), "utf8"));
+  const exp0 = oracleKeys(oracle0);
+  const mutate = (from, to) => { const m = JSON.parse(JSON.stringify(finalSpec)); const tr = m.transform.find((x) => x.as === "Vertices"); if (!tr.calculate.includes(from)) throw new Error("mutation target missing"); tr.calculate = tr.calculate.split(from).join(to); return m; };
+  const mutants = [
+    ["second half sign not negated", "sign: -datum.RunSign", "sign: datum.RunSign"],
+    ["a/b parts swapped", "part: 'a'", "part: 'X'"],
+    ["crossing x not shifted by CrossT", "x: datum.Position + datum.CrossT", "x: datum.Position"],
+  ];
+  for (const [name, from, to] of mutants) {
+    const got = await vertexRows(fourField(oracle0), mutate(from, to));
+    check("VERT-mutation", `mutant "${name}" is detected (test has teeth)`, JSON.stringify(got) !== JSON.stringify(exp0));
+  }
+}
+
+// Edge cases (chapter 9 policy): the spec must render without error and behave as documented.
+{
+  const run = async (rows, w = 640, h = 320) => {
     const s = JSON.parse(JSON.stringify(finalSpec));
     s.data = { name: "dataset", values: rows };
-    s.width = 640;
-    s.height = 320;
-    let ok = true, detail = "";
-    try {
-      const view = new vega.View(vega.parse(vl.compile(s).spec), { renderer: "none" });
-      await view.toSVG();
-      const vals = view.signal("xAxisValues");
-      detail = `xAxisValues length ${vals.length}`;
-      if (!Array.isArray(vals) || vals.length > 1001) ok = false;
-      if (name === "gaps" && vals.length !== 14) ok = false; // 1..14 (2 blank ticks at 3,4)
-      if (name === "hugeGap" && vals.length !== 0) ok = false;
-      if (name === "empty" && vals.length !== 0) ok = false;
-      view.finalize();
-    } catch (e) {
-      ok = false;
-      detail = e.message;
-    }
-    check("AXIS-edge-" + name, "renders without error and tick array is bounded", ok, detail);
+    s.width = w; s.height = h;
+    const view = new vega.View(vega.parse(vl.compile(s).spec), { renderer: "none" });
+    await view.runAsync();
+    const top = view.scenegraph().root.items[0].items;
+    const items = (n) => (top.find((it) => it.name === n + "_marks") || { items: [] }).items;
+    const shapes = (n) => { const pg = top.find((it) => it.name === n + "_pathgroup"); return pg ? pg.items.length : 0; };
+    return { view, items, shapes };
+  };
+  const mk = (a, r, bt = "Higher is Good") => a.map((v, i) => ({ Category: "M" + (i + 1), Actual: v, Reference: r[i], Business_Type: bt }));
+  // blank Actual/Reference -> 0 (prototype policy), domain includes 0
+  {
+    const rows = dataset.map((r, i) => (i === 3 ? { ...r, Actual: null } : i === 8 ? { ...r, Reference: null } : r));
+    const o = await run(rows);
+    const pa = o.items("point_actual_hit_target"), pr = o.items("point_reference");
+    check("EDGE-blank", "blank Actual/Reference are drawn as 0", pa.length === 12 && pa[3].datum.Actual === 0 && pr[8].datum.Reference === 0);
+    const dom = o.view.scale("y").domain();
+    check("EDGE-blank", "Y domain includes 0 when a blank was replaced by 0", dom[0] <= 0 && dom[1] >= 600, `[${dom}]`);
+    check("EDGE-blank", "area still built (no NaN vertices)", o.shapes("variance_area") > 0);
+    o.view.finalize();
+  }
+  // Reference = 0 -> tooltip guard text, no Infinity
+  {
+    const rows = dataset.map((r, i) => (i === 5 ? { ...r, Reference: 0 } : r));
+    const o = await run(rows);
+    const d = o.items("point_actual_hit_target")[5].datum;
+    check("EDGE-referenceZero", "tooltip shows N/A text instead of a percentage", d.VariancePercentLabel === "N/A (เป้าหมาย = 0)", d.VariancePercentLabel);
+    check("EDGE-referenceZero", "variance label is a signed number", d.VarianceLabel === "+480", d.VarianceLabel);
+    o.view.finalize();
+  }
+  // tiny datasets
+  {
+    const one = await run(mk([10], [8]));
+    check("EDGE-oneRow", "one row: 1 point, no area, renders", one.items("point_actual_hit_target").length === 1 && one.shapes("variance_area") === 0);
+    one.view.finalize();
+    const two = await run(mk([10, 20], [12, 18]));
+    check("EDGE-twoRows", "two rows crossing: 1 segment split into 2 area shapes", two.shapes("variance_area") === 2, String(two.shapes("variance_area")));
+    two.view.finalize();
+    const empty = await run([]);
+    check("EDGE-empty", "empty dataset renders; ticks [] and Y domain 0..1", empty.view.signal("xAxisValues").length === 0 && empty.view.scale("y").domain().join() === "0,1", String(empty.view.scale("y").domain()));
+    empty.view.finalize();
+  }
+  // all equal (Diff = 0 everywhere): every segment is Bad, no crossing, no NaN
+  {
+    const o = await run(mk([5, 5, 5, 5], [5, 5, 5, 5]));
+    check("EDGE-allEqual", "3 segments, all Bad (border on every segment), no crossings", o.shapes("variance_area") === 3 && o.shapes("bad_area_border_actual") === 3, String(o.shapes("variance_area")));
+    o.view.finalize();
+  }
+  // negative values
+  {
+    const o = await run(mk([-10, -20, -5, -15], [-12, -18, -8, -10]));
+    const dom = o.view.scale("y").domain();
+    check("EDGE-negative", "negative data: renders and the domain covers the data", dom[0] < -20 && dom[1] > -5, `[${dom}]`);
+    o.view.finalize();
+  }
+  // Lower is Good flips Good/Bad shape counts
+  {
+    const hi = await run(dataset), lo = await run(dataset.map((r) => ({ ...r, Business_Type: "Lower is Good" })));
+    const total = hi.shapes("variance_area");
+    check("EDGE-lowerIsGood", "Bad-border shape counts flip (Higher Bad + Lower Bad = all shapes)", hi.shapes("bad_area_border_actual") + lo.shapes("bad_area_border_actual") === total, `${hi.shapes("bad_area_border_actual")} + ${lo.shapes("bad_area_border_actual")} vs ${total}`);
+    hi.view.finalize(); lo.view.finalize();
+  }
+  // Blank month + highlight (documented LIMITATION, Codex M-01): Deneb sends status "on" and __highlight null for
+  // every row that is not highlighted AND for a highlighted month whose measure is blank, so the two cannot be
+  // told apart; a highlight on a blank month therefore dims every month. The book must not claim support.
+  {
+    const rows = dataset.map((r, i) => ({ ...r, Actual: i === 3 ? null : r.Actual, Actual__highlight: null, Actual__highlightStatus: "on", Reference__highlight: null, Reference__highlightStatus: "on" }));
+    const o = await run(rows);
+    const dimmed = o.items("point_actual_hit_target").filter((it) => (it.opacity ?? 1) < 1).length;
+    check("EDGE-blankHighlight", "documented limitation: highlighting a blank month dims all 12 Actual points", dimmed === 12, String(dimmed));
+    o.view.finalize();
+  }
+  // Business_Type outside the allow-list -> every segment and connector is drawn as Bad (invalid configuration)
+  {
+    const o = await run(dataset.map((r) => ({ ...r, Business_Type: "higher is good" })));
+    check("EDGE-businessTypeInvalid", "unknown Business_Type: all area shapes are Bad-styled (border on every shape)", o.shapes("bad_area_border_actual") === o.shapes("variance_area"), `${o.shapes("bad_area_border_actual")} of ${o.shapes("variance_area")}`);
+    o.view.finalize();
+  }
+  // tick bound: 1001 rows -> no explicit ticks; 1000 rows -> 1000 ticks
+  for (const [n, want] of [[1001, 0], [1000, 1000]]) {
+    const rows = Array.from({ length: n }, (_, i) => ({ Category: "C" + i, Actual: 100 + (i % 7), Reference: 100 + ((i * 3) % 7), Business_Type: "Higher is Good" }));
+    const o = await run(rows, 1200, 400);
+    check("EDGE-" + n + "rows", "tick array bounded (more than 1000 categories -> none)", o.view.signal("xAxisValues").length === want, String(o.view.signal("xAxisValues").length));
+    o.view.finalize();
   }
 }
 

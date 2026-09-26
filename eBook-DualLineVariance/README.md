@@ -78,6 +78,8 @@ Visual อ้างอิงคือ Custom Visual จริงที่ `D:\DA
 
 ### Phase 3 — กำลังดำเนินการ (เขียนทีละบท)
 
+> **เปลี่ยนสถาปัตยกรรม (26 ก.ย. 2026): ส่งเข้า Deneb แค่ 4 field** (`Category`, `Actual`, `Reference`, `Business_Type`) แทน 13 field ของ `DualLine_PlotData` spec คำนวณพื้นที่ Good/Bad เองด้วย `window` + `calculate` + `flatten` ทดสอบบน Deneb จริงแล้ว (ลำดับแถวถูกต้องด้วย Sort by column, คลิกพื้นที่สียังเลือกเดือนต้นช่วง) final spec, Step 11 ไฟล์, template และชุดทดสอบ (503 รายการ) อัปเดตแล้ว **บทที่ 4 ถึง 8 ในตารางด้านล่างยังอธิบายแบบ 13 field และอยู่ระหว่างเขียนใหม่ทีละบท** (สถานะ PASS ในตารางหมายถึงต้นฉบับเดิม) ไฟล์ Power Query และตาราง Settings เก่าอยู่ใน `archive/pq-design/` ดูรายละเอียดใน `review/PHASE1_DESIGN_PLAN.md` หัวข้อ 0.6
+
 | บท | สถานะ | Review |
 | --- | --- | --- |
 | 1 รู้จัก Deneb | **PASS** (24 ก.ย. 2026) | `review/chapters/CH01_CODEX_VERDICT.md` (REVISE) → `..._R2.md` (PASS) |

@@ -1,27 +1,20 @@
--- Deneb Dual-Line Variance Chart — DAX measures
+-- Deneb Dual-Line Variance Chart — DAX measures (spec rev 8, 4-field architecture)
 --
--- Apart from [DualLine Row Count] below, these measures are for OTHER visuals on the report page (KPI cards, a
--- Clustered bar/column chart used as the cross-highlight source in บทที่ 8,
--- etc.) — NOT for the Dual-Line Variance Chart itself. The chart binds
--- directly to the DualLine_PlotData table built by Power Query
--- (specs/DualLine_PlotData_PowerQuery.pq); Actual/Reference there are plain
--- Columns already at the correct grain, not Measures.
---
--- Table: DualLineVariance_Workshop_Data (the raw input table, before
--- Power Query builds DualLine_PlotData from it)
+-- The chart receives ONLY four fields from the table DualLineVariance_Workshop_Data
+-- (or the user's own fact table with a Category/month column):
+--   Category      column  (Sort by column -> Sort_Order so rows arrive in month order)
+--   Actual        Sum of the Actual column      (rename the value well chip "Sum of Actual" to "Actual")
+--   Reference     Sum of the Reference column   (rename the chip to "Reference")
+--   Business_Type measure below                 ('Higher is Good' or 'Lower is Good', exact spelling)
+-- The variance area, crossing points and Good/Bad colours are computed inside the spec.
 
 -- ---------------------------------------------------------------------------
--- Table: DualLine_PlotData (the Power Query table the chart binds to)
---
--- REQUIRED in the Deneb Values well (Phase 2 evidence T23, 24 Sep 2026):
--- Actual/Reference are bound as Sum (implicit measures) so Deneb can expose
--- Actual__highlight / __highlightStatus for cross-highlight. Boundary/Crossing
--- rows have Actual/Reference = Blank, and Power BI drops rows whose measures are
--- all Blank -> the dataset shrank from 52 to 12 rows and the variance area
--- disappeared. This measure is never Blank, so every row is kept. The spec does
--- not read it. See PHASE1_DESIGN_PLAN.md section 2.1.1.
-DualLine Row Count =
-COUNTROWS ( DualLine_PlotData )
+-- REQUIRED: the fourth field of the chart
+Business_Type =
+"Higher is Good"
+
+-- To flip the meaning (lower is better, e.g. cost, defects) change the text to:
+--   Business_Type = "Lower is Good"
 
 -- ---------------------------------------------------------------------------
 -- Table: DualLineVariance_Workshop_Data (measures for other visuals)
@@ -39,12 +32,9 @@ Variance % =
 DIVIDE ( [Variance], [Total Reference] )
 
 -- Achievement % follows the Business_Type direction, not a hardcoded "higher is better".
--- Business_Type_Source lives on DualLineVariance_Settings (single row) — see
--- PHASE1_DESIGN_PLAN.md section 3. This measure is illustrative only; the
--- Dual-Line Variance Chart itself reads Business_Type from DualLine_PlotData,
--- not from this measure.
+-- This measure is illustrative only (for a KPI card); the chart itself reads Business_Type.
 Achievement % =
-VAR BusinessType = SELECTEDVALUE ( DualLineVariance_Settings[Business_Type_Source], "Higher is Good" )
+VAR BusinessType = [Business_Type]
 VAR RawRatio = DIVIDE ( [Total Actual], [Total Reference] )
 RETURN
     IF ( BusinessType = "Lower is Good", DIVIDE ( [Total Reference], [Total Actual] ), RawRatio )

@@ -13,30 +13,27 @@
   },
   "params": [
     {
-      "name": "xAxisSortOrders",
-      "expr": "pluck(data('dataset'), 'Sort_Order')"
-    },
-    {
       "name": "xAxisCategories",
       "expr": "pluck(data('dataset'), 'Category')"
     },
     {
-      "name": "xAxisSortExtent",
-      "expr": "extent(xAxisSortOrders)"
-    },
-    {
       "name": "xAxisValues",
-      "expr": "isValid(xAxisSortExtent[0]) && xAxisSortExtent[1] - xAxisSortExtent[0] <= 1000 ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []"
+      "expr": "length(xAxisCategories) > 0 && length(xAxisCategories) <= 1000 ? sequence(1, length(xAxisCategories) + 1) : []"
+    }
+  ],
+  "transform": [
+    {
+      "window": [
+        {
+          "op": "row_number",
+          "as": "Position"
+        }
+      ]
     }
   ],
   "layer": [
     {
       "name": "line_reference",
-      "transform": [
-        {
-          "filter": "datum.Row_Type == 'Original'"
-        }
-      ],
       "mark": {
         "type": "line",
         "color": "#F59E0B",
@@ -50,22 +47,17 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Reference",
+          "field": "Reference",
           "type": "quantitative"
         }
       }
     },
     {
       "name": "line_actual",
-      "transform": [
-        {
-          "filter": "datum.Row_Type == 'Original'"
-        }
-      ],
       "mark": {
         "type": "line",
         "color": "#2563EB",
@@ -75,14 +67,14 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative",
           "title": "เดือน",
           "axis": {
             "values": {
               "expr": "xAxisValues"
             },
-            "labelExpr": "indexof(xAxisSortOrders, datum.value) >= 0 ? xAxisCategories[indexof(xAxisSortOrders, datum.value)] : ''",
+            "labelExpr": "xAxisCategories[datum.value - 1]",
             "labelLimit": {
               "expr": "max(40, width / 3)"
             },
@@ -93,7 +85,7 @@
           }
         },
         "y": {
-          "field": "Plot_Actual",
+          "field": "Actual",
           "type": "quantitative",
           "title": "ยอดขาย (พันบาท)"
         }
@@ -101,11 +93,6 @@
     },
     {
       "name": "point_reference",
-      "transform": [
-        {
-          "filter": "datum.Row_Type == 'Original'"
-        }
-      ],
       "mark": {
         "type": "point",
         "filled": true,
@@ -115,22 +102,17 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Reference",
+          "field": "Reference",
           "type": "quantitative"
         }
       }
     },
     {
       "name": "point_actual_hit_target",
-      "transform": [
-        {
-          "filter": "datum.Row_Type == 'Original'"
-        }
-      ],
       "mark": {
         "type": "point",
         "filled": true,
@@ -139,11 +121,11 @@
       },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative"
         },
         "y": {
-          "field": "Plot_Actual",
+          "field": "Actual",
           "type": "quantitative"
         }
       }

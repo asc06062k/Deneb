@@ -445,3 +445,30 @@ Test ที่ไม่มี Evidence record ครบ = สถานะ `NOT T
 6. Filter/Slicer ที่ตัด Category ประกบ Crossing/Boundary row (T29/T33) และ Template limitation (T27) ต้องมีตัวอย่างจริงประกอบก่อนเขียนบทที่ 9/10
 7. ทางเลือกที่ dynamic กว่าสำหรับ Category label lookup (Vega เต็มรูปแบบ หรือวิธีอื่น) — ถ้าไม่มีให้คงข้อจำกัดใน 4.1 ไว้ถาวร
 8. **T18/T22 และความปลอดภัยของ Area interaction (แก้ M-23)** — พิสูจน์บน Power BI จริงว่าคลิก/right-click กลางแถบสี Area ทำให้เกิด selection/filter ที่ผิดหรือไม่ (ตามการวิเคราะห์ในหัวข้อ 2.2 ว่า `Filter_Key` หลายค่าอาจ propagate ผ่าน Relationship แบบ `Both`) ถ้าพบว่าผิดจริง ต้องเปลี่ยน interaction architecture (เช่น Advanced cross-filtering mode) ก่อน Phase 2 จะ `PASS` ตาม Phase 2 ข้อ 7 ของ `PROJECT_PLAN.md` — เป็นรายการที่มีน้ำหนักสูงสุดในรายการนี้ เพราะกระทบความถูกต้องของ Cross-filter ทั้งฟีเจอร์ ไม่ใช่แค่ Edge case
+
+---
+
+## 0.6 rev 8 — สถาปัตยกรรม 4 field (คำตัดสินผู้ใช้ 26 ก.ย. 2026) — แทนที่ตาราง `DualLine_PlotData` ทั้งหมด
+
+**เหตุผล**: ผู้ใช้ต้องเตรียมข้อมูล 13 field (Power Query + measure) ไม่สะดวก ต้องการส่งเข้า Deneb แค่ `Category`, `Actual`, `Reference`, `Business_Type`
+
+**สิ่งที่เปลี่ยน** (ยกเลิกข้อกำหนดในหัวข้อ 2.0–2.2 ที่ขึ้นกับแถว `Row_Type`/`Filter_Key`/`Row Count`):
+
+- แถวพื้นที่ (Boundary/Crossing) ไม่มีในข้อมูลอีกต่อไป spec สร้างจุดยอดของพื้นที่เองด้วย top-level `window` (`row_number`, `lead`) + `calculate` (Diff, RunSign, CrossT, CrossY, Vertices) แล้ว `flatten` ใน layer พื้นที่ พิสูจน์ว่าเท่ากับอัลกอริทึม Power Query เดิมทุกแถว (40 แถวของ Workshop, ชุด T09, T10) ในชุดทดสอบ `VERT-*`
+- ลำดับเดือน = ลำดับแถวที่ Deneb ได้รับ (Sort by column ของ `Category` ตามหลักฐาน T-2 26 ก.ย. 2026 บน Deneb จริง) ไม่มี `Sort_Order` ในข้อมูล
+- `Business_Type` เป็น measure ค่าคงที่ (กลับไปเป็น DAX Measure ตามแนวเดิมของ Phase 0 เพราะ grain คือ 1 แถวต่อ Category แล้ว ไม่มีแถวพื้นที่)
+- ไม่ต้องมี `Filter_Key` (ทุกแถวมี `Category`) และไม่ต้องมี measure `DualLine Row Count` (ไม่มีแถวที่ measure ว่างทั้งคู่ นอกจากเดือนที่ Actual และ Reference ว่างพร้อมกัน ซึ่ง Power BI ตัดแถวทิ้ง)
+- Actual/Reference ว่าง → 0 (เลียนต้นแบบ) ทำใน spec (`calculate` 2 ตัวแรก) และแกน Y รวม 0 เมื่อมีค่าว่าง (`yHasBlank`)
+- Category ซ้ำ: Power BI รวม (Sum) ให้เองตาม Category จึงไม่มีปัญหา (Power Query เดิม error)
+- พฤติกรรมคลิกพื้นที่สี = เลือกเดือนต้นช่วง คงเดิม (ทดสอบซ้ำบน Deneb จริง CF-1 ถึง CF-3 26 ก.ย. 2026: `qa/evidence/four-field-experiment/`)
+- ไฟล์เดิมเก็บใน `archive/pq-design/` (Power Query, Settings CSV, static-test spec, ชุดทดสอบ static ของ PQ)
+
+**ความเสี่ยงที่ยังต้องพิสูจน์บน Deneb จริง**: Cross-highlight บน spec ใหม่ (ทดสอบ headless ผ่าน HL-*), import template ใหม่, กรณีขอบ (Blank, Reference = 0, Category ยาว/มาก) ทดสอบบทที่ 9
+
+**ข้อจำกัดที่บันทึกไว้จาก Codex รอบ 1 ของ rev 8 (M-01 และข้อเสนอเสริม)** — ต้องเขียนในบทที่ 9 และห้ามอ้างว่ารองรับ:
+
+1. **Highlight เดือนที่ Actual หรือ Reference เป็นค่าว่าง**: spec แปลงค่าว่างเป็น 0 ก่อนเทียบกับ `__highlight` แต่ Deneb ส่ง `__highlightStatus = on` และ `__highlight = null` ทั้งกับแถวที่ไม่ถูกเลือกและกับเดือนที่ถูกเลือกซึ่งค่าว่าง จึงแยกไม่ได้ ผลคือ highlight เดือนที่ค่าว่างจะจางทุกเดือน (ชุดทดสอบ `EDGE-blankHighlight` ยืนยันพฤติกรรมนี้) ต้องทดสอบบน Deneb จริงในบทที่ 9 ก่อนเขียนตัวเลขผลลัพธ์
+2. ไม่ตั้ง Sort by column ที่ `Category`: เส้นและพื้นที่เชื่อมตามลำดับแถวที่ส่งมา (ไม่ใช่ลำดับเดือน)
+3. Actual และ Reference ว่างพร้อมกัน: Power BI อาจไม่ส่งแถวนั้นมา ตำแหน่งเดือนถัดไปเลื่อน เส้นเชื่อมข้ามเดือนที่หายไป
+4. `Business_Type` ว่างหรือสะกดนอก allow-list (ตรงตัว, case-sensitive): ทุกช่วงและ Connector เป็นสี Bad (`EDGE-businessTypeInvalid`) ถือเป็นการตั้งค่าผิด ไม่มี fallback เป็น Higher is Good เหมือน Power Query เดิม
+5. Template rev 8 (`qa/scripts/build-template.mjs`) ยังไม่ได้ทดสอบ import บน Deneb จริง (ต้องทดสอบก่อนแจก)

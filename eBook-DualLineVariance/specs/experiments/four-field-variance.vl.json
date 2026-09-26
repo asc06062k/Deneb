@@ -1,0 +1,126 @@
+{
+  "description": "EXPERIMENT (not part of the book yet): Dual-Line Variance chart driven by ONLY 4 fields - Category, Actual, Reference, Business_Type. The variance-area vertices (Boundary/Crossing rows of the Power Query design) are derived inside the spec with window + calculate + flatten. Month order = the order of the rows Deneb receives (row_number).",
+  "width": "container",
+  "height": "container",
+  "autosize": { "type": "fit", "contains": "padding", "resize": true },
+  "data": { "name": "dataset" },
+  "params": [
+    { "name": "xAxisCategories", "expr": "pluck(data('dataset'), 'Category')" },
+    { "name": "xAxisValues", "expr": "sequence(1, length(xAxisCategories) + 1)" },
+    { "name": "yRawMin", "expr": "min(extent(pluck(data('dataset'), 'Actual'))[0], extent(pluck(data('dataset'), 'Reference'))[0])" },
+    { "name": "yRawMax", "expr": "max(extent(pluck(data('dataset'), 'Actual'))[1], extent(pluck(data('dataset'), 'Reference'))[1])" },
+    { "name": "yPad", "expr": "(yRawMax - yRawMin) * 0.18 || abs(yRawMax) * 0.1 || 1" },
+    { "name": "yDomainMin", "expr": "isFinite(yRawMin) ? yRawMin - yPad : 0" },
+    { "name": "yDomainMax", "expr": "isFinite(yRawMax) ? max(yRawMax + yPad, yDomainMin + 1) : 1" }
+  ],
+  "layer": [
+    {
+      "name": "variance_area",
+      "transform": [
+        { "window": [ { "op": "row_number", "as": "pos" }, { "op": "lead", "field": "Actual", "as": "A1" }, { "op": "lead", "field": "Reference", "as": "R1" } ] },
+        { "filter": "isValid(datum.A1)" },
+        { "calculate": "datum.Actual - datum.Reference", "as": "d0" },
+        { "calculate": "datum.A1 - datum.R1", "as": "d1" },
+        { "calculate": "datum.d0 > 0 ? 1 : datum.d0 < 0 ? -1 : 0", "as": "sd0" },
+        { "calculate": "datum.d1 > 0 ? 1 : datum.d1 < 0 ? -1 : 0", "as": "sd1" },
+        { "calculate": "datum.d0 != 0 ? datum.sd0 : datum.sd1", "as": "sRun" },
+        { "calculate": "datum.d0 * datum.d1 < 0", "as": "cross" },
+        { "calculate": "datum.cross ? datum.d0 / (datum.d0 - datum.d1) : 0", "as": "t" },
+        { "calculate": "datum.Actual + datum.t * (datum.A1 - datum.Actual)", "as": "yc" },
+        {
+          "calculate": "datum.cross ? [ {x: datum.pos, a: datum.Actual, r: datum.Reference, g: 'a', s: datum.sd0}, {x: datum.pos + datum.t, a: datum.yc, r: datum.yc, g: 'a', s: datum.sd0}, {x: datum.pos + datum.t, a: datum.yc, r: datum.yc, g: 'b', s: datum.sd1}, {x: datum.pos + 1, a: datum.A1, r: datum.R1, g: 'b', s: datum.sd1} ] : [ {x: datum.pos, a: datum.Actual, r: datum.Reference, g: '', s: datum.sRun}, {x: datum.pos + 1, a: datum.A1, r: datum.R1, g: '', s: datum.sRun} ]",
+          "as": "verts"
+        },
+        { "flatten": ["verts"], "as": ["v"] },
+        { "calculate": "datum.v.x", "as": "Plot_Position" },
+        { "calculate": "datum.v.a", "as": "Plot_Actual" },
+        { "calculate": "datum.v.r", "as": "Plot_Reference" },
+        { "calculate": "datum.v.s", "as": "Run_Sign" },
+        { "calculate": "datum.pos + '-' + datum.v.g", "as": "Segment_ID" }
+      ],
+      "mark": { "type": "area", "opacity": 0.15, "tooltip": null },
+      "encoding": {
+        "x": { "field": "Plot_Position", "type": "quantitative" },
+        "y": { "field": "Plot_Actual", "type": "quantitative" },
+        "y2": { "field": "Plot_Reference" },
+        "detail": { "field": "Segment_ID", "type": "nominal" },
+        "color": {
+          "condition": {
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0)",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "stroke": {
+          "condition": {
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0)",
+            "value": "#0F766E"
+          },
+          "value": "#B45309"
+        },
+        "strokeWidth": { "value": 1 }
+      }
+    },
+    {
+      "name": "line_reference",
+      "transform": [ { "window": [ { "op": "row_number", "as": "pos" } ] } ],
+      "mark": { "type": "line", "interpolate": "monotone", "color": "#F59E0B", "strokeWidth": 2, "strokeDash": [5, 3], "point": false, "tooltip": null },
+      "encoding": {
+        "x": { "field": "pos", "type": "quantitative" },
+        "y": { "field": "Reference", "type": "quantitative" }
+      }
+    },
+    {
+      "name": "line_actual",
+      "transform": [ { "window": [ { "op": "row_number", "as": "pos" } ] } ],
+      "mark": { "type": "line", "interpolate": "monotone", "color": "#2563EB", "strokeWidth": 2, "point": false, "tooltip": null },
+      "encoding": {
+        "x": {
+          "field": "pos",
+          "type": "quantitative",
+          "title": "เดือน",
+          "axis": {
+            "values": { "expr": "xAxisValues" },
+            "labelExpr": "xAxisCategories[datum.value - 1]",
+            "labelLimit": { "expr": "max(40, width / 3)" },
+            "labelFlush": false,
+            "labelSeparation": 4,
+            "labelOverlap": "greedy",
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "Actual",
+          "type": "quantitative",
+          "title": "ยอดขาย (พันบาท)",
+          "scale": { "domain": [ { "expr": "yDomainMin" }, { "expr": "yDomainMax" } ], "zero": false, "nice": false }
+        }
+      }
+    },
+    {
+      "name": "point_reference",
+      "transform": [ { "window": [ { "op": "row_number", "as": "pos" } ] } ],
+      "mark": { "type": "point", "filled": true, "size": 40, "color": "#F59E0B", "tooltip": null },
+      "encoding": {
+        "x": { "field": "pos", "type": "quantitative" },
+        "y": { "field": "Reference", "type": "quantitative" }
+      }
+    },
+    {
+      "name": "point_actual_hit_target",
+      "transform": [ { "window": [ { "op": "row_number", "as": "pos" } ] } ],
+      "mark": { "type": "point", "filled": true, "size": 40, "color": "#2563EB" },
+      "encoding": {
+        "x": { "field": "pos", "type": "quantitative" },
+        "y": { "field": "Actual", "type": "quantitative" },
+        "tooltip": [
+          { "field": "Category", "type": "nominal", "title": "เดือน" },
+          { "field": "Actual", "type": "quantitative", "title": "ยอดขายจริง", "format": ",.0f" },
+          { "field": "Reference", "type": "quantitative", "title": "เป้าหมาย", "format": ",.0f" }
+        ]
+      }
+    }
+  ],
+  "resolve": { "scale": { "y": "shared", "x": "shared" } },
+  "config": { "view": { "stroke": null }, "axis": { "domainColor": "#D1D5DB", "gridColor": "#F3F4F6" } }
+}

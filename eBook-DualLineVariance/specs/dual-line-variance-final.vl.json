@@ -1,43 +1,61 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Dual-Line Variance Chart - final Deneb-ready spec (Phase 2, rev 7: x-axis labelFlush false + labelLimit width/3 + labelSeparation 4 after T09 overlap on real Power BI; rev 6: x-axis labels read Category from the dataset via Sort_Order lookup (T09/T10, user decision); rev 5: highlight dims points, connector and data labels of non-highlighted months to 0.5, lines never dim (user request); rev 4: highlight rule per real Deneb evidence T19 (status on + __highlight null for non-highlighted rows); rev 3: Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype, visual.ts:167-174). Binds to {\"data\": {\"name\": \"dataset\"}} = the DualLine_PlotData table built by specs/DualLine_PlotData_PowerQuery.pq. Row_Type in {Original, Boundary, Crossing} discriminates identity rows (Line/Connector/Point/Tooltip/Label) from fill-only rows (Area) per PHASE1_DESIGN_PLAN.md section 2.0-2.2. For static/browser testing use specs/dual-line-variance-static-test.vl.json instead (same spec with inline data.values) - this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
+  "description": "Dual-Line Variance Chart - final Deneb-ready spec (rev 8, 4-field architecture, user decision 26 Sep 2026). Binds to {\"data\": {\"name\": \"dataset\"}} with ONLY four fields: Category, Actual, Reference (Sum measures renamed to plain names) and Business_Type (measure returning 'Higher is Good' or 'Lower is Good'). Row order = the order Deneb receives (Sort by column on Category). The variance-area vertices (start, crossing point, end of every month-to-month segment) are derived inside the spec: top-level window + calculate transforms, then flatten inside the area layers. Blank Actual/Reference are treated as 0 (like the prototype). Earlier revisions: rev 7 x-axis labelFlush false + labelLimit width/3 + labelSeparation 4; rev 6 x-axis labels read Category from the dataset; rev 5 highlight dims points 0.5, data labels 0.3, connector 0.2, lines never dim (user request); rev 4 highlight rule per real Deneb evidence (status on + __highlight null for non-highlighted rows); rev 3 Y domain = data extent +/- 18% padding like the dualLineVarianceChart prototype. For static/browser testing the test scripts inject inline data.values; this file intentionally has NO inline values so it is not accidentally pasted into Deneb with stale test data.",
   "width": "container",
   "height": "container",
   "autosize": { "type": "fit", "contains": "padding", "resize": true },
   "data": { "name": "dataset" },
   "params": [
-    { "name": "xAxisSortOrders", "expr": "pluck(data('dataset'), 'Sort_Order')" },
     { "name": "xAxisCategories", "expr": "pluck(data('dataset'), 'Category')" },
-    { "name": "xAxisSortExtent", "expr": "extent(xAxisSortOrders)" },
-    { "name": "xAxisValues", "expr": "isValid(xAxisSortExtent[0]) && xAxisSortExtent[1] - xAxisSortExtent[0] <= 1000 ? sequence(xAxisSortExtent[0], xAxisSortExtent[1] + 1) : []" },
-    { "name": "yRawMin", "expr": "min(extent(pluck(data('dataset'), 'Plot_Actual'))[0], extent(pluck(data('dataset'), 'Plot_Reference'))[0])" },
-    { "name": "yRawMax", "expr": "max(extent(pluck(data('dataset'), 'Plot_Actual'))[1], extent(pluck(data('dataset'), 'Plot_Reference'))[1])" },
+    { "name": "xAxisValues", "expr": "length(xAxisCategories) > 0 && length(xAxisCategories) <= 1000 ? sequence(1, length(xAxisCategories) + 1) : []" },
+    { "name": "yActualValues", "expr": "pluck(data('dataset'), 'Actual')" },
+    { "name": "yReferenceValues", "expr": "pluck(data('dataset'), 'Reference')" },
+    { "name": "yHasBlank", "expr": "indexof(yActualValues, null) >= 0 || indexof(yReferenceValues, null) >= 0" },
+    { "name": "yRawMin", "expr": "min(extent(yActualValues)[0], extent(yReferenceValues)[0], yHasBlank ? 0 : MAX_VALUE)" },
+    { "name": "yRawMax", "expr": "max(extent(yActualValues)[1], extent(yReferenceValues)[1], yHasBlank ? 0 : -MAX_VALUE)" },
     { "name": "yPad", "expr": "(yRawMax - yRawMin) * 0.18 || abs(yRawMax) * 0.1 || 1" },
     { "name": "yDomainMin", "expr": "isFinite(yRawMin) ? yRawMin - yPad : 0" },
     { "name": "yDomainMax", "expr": "isFinite(yRawMax) ? max(yRawMax + yPad, yDomainMin + 1) : 1" }
+  ],
+  "transform": [
+    { "calculate": "isValid(datum.Actual) ? datum.Actual : 0", "as": "Actual" },
+    { "calculate": "isValid(datum.Reference) ? datum.Reference : 0", "as": "Reference" },
+    { "window": [{ "op": "row_number", "as": "Position" }] },
+    { "window": [{ "op": "lead", "field": "Actual", "as": "NextActual" }, { "op": "lead", "field": "Reference", "as": "NextReference" }] },
+    { "calculate": "datum.Actual - datum.Reference", "as": "Diff" },
+    { "calculate": "datum.NextActual - datum.NextReference", "as": "NextDiff" },
+    { "calculate": "datum.Diff != 0 ? (datum.Diff > 0 ? 1 : -1) : (datum.NextDiff > 0 ? 1 : datum.NextDiff < 0 ? -1 : 0)", "as": "RunSign" },
+    { "calculate": "datum.Diff * datum.NextDiff < 0 ? datum.Diff / (datum.Diff - datum.NextDiff) : 0", "as": "CrossT" },
+    { "calculate": "datum.Actual + datum.CrossT * (datum.NextActual - datum.Actual)", "as": "CrossY" },
+    {
+      "calculate": "datum.CrossT > 0 ? [ {x: datum.Position, actual: datum.Actual, reference: datum.Reference, part: 'a', sign: datum.RunSign}, {x: datum.Position + datum.CrossT, actual: datum.CrossY, reference: datum.CrossY, part: 'a', sign: datum.RunSign}, {x: datum.Position + datum.CrossT, actual: datum.CrossY, reference: datum.CrossY, part: 'b', sign: -datum.RunSign}, {x: datum.Position + 1, actual: datum.NextActual, reference: datum.NextReference, part: 'b', sign: -datum.RunSign} ] : [ {x: datum.Position, actual: datum.Actual, reference: datum.Reference, part: '', sign: datum.RunSign}, {x: datum.Position + 1, actual: datum.NextActual, reference: datum.NextReference, part: '', sign: datum.RunSign} ]",
+      "as": "Vertices"
+    }
   ],
   "layer": [
     {
       "name": "variance_area",
       "transform": [
-        { "filter": "datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing'" }
+        { "filter": "isValid(datum.NextActual)" },
+        { "flatten": ["Vertices"], "as": ["Vertex"] },
+        { "calculate": "datum.Position + '-' + datum.Vertex.part", "as": "Segment" }
       ],
       "mark": { "type": "area", "opacity": 0.15, "tooltip": null },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Actual", "type": "quantitative" },
-        "y2": { "field": "Plot_Reference" },
-        "detail": { "field": "Segment_ID", "type": "nominal" },
+        "x": { "field": "Vertex.x", "type": "quantitative" },
+        "y": { "field": "Vertex.actual", "type": "quantitative" },
+        "y2": { "field": "Vertex.reference" },
+        "detail": { "field": "Segment", "type": "nominal" },
         "color": {
           "condition": {
-            "test": "(datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0)",
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Vertex.sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Vertex.sign < 0)",
             "value": "#0F766E"
           },
           "value": "#B45309"
         },
         "stroke": {
           "condition": {
-            "test": "(datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0)",
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Vertex.sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Vertex.sign < 0)",
             "value": "#0F766E"
           },
           "value": "#B45309"
@@ -48,45 +66,50 @@
     {
       "name": "bad_area_border_actual",
       "transform": [
-        { "filter": "(datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing') && !((datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0))" }
+        { "filter": "isValid(datum.NextActual)" },
+        { "flatten": ["Vertices"], "as": ["Vertex"] },
+        { "calculate": "datum.Position + '-' + datum.Vertex.part", "as": "Segment" },
+        { "filter": "!((datum.Business_Type == 'Higher is Good' && datum.Vertex.sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Vertex.sign < 0))" }
       ],
       "mark": { "type": "line", "color": "#B45309", "strokeWidth": 1, "strokeDash": [3, 2], "point": false, "tooltip": null },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Actual", "type": "quantitative" },
-        "detail": { "field": "Segment_ID", "type": "nominal" }
+        "x": { "field": "Vertex.x", "type": "quantitative" },
+        "y": { "field": "Vertex.actual", "type": "quantitative" },
+        "detail": { "field": "Segment", "type": "nominal" }
       }
     },
     {
       "name": "bad_area_border_reference",
       "transform": [
-        { "filter": "(datum.Row_Type == 'Boundary' || datum.Row_Type == 'Crossing') && !((datum.Business_Type == 'Higher is Good' && datum.Run_Sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Run_Sign < 0))" }
+        { "filter": "isValid(datum.NextActual)" },
+        { "flatten": ["Vertices"], "as": ["Vertex"] },
+        { "calculate": "datum.Position + '-' + datum.Vertex.part", "as": "Segment" },
+        { "filter": "!((datum.Business_Type == 'Higher is Good' && datum.Vertex.sign > 0) || (datum.Business_Type == 'Lower is Good' && datum.Vertex.sign < 0))" }
       ],
       "mark": { "type": "line", "color": "#B45309", "strokeWidth": 1, "strokeDash": [3, 2], "point": false, "tooltip": null },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Reference", "type": "quantitative" },
-        "detail": { "field": "Segment_ID", "type": "nominal" }
+        "x": { "field": "Vertex.x", "type": "quantitative" },
+        "y": { "field": "Vertex.reference", "type": "quantitative" },
+        "detail": { "field": "Segment", "type": "nominal" }
       }
     },
     {
       "name": "connector_rule",
-      "transform": [{ "filter": "datum.Row_Type == 'Original'" }],
       "mark": { "type": "rule", "tooltip": null },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Actual", "type": "quantitative" },
-        "y2": { "field": "Plot_Reference" },
+        "x": { "field": "Position", "type": "quantitative" },
+        "y": { "field": "Actual", "type": "quantitative" },
+        "y2": { "field": "Reference" },
         "color": {
           "condition": {
-            "test": "(datum.Business_Type == 'Higher is Good' && datum.Plot_Actual > datum.Plot_Reference) || (datum.Business_Type == 'Lower is Good' && datum.Plot_Actual < datum.Plot_Reference)",
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Actual > datum.Reference) || (datum.Business_Type == 'Lower is Good' && datum.Actual < datum.Reference)",
             "value": "#0F766E"
           },
           "value": "#B45309"
         },
         "strokeWidth": {
           "condition": {
-            "test": "(datum.Business_Type == 'Higher is Good' && datum.Plot_Actual > datum.Plot_Reference) || (datum.Business_Type == 'Lower is Good' && datum.Plot_Actual < datum.Plot_Reference)",
+            "test": "(datum.Business_Type == 'Higher is Good' && datum.Actual > datum.Reference) || (datum.Business_Type == 'Lower is Good' && datum.Actual < datum.Reference)",
             "value": 3
           },
           "value": 2
@@ -99,25 +122,23 @@
     },
     {
       "name": "line_reference",
-      "transform": [{ "filter": "datum.Row_Type == 'Original'" }],
       "mark": { "type": "line", "interpolate": "monotone", "color": "#F59E0B", "strokeWidth": 2, "strokeDash": [5, 3], "point": false, "tooltip": null },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Reference", "type": "quantitative" }
+        "x": { "field": "Position", "type": "quantitative" },
+        "y": { "field": "Reference", "type": "quantitative" }
       }
     },
     {
       "name": "line_actual",
-      "transform": [{ "filter": "datum.Row_Type == 'Original'" }],
       "mark": { "type": "line", "interpolate": "monotone", "color": "#2563EB", "strokeWidth": 2, "point": false, "tooltip": null },
       "encoding": {
         "x": {
-          "field": "Plot_Position",
+          "field": "Position",
           "type": "quantitative",
           "title": "เดือน",
           "axis": {
             "values": { "expr": "xAxisValues" },
-            "labelExpr": "indexof(xAxisSortOrders, datum.value) >= 0 ? xAxisCategories[indexof(xAxisSortOrders, datum.value)] : ''",
+            "labelExpr": "xAxisCategories[datum.value - 1]",
             "labelLimit": { "expr": "max(40, width / 3)" },
             "labelFlush": false,
             "labelSeparation": 4,
@@ -126,7 +147,7 @@
           }
         },
         "y": {
-          "field": "Plot_Actual",
+          "field": "Actual",
           "type": "quantitative",
           "title": "ยอดขาย (พันบาท)",
           "scale": { "domain": [{ "expr": "yDomainMin" }, { "expr": "yDomainMax" }], "zero": false, "nice": false }
@@ -135,11 +156,10 @@
     },
     {
       "name": "point_reference",
-      "transform": [{ "filter": "datum.Row_Type == 'Original'" }],
       "mark": { "type": "point", "filled": true, "size": 40, "color": "#F59E0B", "tooltip": null },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Reference", "type": "quantitative" },
+        "x": { "field": "Position", "type": "quantitative" },
+        "y": { "field": "Reference", "type": "quantitative" },
         "opacity": {
           "condition": { "test": "(isDefined(datum.Reference__highlightStatus) && (datum.Reference__highlightStatus == 'off' || (datum.Reference__highlightStatus == 'on' && isDefined(datum.Reference__highlight) && datum.Reference__highlight !== datum.Reference)))", "value": 0.5 },
           "value": 1
@@ -149,23 +169,21 @@
     {
       "name": "point_actual_hit_target",
       "transform": [
-        { "filter": "datum.Row_Type == 'Original'" },
-        { "calculate": "datum.Plot_Actual - datum.Plot_Reference", "as": "Variance" },
-        { "calculate": "format(datum.Variance, '+,.0f')", "as": "VarianceLabel" },
-        { "calculate": "datum.Plot_Reference == 0 ? 'N/A (เป้าหมาย = 0)' : format(datum.Variance / datum.Plot_Reference, '+.1%')", "as": "VariancePercentLabel" }
+        { "calculate": "format(datum.Diff, '+,.0f')", "as": "VarianceLabel" },
+        { "calculate": "datum.Reference == 0 ? 'N/A (เป้าหมาย = 0)' : format(datum.Diff / datum.Reference, '+.1%')", "as": "VariancePercentLabel" }
       ],
       "mark": { "type": "point", "filled": true, "size": 40, "color": "#2563EB" },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Actual", "type": "quantitative" },
+        "x": { "field": "Position", "type": "quantitative" },
+        "y": { "field": "Actual", "type": "quantitative" },
         "opacity": {
           "condition": { "test": "(isDefined(datum.Actual__highlightStatus) && (datum.Actual__highlightStatus == 'off' || (datum.Actual__highlightStatus == 'on' && isDefined(datum.Actual__highlight) && datum.Actual__highlight !== datum.Actual)))", "value": 0.5 },
           "value": 1
         },
         "tooltip": [
           { "field": "Category", "type": "nominal", "title": "เดือน" },
-          { "field": "Plot_Actual", "type": "quantitative", "title": "ยอดขายจริง", "format": ",.0f" },
-          { "field": "Plot_Reference", "type": "quantitative", "title": "เป้าหมาย", "format": ",.0f" },
+          { "field": "Actual", "type": "quantitative", "title": "ยอดขายจริง", "format": ",.0f" },
+          { "field": "Reference", "type": "quantitative", "title": "เป้าหมาย", "format": ",.0f" },
           { "field": "VarianceLabel", "type": "nominal", "title": "ผลต่าง" },
           { "field": "VariancePercentLabel", "type": "nominal", "title": "ผลต่าง %" }
         ]
@@ -174,33 +192,32 @@
     {
       "name": "label_actual",
       "transform": [
-        { "filter": "datum.Row_Type == 'Original'" },
-        { "calculate": "length(format(datum.Plot_Actual, ',.0f'))", "as": "lenA" },
-        { "calculate": "length(format(datum.Plot_Reference, ',.0f'))", "as": "lenR" },
+        { "calculate": "length(format(datum.Actual, ',.0f'))", "as": "lenA" },
+        { "calculate": "length(format(datum.Reference, ',.0f'))", "as": "lenR" },
         { "calculate": "max(datum.lenA, datum.lenR)", "as": "maxLen" },
         {
           "joinaggregate": [
             { "op": "max", "field": "maxLen", "as": "globalMaxLen" },
-            { "op": "count", "field": "Plot_Actual", "as": "n" },
-            { "op": "max", "field": "Sort_Order", "as": "lastSort" }
+            { "op": "count", "field": "Actual", "as": "n" },
+            { "op": "max", "field": "Position", "as": "lastPosition" }
           ]
         },
         { "calculate": "max(1, ceil((datum.globalMaxLen * 10 * 0.62 + 14) / (width / datum.n)))", "as": "labelStep" },
-        { "calculate": "(datum.Sort_Order - 1) % datum.labelStep == 0 || datum.Sort_Order == datum.lastSort", "as": "showLabel" },
+        { "calculate": "(datum.Position - 1) % datum.labelStep == 0 || datum.Position == datum.lastPosition", "as": "showLabel" },
         { "filter": "datum.showLabel" }
       ],
       "mark": {
         "type": "text",
-        "dy": { "expr": "datum.Plot_Actual >= datum.Plot_Reference ? -12 : 12" },
+        "dy": { "expr": "datum.Actual >= datum.Reference ? -12 : 12" },
         "fontSize": 10,
         "fontWeight": "bold",
         "color": "#2563EB",
         "tooltip": null
       },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Actual", "type": "quantitative" },
-        "text": { "field": "Plot_Actual", "type": "quantitative", "format": ",.0f" },
+        "x": { "field": "Position", "type": "quantitative" },
+        "y": { "field": "Actual", "type": "quantitative" },
+        "text": { "field": "Actual", "type": "quantitative", "format": ",.0f" },
         "opacity": {
           "condition": { "test": "(isDefined(datum.Actual__highlightStatus) && (datum.Actual__highlightStatus == 'off' || (datum.Actual__highlightStatus == 'on' && isDefined(datum.Actual__highlight) && datum.Actual__highlight !== datum.Actual)))", "value": 0.3 },
           "value": 1
@@ -210,33 +227,32 @@
     {
       "name": "label_reference",
       "transform": [
-        { "filter": "datum.Row_Type == 'Original'" },
-        { "calculate": "length(format(datum.Plot_Actual, ',.0f'))", "as": "lenA" },
-        { "calculate": "length(format(datum.Plot_Reference, ',.0f'))", "as": "lenR" },
+        { "calculate": "length(format(datum.Actual, ',.0f'))", "as": "lenA" },
+        { "calculate": "length(format(datum.Reference, ',.0f'))", "as": "lenR" },
         { "calculate": "max(datum.lenA, datum.lenR)", "as": "maxLen" },
         {
           "joinaggregate": [
             { "op": "max", "field": "maxLen", "as": "globalMaxLen" },
-            { "op": "count", "field": "Plot_Reference", "as": "n" },
-            { "op": "max", "field": "Sort_Order", "as": "lastSort" }
+            { "op": "count", "field": "Reference", "as": "n" },
+            { "op": "max", "field": "Position", "as": "lastPosition" }
           ]
         },
         { "calculate": "max(1, ceil((datum.globalMaxLen * 10 * 0.62 + 14) / (width / datum.n)))", "as": "labelStep" },
-        { "calculate": "(datum.Sort_Order - 1) % datum.labelStep == 0 || datum.Sort_Order == datum.lastSort", "as": "showLabel" },
+        { "calculate": "(datum.Position - 1) % datum.labelStep == 0 || datum.Position == datum.lastPosition", "as": "showLabel" },
         { "filter": "datum.showLabel" }
       ],
       "mark": {
         "type": "text",
-        "dy": { "expr": "datum.Plot_Actual >= datum.Plot_Reference ? 12 : -12" },
+        "dy": { "expr": "datum.Actual >= datum.Reference ? 12 : -12" },
         "fontSize": 10,
         "fontWeight": "bold",
         "color": "#B45309",
         "tooltip": null
       },
       "encoding": {
-        "x": { "field": "Plot_Position", "type": "quantitative" },
-        "y": { "field": "Plot_Reference", "type": "quantitative" },
-        "text": { "field": "Plot_Reference", "type": "quantitative", "format": ",.0f" },
+        "x": { "field": "Position", "type": "quantitative" },
+        "y": { "field": "Reference", "type": "quantitative" },
+        "text": { "field": "Reference", "type": "quantitative", "format": ",.0f" },
         "opacity": {
           "condition": { "test": "(isDefined(datum.Reference__highlightStatus) && (datum.Reference__highlightStatus == 'off' || (datum.Reference__highlightStatus == 'on' && isDefined(datum.Reference__highlight) && datum.Reference__highlight !== datum.Reference)))", "value": 0.3 },
           "value": 1
