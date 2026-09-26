@@ -168,7 +168,8 @@ for (const step of manifest) {
 // sent __highlightStatus = "on" on EVERY row while a highlight was active, with
 // __highlight = value only on the highlighted row and null elsewhere (the docs say "off").
 // rev 5 (user request): points and data labels dim on their own measure, the connector dims
-// unless either measure is highlighted on that month, all to 0.5; lines and the area never dim.
+// unless either measure is highlighted on that month; lines and the area never dim.
+// rev 8 (user request 26 Sep 2026): dim levels differ per layer - points 0.5, connector 0.2, data labels 0.3.
 {
   const HL = 7; // ก.ค.
   const orig = (r) => r.Row_Type === "Original";
@@ -178,7 +179,9 @@ for (const step of manifest) {
   const documented = (m) => (r) => fields(r, m, hit(r) ? "on" : "off", hit(r) ? r[m] : null);
   const neutral = (m) => (r) => fields(r, m, "neutral", r[m]);
   const onNull = (m) => (r) => fields(r, m, "on", null); // measure not highlighted anywhere
-  const DIM = 0.5;
+  const DIM = 0.5; // point dim level; connector and label levels are mapped below
+  const DIM_CONNECTOR = 0.2, DIM_LABEL = 0.3;
+  const level = (fn, dim) => (x) => (fn(x) === 1 ? 1 : dim);
   // per scenario: a/r = Actual/Reference supporting-field generators (null = fields absent),
   // pa/pr/cn = expected opacity per point/connector datum; lines are always 1
   const scen = {
@@ -218,9 +221,9 @@ for (const step of manifest) {
     const o = await render(finalSpec, sc);
     check("HL-" + name, "point_actual_hit_target opacity per Actual measure", o.pa.length === 12 && wrong(o.pa, sc.pa) === 0, `${wrong(o.pa, sc.pa)} wrong of ${o.pa.length}`);
     check("HL-" + name, "point_reference opacity per Reference measure", o.pr.length === 12 && wrong(o.pr, sc.pr) === 0, `${wrong(o.pr, sc.pr)} wrong of ${o.pr.length}`);
-    check("HL-" + name, "connector_rule opacity: dim unless either measure highlighted", o.cn.length === 12 && wrong(o.cn, sc.cn) === 0, `${wrong(o.cn, sc.cn)} wrong of ${o.cn.length}`);
-    check("HL-" + name, "label_actual opacity per Actual measure", o.la2.length > 0 && wrong(o.la2, sc.pa) === 0, `${wrong(o.la2, sc.pa)} wrong of ${o.la2.length}`);
-    check("HL-" + name, "label_reference opacity per Reference measure", o.lr2.length > 0 && wrong(o.lr2, sc.pr) === 0, `${wrong(o.lr2, sc.pr)} wrong of ${o.lr2.length}`);
+    check("HL-" + name, "connector_rule opacity: dim unless either measure highlighted", o.cn.length === 12 && wrong(o.cn, level(sc.cn, DIM_CONNECTOR)) === 0, `${wrong(o.cn, level(sc.cn, DIM_CONNECTOR))} wrong of ${o.cn.length}`);
+    check("HL-" + name, "label_actual opacity per Actual measure", o.la2.length > 0 && wrong(o.la2, level(sc.pa, DIM_LABEL)) === 0, `${wrong(o.la2, level(sc.pa, DIM_LABEL))} wrong of ${o.la2.length}`);
+    check("HL-" + name, "label_reference opacity per Reference measure", o.lr2.length > 0 && wrong(o.lr2, level(sc.pr, DIM_LABEL)) === 0, `${wrong(o.lr2, level(sc.pr, DIM_LABEL))} wrong of ${o.lr2.length}`);
     check("HL-" + name, "lines never dim", (o.la.opacity ?? 1) === 1 && (o.lr.opacity ?? 1) === 1, `actual ${o.la.opacity ?? 1}, reference ${o.lr.opacity ?? 1}`);
   }
   // Regression (M-26): the rev-3 "off"-only condition must be caught by HL-observed.

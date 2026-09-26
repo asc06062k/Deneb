@@ -203,7 +203,7 @@
         "opacity": {
           "condition": {
             "test": "((isDefined(datum.Actual__highlightStatus) && datum.Actual__highlightStatus != 'neutral') || (isDefined(datum.Reference__highlightStatus) && datum.Reference__highlightStatus != 'neutral')) && !((isDefined(datum.Actual__highlightStatus) && datum.Actual__highlightStatus == 'on' && isDefined(datum.Actual__highlight) && datum.Actual__highlight === datum.Actual) || (isDefined(datum.Reference__highlightStatus) && datum.Reference__highlightStatus == 'on' && isDefined(datum.Reference__highlight) && datum.Reference__highlight === datum.Reference))",
-            "value": 0.5
+            "value": 0.2
           },
           "value": 1
         }
@@ -472,7 +472,7 @@
         "opacity": {
           "condition": {
             "test": "(isDefined(datum.Actual__highlightStatus) && (datum.Actual__highlightStatus == 'off' || (datum.Actual__highlightStatus == 'on' && isDefined(datum.Actual__highlight) && datum.Actual__highlight !== datum.Actual)))",
-            "value": 0.5
+            "value": 0.3
           },
           "value": 1
         }
@@ -554,7 +554,7 @@
         "opacity": {
           "condition": {
             "test": "(isDefined(datum.Reference__highlightStatus) && (datum.Reference__highlightStatus == 'off' || (datum.Reference__highlightStatus == 'on' && isDefined(datum.Reference__highlight) && datum.Reference__highlight !== datum.Reference)))",
-            "value": 0.5
+            "value": 0.3
           },
           "value": 1
         }

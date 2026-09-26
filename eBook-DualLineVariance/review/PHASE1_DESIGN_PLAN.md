@@ -222,7 +222,8 @@ Codex ชี้ถูกต้องว่าถ้าใช้คอลัม�
 **rev 5 — คำขอผู้ใช้ (24 ก.ย. 2026) หลังเห็นผลบน Deneb จริง**: ผู้ใช้ไม่ต้องการให้เส้นจางทั้งเส้น จึงเปลี่ยนเป็น
 - เส้น Actual/Reference: **ไม่จางเลย** (ลบ opacity condition ออกจาก line layers)
 - จุดและป้ายตัวเลข (label) ของเดือนที่ไม่ถูก highlight: จาง **0.5** ตาม measure ของตัวเอง (point/label Actual ↔ `Actual__*`, Reference ↔ `Reference__*`)
-- Connector ของเดือนที่ไม่ถูก highlight: จาง 0.5 เมื่อมี highlight อยู่ (status ≠ neutral ฝั่งใดฝั่งหนึ่ง) และไม่มี measure ใดของแถวนั้นถูก highlight (status = on และ `__highlight === ค่าจริง`)
+- **rev 8 (26 ก.ย. 2026, คำขอผู้ใช้)**: ระดับความจางแยกตามชั้น จุด (point_actual_hit_target, point_reference) 0.5 เท่าเดิม, ป้ายตัวเลข (label_actual, label_reference) 0.3, Connector 0.2 ตรรกะ `test` เดิมไม่เปลี่ยน (ทดสอบ HL-* ปรับเป็น 3 ระดับ 464/464)
+- Connector ของเดือนที่ไม่ถูก highlight: จาง 0.5 (rev 5; rev 8 เปลี่ยนเป็น 0.2) เมื่อมี highlight อยู่ (status ≠ neutral ฝั่งใดฝั่งหนึ่ง) และไม่มี measure ใดของแถวนั้นถูก highlight (status = on และ `__highlight === ค่าจริง`)
 - พื้นที่สี: ไม่จาง (คงเดิม)
 - ผู้ใช้เคยพิจารณาให้เส้นช่วงรอบเดือนที่เลือกเข้ม แต่ต้นแบบพบว่าเส้น monotone ที่วาดจากจุดบางส่วนโค้งไม่ตรงกับเส้นเต็ม (ภาพต้นแบบในแชท ไม่ได้เก็บเป็นไฟล์) จึงเลือกแนวทางนี้แทน
 

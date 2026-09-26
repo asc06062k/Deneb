@@ -7,7 +7,7 @@
 - เตรียม Clustered column chart เป็น Visual ต้นทางและปลายทางสำหรับทดสอบ
 - เปิด Cross-filtering ใน Project setup และอธิบายได้ว่าทำไมคลิกพื้นที่สีจึงเลือกเดือนต้นช่วง
 - เปิด Cross-highlighting และ Supporting fields แล้วตรวจว่า Deneb ส่งคอลัมน์ `Actual__highlight` และ `Actual__highlightStatus` มาถูกต้อง
-- ใช้ spec `CH08-S01` ทำให้จุด ป้ายตัวเลข และ Connector ของเดือนที่ไม่ได้เลือกจางลง
+- ใช้ spec `CH08-S01` ทำให้จุด (0.5) ป้ายตัวเลข (0.3) และ Connector (0.2) ของเดือนที่ไม่ได้เลือกจางลง
 - ตั้ง Edit interactions เป็น Highlight, Filter, None และเห็นความต่างของทั้งสาม
 - ตรวจ Context menu (คลิกขวา) ของ Deneb
 
@@ -15,7 +15,7 @@
 
 > **เรื่องภาพและไฟล์ Step ในบทนี้** ภาพ 8-1 ถึง 8-17 เป็นภาพหน้าจอจริงจาก Power BI Desktop 2.157.1354.0 และ Deneb 2.0.0.0 ที่ผู้ใช้จับ 26 ก.ย. 2026 ปิดชื่อบัญชีแล้ว ผูกข้อมูล 12 เดือนของ Workshop (`DualLine_PlotData` 52 แถว) ทำบน Page 5 ของ `deneb demo.pbix` ที่ซูมหน้าจอ 73% ถึง 75% ขนาดที่ Visual เห็นจึงเล็กกว่าค่าจริง (บทก่อนใช้ 79%) ไม่มีผลต่อผลลัพธ์ บทนี้มี spec ใหม่ไฟล์เดียว (`CH08-S01`) ซึ่งเท่ากับ spec สุดท้ายของเล่ม ใช้ใน Step 3 เท่านั้น Step อื่นตั้งค่าใน Power BI และ Deneb โดยไม่แก้ spec บทนี้แสดงเฉพาะส่วนของ spec ที่เพิ่ม ตัดจากไฟล์จริง ตรวจด้วยสคริปต์ `qa/scripts/run-ch08-claims-check.mjs`
 >
-> **ภาพถ่ายก่อนเปลี่ยน opacity ของพื้นที่สี** ผู้เขียนปรับ `opacity` ของพื้นที่ Good/Bad เป็น **0.15** ทั้งเล่ม (26 ก.ย. 2026) ภาพที่ถ่ายก่อนหน้านี้แสดงพื้นที่สีเข้มกว่าที่ spec ปัจจุบันวาด (ถ่ายด้วย 0.35 และบางภาพระหว่างทดลอง 0.25) ตำแหน่ง สี และรูปร่างไม่ต่างกัน ผู้เขียนจะถ่ายภาพที่เห็นพื้นที่สีใหม่ทั้งหมดก่อนเผยแพร่
+> **ภาพถ่ายก่อนเปลี่ยน opacity ของพื้นที่สี** ผู้เขียนปรับ `opacity` ของพื้นที่ Good/Bad เป็น **0.15** ทั้งเล่ม (26 ก.ย. 2026) ภาพที่ถ่ายก่อนหน้านี้แสดงพื้นที่สีเข้มกว่าที่ spec ปัจจุบันวาด (ถ่ายด้วย 0.35 และบางภาพระหว่างทดลอง 0.25) ตำแหน่ง สี และรูปร่างไม่ต่างกัน ผู้เขียนจะถ่ายภาพที่เห็นพื้นที่สีใหม่ทั้งหมดก่อนเผยแพร่ นอกจากนี้ภาพ 8-12 และ 8-13 ถ่ายก่อนที่ผู้ใช้ให้แยกระดับความจาง (ทุกอย่างจาง 0.5 ปัจจุบัน จุด 0.5 ป้าย 0.3 Connector 0.2) จะรวมถ่ายใหม่ในรอบเดียวกัน
 
 ---
 
@@ -183,7 +183,7 @@ Deneb แสดงกราฟจาก spec `CH07-S02` ยังไม่มี
 
 ### 1) เป้าหมาย
 
-เมื่อเลือกแท่งใน column chart ให้กราฟ Deneb เน้นเดือนที่เลือก โดยจุด ป้ายตัวเลข และ Connector ของเดือนอื่นจางลงครึ่งหนึ่ง ส่วนเส้นและพื้นที่สีไม่จาง
+เมื่อเลือกแท่งใน column chart ให้กราฟ Deneb เน้นเดือนที่เลือก โดยจุดของเดือนอื่นจางเหลือ 0.5 ป้ายตัวเลขเหลือ 0.3 และ Connector เหลือ 0.2 (ค่า opacity ยิ่งน้อยยิ่งจาง) ส่วนเส้นและพื้นที่สีไม่จาง
 
 ### 2) สิ่งที่ควรเห็นก่อนเริ่ม
 
@@ -201,7 +201,7 @@ measure `Actual` และ `Reference` (แถบ Sum ที่เปลี่�
 4. กลับหน้ารายงาน เลือก **column chart** ที่แท็บ **Format** ของ ribbon กด **Edit interactions** แล้วที่ตัว Deneb เลือกไอคอน **Highlight** (ไอคอนกลางของสามตัวเหนือ Deneb: Filter, Highlight, None) ตามภาพ 8-9
 5. **ยังไม่วาง spec ใหม่** ล้าง selection แล้วคลิกแท่ง **ก.ค.** ตามภาพ 8-10 Deneb ต้องยังไม่จาง
 6. เปิด Editor วาง `CH08-S01-cross-highlight-opacity.vl.json` ทับทั้งไฟล์ กด Apply ตามภาพ 8-11
-7. กลับหน้ารายงาน ล้าง selection แล้วคลิกแท่ง ก.ค. ตามภาพ 8-12 จุด ป้ายตัวเลข และ Connector ของเดือนอื่นต้องจางลง
+7. กลับหน้ารายงาน ล้าง selection แล้วคลิกแท่ง ก.ค. ตามภาพ 8-12 จุด ป้ายตัวเลข และ Connector ของเดือนอื่นต้องจางลง โดย Connector จางที่สุด รองลงมาคือป้ายตัวเลข และจุด
 8. ล้าง selection แล้ว Ctrl+คลิกแท่ง พ.ค., ก.ค. และ ส.ค. ตามภาพ 8-13 เมื่อล้าง selection ทุกครั้ง ให้เปิดแท็บ Data ของ Debug pane ตรวจได้ว่า `Actual__highlightStatus` กลับเป็น `neutral` (และ `__selected__` เป็น `neutral`)
 
 ![Project setup หมวด Cross-highlighting](../images/chapter-08/CH08-S03-project-setup-cross-highlighting.png)
@@ -230,17 +230,17 @@ measure `Actual` และ `Reference` (แถบ Sum ที่เปลี่�
 
 ![คลิกแท่ง ก.ค. หลังวาง spec Deneb จางเดือนอื่น](../images/chapter-08/CH08-S03-highlight-july-after-spec.png)
 
-*ภาพ 8-12 Step 3: spec `CH08-S01` วางแล้ว คลิกแท่ง ก.ค. column chart เน้นแท่ง ก.ค. Deneb: จุด ป้ายตัวเลข และ Connector ของเดือนอื่นจางลง ส่วน ก.ค. (Actual 510 Reference 520) เข้มเต็ม เส้น Actual, เส้น Reference และพื้นที่สีไม่จาง*
+*ภาพ 8-12 Step 3: spec `CH08-S01` วางแล้ว คลิกแท่ง ก.ค. column chart เน้นแท่ง ก.ค. Deneb: จุด ป้ายตัวเลข และ Connector ของเดือนอื่นจางลง (ภาพนี้ถ่ายก่อนแยกระดับความจาง ทั้งสามอย่างจางเท่ากันที่ 0.5 ส่วน spec ปัจจุบันจุด 0.5 ป้าย 0.3 Connector 0.2) ส่วน ก.ค. (Actual 510 Reference 520) เข้มเต็ม เส้น Actual, เส้น Reference และพื้นที่สีไม่จาง*
 
 ![เลือกสามแท่งพร้อมกัน](../images/chapter-08/CH08-S03-highlight-multiselect.png)
 
-*ภาพ 8-13 Step 3: Ctrl+คลิกแท่ง พ.ค., ก.ค. และ ส.ค. column chart เน้นสามแท่ง Deneb เน้นจุด ป้าย และ Connector ของสามเดือนนี้ (พ.ค. 500/470, ก.ค. 510/520, ส.ค. 530/500) เดือนอื่นจาง*
+*ภาพ 8-13 Step 3: Ctrl+คลิกแท่ง พ.ค., ก.ค. และ ส.ค. column chart เน้นสามแท่ง Deneb เน้นจุด ป้าย และ Connector ของสามเดือนนี้ (พ.ค. 500/470, ก.ค. 510/520, ส.ค. 530/500) เดือนอื่นจาง (ถ่ายก่อนแยกระดับความจาง เหมือนภาพ 8-12)*
 
 ### 5) JSON ที่เพิ่มหรือแก้เฉพาะ Step
 
 ไฟล์ `CH08-S01` ต่างจาก `CH07-S02` เพียงอย่างเดียว คือเพิ่ม `opacity` ใน `encoding` ของห้าชั้น (`connector_rule`, `point_reference`, `point_actual_hit_target`, `label_actual`, `label_reference`) ชั้นเส้นและพื้นที่สีไม่เปลี่ยน
 
-ชั้นจุด Actual (ชั้น `label_actual` ใช้เงื่อนไขเดียวกันนี้ และ `point_reference` กับ `label_reference` ใช้แบบเดียวกันแต่อ่านค่าของ Reference)
+ชั้นจุด Actual (ชั้น `label_actual` ใช้เงื่อนไข `test` เดียวกันนี้ แต่ค่าจาง (`value`) เป็น `0.3` และ `point_reference` กับ `label_reference` ใช้แบบเดียวกันแต่อ่านค่าของ Reference โดยจุดจาง 0.5 ป้ายจาง 0.3)
 
 <!-- excerpt: CH08-S01-cross-highlight-opacity opacity:point_actual_hit_target -->
 ```json
@@ -260,7 +260,7 @@ measure `Actual` และ `Reference` (แถบ Sum ที่เปลี่�
 "opacity": {
   "condition": {
     "test": "((isDefined(datum.Actual__highlightStatus) && datum.Actual__highlightStatus != 'neutral') || (isDefined(datum.Reference__highlightStatus) && datum.Reference__highlightStatus != 'neutral')) && !((isDefined(datum.Actual__highlightStatus) && datum.Actual__highlightStatus == 'on' && isDefined(datum.Actual__highlight) && datum.Actual__highlight === datum.Actual) || (isDefined(datum.Reference__highlightStatus) && datum.Reference__highlightStatus == 'on' && isDefined(datum.Reference__highlight) && datum.Reference__highlight === datum.Reference))",
-    "value": 0.5
+    "value": 0.2
   },
   "value": 1
 }
@@ -269,6 +269,8 @@ measure `Actual` และ `Reference` (แถบ Sum ที่เปลี่�
 ### 6) คำอธิบายโค้ด
 
 **ข้อมูลที่ Deneb ส่งมาจริง** จากภาพ 8-8 และผลทดสอบของผู้เขียนบน Deneb 2.0.0.0 เมื่อมีการเลือก (highlight) อยู่ Deneb ส่ง `Actual__highlightStatus` เป็น `on` ให้**ทุกแถว** รวมแถวที่ไม่ได้ถูกเลือก (ต่างจากเอกสารของ Deneb ที่ระบุว่าแถวที่ไม่ถูกเลือกเป็น `off`) แถวที่ถูกเลือกมี `Actual__highlight` เท่ากับค่า Actual ของแถว ส่วนแถวอื่นเป็น `null` เมื่อไม่มีการเลือก status เป็น `neutral` spec จึงต้องไม่พึ่ง `off` อย่างเดียว
+
+**ระดับความจางต่างกันตามชั้น** เงื่อนไขว่าจะจางหรือไม่ (`test`) ใช้ตรรกะเดียวกัน แต่ค่าที่ใช้เมื่อจางต่างกัน: จุดทั้งสองชั้น **0.5**, ป้ายตัวเลขทั้งสองชั้น **0.3**, Connector **0.2** (ผู้ใช้ตัดสิน 26 ก.ย. 2026 ให้ Connector และป้ายจางกว่าจุด เพราะจุดคือสิ่งที่ผู้อ่านใช้ระบุเดือนที่เลือก) เส้นและพื้นที่สีไม่จาง
 
 **เงื่อนไขของจุด Actual** ให้จาง (opacity 0.5) เมื่อ
 
@@ -291,7 +293,7 @@ measure `Actual` และ `Reference` (แถบ Sum ที่เปลี่�
 
 ### 8) ผลลัพธ์ที่ควรได้
 
-เลือกแท่งแล้ว จุด ป้าย และ Connector ของเดือนที่ไม่ได้เลือกจางครึ่งหนึ่ง เดือนที่เลือกเข้มเต็ม เส้นและพื้นที่สีไม่เปลี่ยน ยกเลิกการเลือกแล้วทุกอย่างกลับเข้ม
+เลือกแท่งแล้ว จุด (0.5) ป้าย (0.3) และ Connector (0.2) ของเดือนที่ไม่ได้เลือกจางลง เดือนที่เลือกเข้มเต็ม เส้นและพื้นที่สีไม่เปลี่ยน ยกเลิกการเลือกแล้วทุกอย่างกลับเข้ม
 
 ### 9) วิธีตรวจสอบผล
 
